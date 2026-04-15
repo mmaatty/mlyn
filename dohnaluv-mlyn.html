@@ -413,7 +413,6 @@
       <option value="9">Září</option>
       <option value="10">Říjen</option>
     </select>
-    <button class="btn btn-outline btn-sm" onclick="if(confirm('Opravdu smazat VŠECHNY záznamy?')){hoursLog=[];saveHours();renderHodinovka();}">Smazat vše</button>
   </div>
   <div id="hodinovka-content"></div>
 </div>
@@ -1018,6 +1017,26 @@ function renderTerminy() {
   }).join('');
 }
 
+function updateRequiredStaff(date, val) {
+  const w = WEDDINGS.find(x => x.date === date);
+  if (!w) return;
+  const n = parseInt(val);
+  w.staff = isNaN(n) || val === '' ? null : n;
+  // Re-render status badge without closing modal
+  const svc = getService(date);
+  const req = w.staff;
+  let statusHtml = '';
+  if (req !== null && req !== undefined) {
+    const actual = svc.length;
+    if (actual < req) statusHtml = `<span style="color:var(--red);font-weight:700;">⚠ ${actual}/${req}</span>`;
+    else if (actual > req) statusHtml = `<span style="color:var(--yellow);font-weight:700;">${actual}/${req}</span>`;
+    else statusHtml = `<span style="color:var(--green);font-weight:700;">✓ ${actual}/${req}</span>`;
+  }
+  const statusEl = document.querySelector('#modal-content .detail-val span[style*="font-weight:700"]');
+  if (statusEl) statusEl.outerHTML = statusHtml;
+  refreshAll(date);
+}
+
 function openWeddingModal(date) {
   const w = WEDDINGS.find(x => x.date === date);
   if (!w) return;
@@ -1050,7 +1069,12 @@ function openWeddingModal(date) {
     <div class="modal-title">${fmtDate(w.date)} — ${w.day}</div>
     <div class="detail-row"><div class="detail-label">Koordinátor</div><div class="detail-val">${coordTag(w.coord)}</div></div>
     <div class="detail-row"><div class="detail-label">Hosté</div><div class="detail-val">${w.guests || '—'}</div></div>
-    <div class="detail-row"><div class="detail-label">Požadovaná obsluha</div><div class="detail-val">${w.staff || '—'}${staffStatus}</div></div>
+    <div class="detail-row"><div class="detail-label">Požadovaná obsluha</div><div class="detail-val" style="display:flex;align-items:center;gap:8px;">
+      <input type="number" min="0" max="20" value="${w.staff || ''}" placeholder="—"
+        style="width:64px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
+        onchange="updateRequiredStaff('${date}', this.value)">
+      ${staffStatus}
+    </div></div>
 
     <div style="margin-top:20px;padding:16px;background:var(--blue-light);border-radius:8px;margin-bottom:12px;">
       <div style="font-size:0.8rem;font-weight:700;color:var(--blue);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.4px;">
