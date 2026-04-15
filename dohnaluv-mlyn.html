@@ -609,8 +609,14 @@ function addEmployee() {
 }
 
 // Assignment helpers — all rendering reads through these
-function getService(date) { return (weddingAssignments[date] || {service:[]}).service; }
-function getCleaning(date) { return (weddingAssignments[date] || {cleaning:[]}).cleaning; }
+function getService(date) {
+  const a = (weddingAssignments[date] || {}).service;
+  return !a ? [] : Array.isArray(a) ? a : Object.values(a);
+}
+function getCleaning(date) {
+  const a = (weddingAssignments[date] || {}).cleaning;
+  return !a ? [] : Array.isArray(a) ? a : Object.values(a);
+}
 
 function signUp(date, person, role) {
   if (!weddingAssignments[date]) weddingAssignments[date] = { service: [], cleaning: [] };
