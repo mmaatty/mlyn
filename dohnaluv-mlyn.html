@@ -512,9 +512,13 @@ async function loadState() {
   const snapshot = await db.ref('/').once('value');
   const data = snapshot.val() || {};
 
+  // Helper: Firebase sometimes returns arrays as {0:x, 1:y} objects
+  const toArr = v => !v ? [] : Array.isArray(v) ? v : Object.values(v);
+
   // People
-  if (data.people && Array.isArray(data.people) && data.people.length > 0) {
-    ALL_PEOPLE = data.people;
+  if (data.people) {
+    ALL_PEOPLE = toArr(data.people).filter(Boolean);
+    if (ALL_PEOPLE.length === 0) { ALL_PEOPLE = [...SEED_PEOPLE]; savePeople(); }
   } else {
     ALL_PEOPLE = [...SEED_PEOPLE];
     savePeople();
@@ -522,7 +526,7 @@ async function loadState() {
 
   // Hours
   if (data.hoursLog) {
-    hoursLog = Array.isArray(data.hoursLog) ? data.hoursLog : Object.values(data.hoursLog);
+    hoursLog = toArr(data.hoursLog).filter(Boolean);
   } else {
     hoursLog = SEED_HOURS.map((e, i) => ({...e, id: 'seed_'+i}));
     saveHours();
@@ -540,7 +544,15 @@ async function loadState() {
   // Assignments — seeded from WEDDINGS on first load
   if (data.weddingAssignments) {
     weddingAssignments = data.weddingAssignments;
-    // Ensure all wedding dates exist (in case new weddings were added)
+    // Normalize service/cleaning arrays (Firebase may return objects)
+    Object.keys(weddingAssignments).forEach(date => {
+      const e = weddingAssignments[date];
+      if (e) {
+        e.service = toArr(e.service).filter(Boolean);
+        e.cleaning = toArr(e.cleaning).filter(Boolean);
+      }
+    });
+    // Ensure all wedding dates exist
     WEDDINGS.forEach(w => {
       if (!weddingAssignments[w.date]) {
         weddingAssignments[w.date] = { service: [...(w.service||[])], cleaning: [...(w.cleaning||[])] };
