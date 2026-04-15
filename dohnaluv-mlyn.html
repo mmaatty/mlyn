@@ -1186,7 +1186,7 @@ function renderZamestnanec() {
               ${e.inClean && !e.inService ? `<div style="font-size:0.7rem;color:var(--muted);">svatba: ${fmtDate(w.date)}</div>` : ''}
             </div>
             <div style="flex:1">
-              <div>${coordTag(w.coord)} ${w.guests?`<span class="tag" style="background:#eee;color:#666;">${w.guests} h.</span>`:''}</div>
+              <div>${coordTag(w.coord)} ${w.guests?`<span class="tag" style="background:#eee;color:#666;">${w.guests} hostů</span>`:''}</div>
               <div class="event-role" style="margin-top:5px;">
                 ${e.inService?'<span class="tag tag-service">obsluha</span>':''}
                 ${e.inClean?`<span class="tag tag-cleaning">úklid · ${(5000/getCleaning(w.date).length).toFixed(0)} Kč</span>`:''}
