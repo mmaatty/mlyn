@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dohnalův Mlýn — Plánování 2026</title>
+<style>
+  :root {
+    --bg: #f7f4ef;
+    --card: #ffffff;
+    --border: #e0d8cc;
+    --text: #2c2416;
+    --muted: #7a6e5f;
+    --accent: #8b5e3c;
+    --accent-light: #f0e6da;
+    --green: #4a7c59;
+    --green-light: #e4f0e8;
+    --red: #b94040;
+    --red-light: #fae8e8;
+    --blue: #3a5f8a;
+    --blue-light: #e6eef7;
+    --yellow: #c98b2e;
+    --yellow-light: #fdf3e0;
+    --radius: 10px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* HEADER */
+  header { background: var(--accent); color: #fff; padding: 16px 24px; display: flex; align-items: center; gap: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: 0.3px; }
+  header span { font-size: 0.9rem; opacity: 0.8; }
+  .header-badge { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 3px 12px; font-size: 0.8rem; }
+
+  /* TABS */
+  .tabs { background: #fff; border-bottom: 2px solid var(--border); display: flex; gap: 0; overflow-x: auto; }
+  .tab { padding: 14px 22px; font-size: 0.9rem; font-weight: 500; cursor: pointer; border-bottom: 3px solid transparent; color: var(--muted); white-space: nowrap; transition: all 0.15s; }
+  .tab:hover { color: var(--accent); background: var(--accent-light); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+
+  /* CONTENT */
+  .page { display: none; padding: 24px; max-width: 1400px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* CARDS */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+  .card-title { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px; }
+  .card-value { font-size: 2rem; font-weight: 700; color: var(--text); }
+  .card-sub { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
+
+  /* GRID */
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  @media (max-width: 900px) { .grid-4 { grid-template-columns: repeat(2,1fr); } .grid-3 { grid-template-columns: repeat(2,1fr); } .grid-2 { grid-template-columns: 1fr; } }
+  @media (max-width: 500px) { .grid-4 { grid-template-columns: 1fr 1fr; } .grid-3 { grid-template-columns: 1fr 1fr; } }
+
+  /* COORDINATOR COLORS */
+  .coord-honza { background: #e8f0fa; color: #2d5e99; border-left: 4px solid #2d5e99; }
+  .coord-matej { background: #e8f5ee; color: #2a6645; border-left: 4px solid #2a6645; }
+  .coord-grochy { background: #fdf0e2; color: #a05c1a; border-left: 4px solid #a05c1a; }
+  .coord-eliska { background: #f5e8f5; color: #7a3d8f; border-left: 4px solid #7a3d8f; }
+  .coord-dot-honza { background: #2d5e99; }
+  .coord-dot-matej { background: #2a6645; }
+  .coord-dot-grochy { background: #a05c1a; }
+  .coord-dot-eliska { background: #7a3d8f; }
+
+  /* WEDDING TABLE */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th { background: #f3ede5; color: var(--muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.4px; padding: 10px 12px; text-align: left; border-bottom: 2px solid var(--border); position: sticky; top: 0; }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:hover td { background: var(--accent-light); }
+  tr.past-event td { opacity: 0.5; }
+
+  /* TAGS */
+  .tag { display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; margin: 1px; }
+  .tag-service { background: var(--blue-light); color: var(--blue); }
+  .tag-cleaning { background: var(--green-light); color: var(--green); }
+  .tag-conflict { background: var(--red-light); color: var(--red); }
+  .tag-coord { color: #fff; font-size: 0.72rem; padding: 2px 8px; border-radius: 10px; }
+  .tc-honza { background: #2d5e99; }
+  .tc-matej { background: #2a6645; }
+  .tc-grochy { background: #a05c1a; }
+  .tc-eliska { background: #7a3d8f; }
+
+  /* GUEST SIZE BAR */
+  .guest-bar { display: flex; align-items: center; gap: 6px; }
+  .guest-fill { height: 8px; background: var(--accent); border-radius: 4px; min-width: 4px; }
+  .guest-num { font-size: 0.8rem; color: var(--muted); }
+
+  /* SEARCH & FILTERS */
+  .filters { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
+  .filters input, .filters select { padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.88rem; background: #fff; color: var(--text); outline: none; }
+  .filters input:focus, .filters select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(139,94,60,0.12); }
+  .btn { padding: 8px 18px; background: var(--accent); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 0.88rem; font-weight: 500; transition: background 0.15s; }
+  .btn:hover { background: #7a5030; }
+  .btn-sm { padding: 5px 12px; font-size: 0.8rem; }
+  .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+  .btn-outline:hover { background: var(--accent-light); }
+  .btn-danger { background: var(--red); }
+  .btn-danger:hover { background: #a03030; }
+
+  /* UPCOMING WEDDING CARD */
+  .wedding-mini { border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px; }
+  .wedding-mini-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .wedding-date-big { font-size: 1.1rem; font-weight: 700; }
+  .wedding-date-small { font-size: 0.8rem; color: var(--muted); }
+  .days-left { font-size: 0.75rem; font-weight: 600; padding: 3px 8px; background: rgba(0,0,0,0.07); border-radius: 10px; }
+
+  /* PERSON SCHEDULE */
+  .person-event { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .event-date-col { min-width: 100px; }
+  .event-date-main { font-weight: 600; font-size: 0.9rem; }
+  .event-date-sub { font-size: 0.78rem; color: var(--muted); }
+  .event-role { font-size: 0.8rem; margin-top: 4px; }
+
+  /* HOURS LOG */
+  .hours-form { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 24px; }
+  .form-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group label { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+  .form-group input, .form-group select { padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.88rem; background: #fff; }
+  .form-group input:focus, .form-group select:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(139,94,60,0.12); }
+
+  /* MONTHLY TABLE */
+  .month-section { margin-bottom: 24px; }
+  .month-header { font-size: 1rem; font-weight: 700; color: var(--accent); padding: 12px 0 8px; border-bottom: 2px solid var(--border); margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+  .hours-table td { font-size: 0.85rem; }
+  .hours-table td.hours-num { font-weight: 600; text-align: right; color: var(--blue); }
+  .hours-table td.total-row { font-weight: 700; background: var(--accent-light); }
+  .delete-btn { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 0.8rem; padding: 2px 6px; border-radius: 4px; }
+  .delete-btn:hover { color: var(--red); background: var(--red-light); }
+
+  /* PAYROLL */
+  .payroll-person { margin-bottom: 20px; }
+  .payroll-name { font-size: 1rem; font-weight: 700; margin-bottom: 10px; }
+  .payroll-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  .payroll-table th { background: #f3ede5; padding: 8px 12px; text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.3px; color: var(--muted); }
+  .payroll-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  .payroll-total { font-weight: 700; background: var(--accent-light); }
+  .rate-input { width: 80px; padding: 4px 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.85rem; text-align: right; }
+  .pay-amount { font-weight: 700; color: var(--green); }
+
+  /* ALERT */
+  .alert { padding: 12px 16px; border-radius: 8px; font-size: 0.88rem; margin-bottom: 16px; }
+  .alert-warning { background: var(--yellow-light); border: 1px solid #e0b96a; color: #7a5010; }
+  .alert-info { background: var(--blue-light); border: 1px solid #90b4d8; color: var(--blue); }
+  .alert-error { background: var(--red-light); border: 1px solid #d8a0a0; color: var(--red); }
+  .alert-success { background: var(--green-light); border: 1px solid #90c8a0; color: var(--green); }
+
+  /* CONFLICT BADGE */
+  .conflict-icon { color: var(--red); font-weight: 700; margin-right: 4px; }
+
+  /* HEATMAP */
+  .heatmap-wrap { overflow-x: auto; }
+  .heatmap { display: grid; gap: 3px; }
+  .heatmap-cell { width: 28px; height: 28px; border-radius: 4px; background: #ede8e0; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: var(--muted); cursor: default; }
+  .heatmap-cell.has-work-1 { background: #c8e0b8; color: #2a6645; }
+  .heatmap-cell.has-work-2 { background: #8ec870; color: #1e5030; }
+  .heatmap-cell.has-work-3 { background: #5aaa3e; color: #fff; }
+  .heatmap-cell.is-wedding { background: var(--accent); color: #fff; }
+  .heatmap-month { margin-bottom: 16px; }
+  .heatmap-month-title { font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .section-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; color: var(--text); padding-bottom: 8px; border-bottom: 2px solid var(--border); }
+
+  /* WORKLOAD BAR */
+  .workload-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .workload-name { width: 140px; font-size: 0.85rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .workload-bar-track { flex: 1; height: 12px; background: #ede8e0; border-radius: 6px; overflow: hidden; }
+  .workload-bar-fill { height: 100%; background: var(--accent); border-radius: 6px; transition: width 0.3s; }
+  .workload-count { font-size: 0.8rem; color: var(--muted); width: 50px; text-align: right; }
+
+  /* TOOLTIP */
+  .has-tip { cursor: help; border-bottom: 1px dashed var(--muted); }
+
+  /* RESPONSIVE TABLE WRAPPER */
+  .table-container { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+
+  /* EMPTY STATE */
+  .empty-state { text-align: center; padding: 40px; color: var(--muted); }
+  .empty-state-icon { font-size: 3rem; margin-bottom: 12px; }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1000; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: #fff; border-radius: var(--radius); padding: 28px; max-width: 560px; width: 90%; max-height: 85vh; overflow-y: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.2); }
+  .modal-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; }
+  .modal-close { float: right; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--muted); margin-top: -4px; }
+  .detail-row { display: flex; gap: 8px; margin-bottom: 10px; align-items: flex-start; }
+  .detail-label { font-size: 0.8rem; font-weight: 600; color: var(--muted); min-width: 120px; padding-top: 2px; }
+  .detail-val { font-size: 0.9rem; }
+
+  /* SCROLL */
+  .scroll-box { max-height: 420px; overflow-y: auto; }
+
+  /* NOTICE */
+  .notice { font-size: 0.8rem; color: var(--muted); font-style: italic; margin-top: 8px; }
+
+  /* LOCK SCREEN */
+  .lock-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 340px; text-align: center; }
+  .lock-icon { font-size: 3.5rem; margin-bottom: 16px; }
+  .lock-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
+  .lock-sub { font-size: 0.88rem; color: var(--muted); margin-bottom: 24px; }
+  .lock-form { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; }
+  .lock-input { padding: 10px 16px; border: 2px solid var(--border); border-radius: 8px; font-size: 1rem; width: 220px; outline: none; text-align: center; letter-spacing: 2px; }
+  .lock-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(139,94,60,0.15); }
+  .lock-error { color: var(--red); font-size: 0.85rem; margin-top: 10px; font-weight: 500; }
+  .lock-badge { display: flex; align-items: center; gap: 6px; background: var(--red-light); border: 1px solid #d8a0a0; color: var(--red); padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; }
+  .unlock-badge { display: flex; align-items: center; gap: 6px; background: var(--green-light); border: 1px solid #90c8a0; color: var(--green); padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; cursor: pointer; }
+</style>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyD65aSlc71YlikBsIo6vumKqmggI6NbbGM",
+    authDomain: "dohnaluv-mlyn.firebaseapp.com",
+    databaseURL: "https://dohnaluv-mlyn-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "dohnaluv-mlyn",
+    storageBucket: "dohnaluv-mlyn.firebasestorage.app",
+    messagingSenderId: "804865428309",
+    appId: "1:804865428309:web:0ad57459d89f7d18b63ddc"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+</script>
+<style>
+  #loading-overlay { position: fixed; inset: 0; background: rgba(247,244,239,0.92); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; gap: 16px; }
+  .loader-spinner { width: 44px; height: 44px; border: 4px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loader-text { color: var(--muted); font-size: 0.95rem; }
+</style>
+</head>
+<body>
+<div id="loading-overlay">
+  <div class="loader-spinner"></div>
+  <div class="loader-text">Načítám data…</div>
+</div>
+
+<header>
+  <div>
+    <h1>🌾 Dohnalův Mlýn</h1>
+  </div>
+  <span class="header-badge">Plánování 2026</span>
+  <span style="margin-left:auto; font-size:0.8rem; opacity:0.7;" id="hdr-date"></span>
+</header>
+
+<div class="tabs" id="tabs">
+  <div class="tab active" onclick="showTab('prehled')">📊 Přehled</div>
+  <div class="tab" onclick="showTab('terminy')">📅 Termíny</div>
+  <div class="tab" onclick="showTab('zamestnanec')">👤 Zaměstnanec</div>
+  <div class="tab" onclick="showTab('hodinovka')">⏱ Hodinovka</div>
+  <div class="tab" onclick="showTab('vyplaty')">💰 Výplaty 🔒</div>
+</div>
+
+<!-- ===================== PAGE: PŘEHLED ===================== -->
+<div class="page active" id="page-prehled">
+  <div class="grid-3" id="kpi-cards"></div>
+  <div class="grid-2">
+    <div>
+      <div class="section-title">Nadcházející termíny</div>
+      <div id="upcoming-list"></div>
+    </div>
+    <div>
+      <div class="section-title">Vytížení zaměstnanců (přiřazení k svatbám)</div>
+      <div id="workload-chart"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PAGE: TERMÍNY ===================== -->
+<div class="page" id="page-terminy">
+  <div class="filters">
+    <input type="text" id="filter-search" placeholder="Hledat jméno / datum..." oninput="renderTerminy()" style="min-width:200px;">
+    <select id="filter-coord" onchange="renderTerminy()">
+      <option value="">Všichni koordinátoři</option>
+      <option>Honza + Verča</option>
+      <option>Matěj</option>
+      <option>Grochy</option>
+      <option>Eliška a Vojta</option>
+    </select>
+    <select id="filter-month" onchange="renderTerminy()">
+      <option value="">Všechny měsíce</option>
+      <option value="04">Duben</option>
+      <option value="05">Květen</option>
+      <option value="06">Červen</option>
+      <option value="07">Červenec</option>
+      <option value="08">Srpen</option>
+      <option value="09">Září</option>
+      <option value="10">Říjen</option>
+    </select>
+    <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;cursor:pointer;">
+      <input type="checkbox" id="filter-incomplete" onchange="renderTerminy()"> Jen neúplné
+    </label>
+    <button class="btn btn-outline btn-sm" onclick="document.getElementById('filter-search').value='';document.getElementById('filter-coord').value='';document.getElementById('filter-month').value='';document.getElementById('filter-incomplete').checked=false;renderTerminy()">Resetovat</button>
+  </div>
+  <div class="table-container">
+    <div class="table-wrap">
+      <table id="terminy-table">
+        <thead>
+          <tr>
+            <th>Datum</th>
+            <th>Koord.</th>
+            <th>Hosté</th>
+            <th>Obsluha (požad./skut.)</th>
+            <th>Úklid (druhý den)</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="terminy-body"></tbody>
+      </table>
+    </div>
+  </div>
+  <p class="notice" style="margin-top:12px;">Kliknutím na řádek zobrazíte detail termínu.</p>
+</div>
+
+<!-- ===================== PAGE: ZAMĚSTNANEC ===================== -->
+<div class="page" id="page-zamestnanec">
+  <div class="filters" style="margin-bottom:24px;">
+    <select id="person-select" onchange="renderZamestnanec()" style="min-width:220px; font-size:1rem; padding:10px 14px;">
+      <option value="">— Vyberte zaměstnance —</option>
+    </select>
+    <div id="person-stats" style="display:flex; gap:12px; flex-wrap:wrap;"></div>
+  </div>
+  <div id="person-schedule"></div>
+</div>
+
+<!-- ===================== PAGE: HODINOVKA ===================== -->
+<div class="page" id="page-hodinovka">
+  <div class="hours-form card" style="margin-bottom:20px;">
+    <div class="section-title" style="margin-bottom:16px;">Přidat odpracované hodiny</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Datum</label>
+        <input type="date" id="h-date">
+      </div>
+      <div class="form-group">
+        <label>Zaměstnanec</label>
+        <select id="h-person">
+          <option value="">Vyberte...</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Hodiny</label>
+        <input type="number" id="h-hours" min="0.5" max="24" step="0.5" style="width:90px;">
+      </div>
+      <div class="form-group">
+        <label>Poznámka (volitelné)</label>
+        <input type="text" id="h-note" placeholder="Příprava, údržba..." style="width:200px;">
+      </div>
+      <div class="form-group" style="justify-content:flex-end;">
+        <button class="btn" onclick="addHoursEntry()">Přidat</button>
+      </div>
+    </div>
+    <div id="h-msg" style="margin-top:10px;"></div>
+  </div>
+  <div class="filters" style="margin-bottom:16px;">
+    <select id="h-filter-person" onchange="renderHodinovka()" style="min-width:180px;">
+      <option value="">Všichni zaměstnanci</option>
+    </select>
+    <select id="h-filter-month" onchange="renderHodinovka()">
+      <option value="">Všechny měsíce</option>
+      <option value="3">Březen</option>
+      <option value="4">Duben</option>
+      <option value="5">Květen</option>
+      <option value="6">Červen</option>
+      <option value="7">Červenec</option>
+      <option value="8">Srpen</option>
+      <option value="9">Září</option>
+      <option value="10">Říjen</option>
+    </select>
+    <button class="btn btn-outline btn-sm" onclick="if(confirm('Opravdu smazat VŠECHNY záznamy?')){hoursLog=[];saveHours();renderHodinovka();}">Smazat vše</button>
+  </div>
+  <div id="hodinovka-content"></div>
+</div>
+
+<!-- ===================== PAGE: VÝPLATY ===================== -->
+<div class="page" id="page-vyplaty">
+  <div id="payroll-lock-screen"></div>
+  <div id="payroll-unlocked-content" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+      <div class="alert alert-info" style="margin:0;flex:1;">
+        💡 <strong>Hodinovka:</strong> hodiny × sazba (Kč/h, upravitelná). <strong>Úklid:</strong> fixní 5 000 Kč / akci, děleno počtem přiřazených osob.
+      </div>
+      <button class="unlock-badge" onclick="lockPayroll()" title="Zamknout sekci">🔒 Zamknout</button>
+    </div>
+    <div id="payroll-content"></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const WEDDINGS = [
+  {date:'2026-04-18',day:'Sobota',coord:'Honza + Verča',staff:5,guests:100,service:['Lenka Helísková','Jan Kenša','Monika Kenša','Petra Pospíšilová'],cleaning:['Monika Kenša','Petra Grochalová','Petra Pospíšilová','Lenka Helísková','Lucka Dohnalová']},
+  {date:'2026-04-25',day:'Sobota',coord:'Matěj',staff:4,guests:60,service:['Matěj Dohnal','Petra Pospíšilová','Tereza Puršová','Lenka Helísková'],cleaning:['Petra Grochalová','Petra Pospíšilová','Kamča Zavadilová','Lenka Helísková','Monika Kenša']},
+  {date:'2026-05-02',day:'Sobota',coord:'Honza + Verča',staff:null,guests:60,service:[],cleaning:['Monika Kenša','Lenka Helísková']},
+  {date:'2026-05-07',day:'Čtvrtek',coord:'Grochy',staff:null,guests:30,service:['Tomáš Grochal','Monika Kenša','Lenka Helísková'],cleaning:['Monika Kenša','Petra Grochalová','Kamča Zavadilová','Lenka Helísková','Lucka Dohnalová']},
+  {date:'2026-05-09',day:'Sobota',coord:'Grochy',staff:null,guests:80,service:['Monika Kenša','Jan Kenša','Lenka Helísková','Kamča Zavadilová'],cleaning:['Petra Pospíšilová','Lenka Helísková','Lucka Dohnalová']},
+  {date:'2026-05-14',day:'Čtvrtek',coord:'Matěj',staff:4,guests:65,service:['Monika Kenša','Tereza Puršová','Tomáš Grochal','Petra Pospíšilová'],cleaning:['Petra Grochalová','Kamča Zavadilová','Tereza Puršová']},
+  {date:'2026-05-16',day:'Sobota',coord:'Matěj',staff:3,guests:50,service:['Monika Kenša','Jan Kenša','Tomáš Grochal','Petra Grochalová','Petra Pospíšilová'],cleaning:['Petra Pospíšilová','Lucka Dohnalová','Monika Kenša']},
+  {date:'2026-05-21',day:'Čtvrtek',coord:'Eliška a Vojta',staff:null,guests:70,service:[],cleaning:['Monika Kenša','Tereza Puršová']},
+  {date:'2026-05-23',day:'Sobota',coord:'Eliška a Vojta',staff:null,guests:90,service:['Tereza Puršová'],cleaning:['Petra Pospíšilová','Tereza Puršová']},
+  {date:'2026-05-28',day:'Čtvrtek',coord:'Honza + Verča',staff:null,guests:30,service:['Tomáš Grochal'],cleaning:['Monika Kenša','Lucka Dohnalová']},
+  {date:'2026-05-30',day:'Sobota',coord:'Honza + Verča',staff:null,guests:45,service:['Tomáš Grochal'],cleaning:['Monika Kenša','Lucka Dohnalová','Petra Pospíšilová']},
+  {date:'2026-06-04',day:'Čtvrtek',coord:'Grochy',staff:null,guests:80,service:['Tomáš Grochal','Monika Kenša'],cleaning:['Petra Grochalová','Kamča Zavadilová']},
+  {date:'2026-06-06',day:'Sobota',coord:'Grochy',staff:null,guests:80,service:['Monika Kenša','Jan Kenša'],cleaning:['Monika Kenša','Tereza Puršová','Petra Pospíšilová']},
+  {date:'2026-06-11',day:'Čtvrtek',coord:'Matěj',staff:null,guests:null,service:['Monika Kenša','Tereza Puršová','Tomáš Grochal'],cleaning:['Tereza Puršová']},
+  {date:'2026-06-13',day:'Sobota',coord:'Matěj',staff:5,guests:90,service:['Monika Kenša','Jan Kenša','Tomáš Grochal','Petra Grochalová','Petra Pospíšilová'],cleaning:['Tereza Puršová','Petra Pospíšilová']},
+  {date:'2026-06-18',day:'Čtvrtek',coord:'Eliška a Vojta',staff:null,guests:60,service:['Tomáš Grochal'],cleaning:['Monika Kenša']},
+  {date:'2026-06-20',day:'Sobota',coord:'Eliška a Vojta',staff:null,guests:50,service:[],cleaning:['Monika Kenša']},
+  {date:'2026-06-25',day:'Čtvrtek',coord:'Honza + Verča',staff:null,guests:80,service:['Tomáš Grochal'],cleaning:['Monika Kenša']},
+  {date:'2026-06-27',day:'Sobota',coord:'Honza + Verča',staff:null,guests:null,service:[],cleaning:['Monika Kenša']},
+  {date:'2026-07-02',day:'Čtvrtek',coord:'Honza + Verča',staff:null,guests:80,service:['Tomáš Grochal'],cleaning:['Monika Kenša']},
+  {date:'2026-07-04',day:'Sobota',coord:'Honza + Verča',staff:null,guests:70,service:['Jan Kenša','Monika Kenša','Petra Pospíšilová'],cleaning:[]},
+  {date:'2026-07-09',day:'Čtvrtek',coord:'Grochy',staff:null,guests:45,service:['Monika Kenša','Jan Kenša'],cleaning:['Monika Kenša']},
+  {date:'2026-07-11',day:'Sobota',coord:'Grochy',staff:null,guests:80,service:['Monika Kenša','Jan Kenša','Kamča Zavadilová'],cleaning:['Monika Kenša']},
+  {date:'2026-07-16',day:'Čtvrtek',coord:'Eliška a Vojta',staff:null,guests:85,service:[],cleaning:['Monika Kenša']},
+  {date:'2026-07-18',day:'Sobota',coord:'Eliška a Vojta',staff:null,guests:60,service:[],cleaning:['Monika Kenša','Petra Pospíšilová']},
+  {date:'2026-07-23',day:'Čtvrtek',coord:'Matěj',staff:5,guests:75,service:['Tomáš Grochal','Petra Pospíšilová','Monika Kenša','Jan Kenša'],cleaning:['Tereza Puršová']},
+  {date:'2026-07-25',day:'Sobota',coord:'Matěj',staff:3,guests:50,service:['Monika Kenša','Jan Kenša','Tereza Puršová','Tomáš Grochal','Petra Pospíšilová'],cleaning:['Petra Pospíšilová']},
+  {date:'2026-07-30',day:'Čtvrtek',coord:'Honza + Verča',staff:null,guests:60,service:['Tomáš Grochal'],cleaning:[]},
+  {date:'2026-08-01',day:'Sobota',coord:'Honza + Verča',staff:null,guests:80,service:[],cleaning:[]},
+  {date:'2026-08-06',day:'Čtvrtek',coord:'Eliška a Vojta',staff:null,guests:45,service:[],cleaning:['Monika Kenša']},
+  {date:'2026-08-08',day:'Sobota',coord:'Eliška a Vojta',staff:null,guests:65,service:[],cleaning:['Monika Kenša']},
+  {date:'2026-08-13',day:'Čtvrtek',coord:'Matěj',staff:3,guests:30,service:['Monika Kenša','Jan Kenša','Tomáš Grochal','Petra Pospíšilová'],cleaning:[]},
+  {date:'2026-08-15',day:'Sobota',coord:'Matěj',staff:null,guests:null,service:['Monika Kenša','Jan Kenša','Petra Pospíšilová'],cleaning:[]},
+  {date:'2026-08-20',day:'Čtvrtek',coord:'Matěj',staff:null,guests:70,service:['Monika Kenša','Jan Kenša','Petra Pospíšilová'],cleaning:[]},
+  {date:'2026-08-22',day:'Sobota',coord:'Matěj',staff:2,guests:60,service:['Petra Pospíšilová','Monika Kenša','Jan Kenša'],cleaning:[]},
+  {date:'2026-08-27',day:'Čtvrtek',coord:'Grochy',staff:null,guests:70,service:[],cleaning:[]},
+  {date:'2026-08-29',day:'Sobota',coord:'Grochy',staff:null,guests:70,service:['Tomáš Grochal','Monika Kenša','Jan Kenša'],cleaning:[]},
+  {date:'2026-09-03',day:'Čtvrtek',coord:'Grochy',staff:null,guests:70,service:[],cleaning:[]},
+  {date:'2026-09-05',day:'Sobota',coord:null,staff:null,guests:null,service:[],cleaning:[]},
+  {date:'2026-09-10',day:'Čtvrtek',coord:'Matěj',staff:3,guests:null,service:['Tomáš Grochal'],cleaning:[]},
+  {date:'2026-09-12',day:'Sobota',coord:'Matěj',staff:3,guests:null,service:['Monika Kenša','Jan Kenša','Tomáš Grochal','Petra Grochalová'],cleaning:[]},
+  {date:'2026-09-17',day:'Čtvrtek',coord:'Honza + Verča',staff:null,guests:65,service:['Tomáš Grochal'],cleaning:[]},
+  {date:'2026-09-19',day:'Sobota',coord:'Honza + Verča',staff:null,guests:80,service:[],cleaning:[]},
+  {date:'2026-09-24',day:'Čtvrtek',coord:'Grochy',staff:null,guests:60,service:['Tomáš Grochal'],cleaning:[]},
+  {date:'2026-09-26',day:'Sobota',coord:'Grochy',staff:null,guests:65,service:['Tomáš Grochal','Monika Kenša','Jan Kenša'],cleaning:[]},
+  {date:'2026-10-01',day:'Čtvrtek',coord:'Grochy',staff:null,guests:70,service:['Tomáš Grochal'],cleaning:[]},
+  {date:'2026-10-03',day:'Sobota',coord:'Grochy',staff:null,guests:80,service:['Tomáš Grochal','Jan Kenša','Monika Kenša'],cleaning:[]},
+  {date:'2026-10-10',day:'Sobota',coord:'Eliška a Vojta',staff:null,guests:50,service:[],cleaning:[]},
+];
+
+// Pre-loaded hours from original Excel (March + April 2026)
+const SEED_HOURS = [
+  {date:'2026-03-10',person:'Tomáš Grochal',hours:6.5,note:''},
+  {date:'2026-03-11',person:'Tomáš Grochal',hours:7,note:''},
+  {date:'2026-03-12',person:'Tomáš Grochal',hours:7,note:''},
+  {date:'2026-03-16',person:'Tomáš Grochal',hours:7,note:''},
+  {date:'2026-03-17',person:'Tomáš Grochal',hours:7,note:''},
+  {date:'2026-03-18',person:'Tomáš Grochal',hours:7,note:''},
+  {date:'2026-03-19',person:'Tomáš Grochal',hours:7,note:''},
+  {date:'2026-03-20',person:'Tomáš Grochal',hours:3,note:''},
+  {date:'2026-03-23',person:'Tomáš Grochal',hours:7,note:''},
+  {date:'2026-03-24',person:'Tomáš Grochal',hours:7,note:''},
+  {date:'2026-03-25',person:'Tomáš Grochal',hours:7,note:''},
+  {date:'2026-03-26',person:'Lucka Dohnalová',hours:5,note:''},
+  {date:'2026-03-26',person:'Monika Kenša',hours:5.5,note:''},
+  {date:'2026-03-26',person:'Tomáš Grochal',hours:7,note:''},
+  {date:'2026-03-30',person:'Lucka Dohnalová',hours:5,note:''},
+  {date:'2026-03-30',person:'Monika Kenša',hours:5,note:''},
+  {date:'2026-03-30',person:'Tomáš Grochal',hours:7,note:''},
+  {date:'2026-03-31',person:'Tomáš Grochal',hours:7,note:''},
+  {date:'2026-04-01',person:'Tomáš Grochal',hours:7,note:''},
+  {date:'2026-04-07',person:'Tomáš Grochal',hours:7,note:''},
+  {date:'2026-04-07',person:'Monika Kenša',hours:6,note:''},
+  {date:'2026-04-08',person:'Tomáš Grochal',hours:7,note:''},
+  {date:'2026-04-09',person:'Monika Kenša',hours:6.5,note:''},
+  {date:'2026-04-09',person:'Tomáš Grochal',hours:7,note:''},
+  {date:'2026-04-10',person:'Tomáš Grochal',hours:7,note:''},
+  {date:'2026-04-13',person:'Tomáš Grochal',hours:6,note:''},
+  {date:'2026-04-14',person:'Tomáš Grochal',hours:7,note:''},
+  {date:'2026-04-14',person:'Monika Kenša',hours:6,note:''},
+];
+
+const ALL_PEOPLE = [
+  'Tomáš Grochal','Monika Kenša','Jan Kenša','Tereza Puršová','Petra Grochalová',
+  'Lenka Helísková','Petra Pospíšilová','Kamča Zavadilová','Lucka Dohnalová',
+  'Matěj Dohnal','Anežka Suchánková','Lenka Matine','Nikola Škarpová','Elena Hluk'
+];
+
+const MONTH_NAMES = ['','Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
+
+// ============================================================
+// STATE
+// ============================================================
+let hoursLog = [];
+let rates = {};
+let weddingAssignments = {}; // { 'YYYY-MM-DD': { service: [...], cleaning: [...] } }
+
+async function loadState() {
+  const snapshot = await db.ref('/').once('value');
+  const data = snapshot.val() || {};
+
+  // Hours
+  if (data.hoursLog) {
+    hoursLog = Array.isArray(data.hoursLog) ? data.hoursLog : Object.values(data.hoursLog);
+  } else {
+    hoursLog = SEED_HOURS.map((e, i) => ({...e, id: 'seed_'+i}));
+    saveHours();
+  }
+
+  // Rates
+  if (data.rates) {
+    rates = data.rates;
+  } else {
+    rates = {};
+    ALL_PEOPLE.forEach(p => rates[p] = 150);
+    saveRates();
+  }
+
+  // Assignments — seeded from WEDDINGS on first load
+  if (data.weddingAssignments) {
+    weddingAssignments = data.weddingAssignments;
+    // Ensure all wedding dates exist (in case new weddings were added)
+    WEDDINGS.forEach(w => {
+      if (!weddingAssignments[w.date]) {
+        weddingAssignments[w.date] = { service: [...(w.service||[])], cleaning: [...(w.cleaning||[])] };
+      }
+    });
+  } else {
+    weddingAssignments = {};
+    WEDDINGS.forEach(w => {
+      weddingAssignments[w.date] = {
+        service: [...(w.service || [])],
+        cleaning: [...(w.cleaning || [])]
+      };
+    });
+    saveAssignments();
+  }
+}
+function saveHours() { db.ref('hoursLog').set(hoursLog); }
+function saveRates() { db.ref('rates').set(rates); }
+function saveAssignments() { db.ref('weddingAssignments').set(weddingAssignments); }
+
+// Assignment helpers — all rendering reads through these
+function getService(date) { return (weddingAssignments[date] || {service:[]}).service; }
+function getCleaning(date) { return (weddingAssignments[date] || {cleaning:[]}).cleaning; }
+
+function signUp(date, person, role) {
+  if (!weddingAssignments[date]) weddingAssignments[date] = { service: [], cleaning: [] };
+  const arr = role === 'service' ? weddingAssignments[date].service : weddingAssignments[date].cleaning;
+  if (person && !arr.includes(person)) arr.push(person);
+  saveAssignments();
+  refreshAll(date);
+}
+
+function unassign(date, person, role) {
+  if (!weddingAssignments[date]) return;
+  if (role === 'service') {
+    weddingAssignments[date].service = weddingAssignments[date].service.filter(p => p !== person);
+  } else {
+    weddingAssignments[date].cleaning = weddingAssignments[date].cleaning.filter(p => p !== person);
+  }
+  saveAssignments();
+  refreshAll(date);
+}
+
+function refreshAll(date) {
+  // Re-render active tab + modal if open
+  const activePage = document.querySelector('.page.active')?.id;
+  if (activePage === 'page-prehled') renderPrehled();
+  if (activePage === 'page-terminy') renderTerminy();
+  if (activePage === 'page-zamestnanec') renderZamestnanec();
+  if (activePage === 'page-vyplaty') renderVyplaty();
+  // If modal is open for this date, refresh it
+  if (document.getElementById('modal-overlay').classList.contains('open')) {
+    openWeddingModal(date);
+  }
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function coordClass(coord) {
+  if (!coord) return '';
+  if (coord.includes('Honza')) return 'honza';
+  if (coord.includes('Matěj')) return 'matej';
+  if (coord.includes('Grochy')) return 'grochy';
+  if (coord.includes('Eliška')) return 'eliska';
+  return '';
+}
+function coordTag(coord) {
+  if (!coord) return '<span class="tag" style="background:#eee;color:#888;">—</span>';
+  const c = coordClass(coord);
+  return `<span class="tag tag-coord tc-${c}">${coord}</span>`;
+}
+function today() { return new Date().toISOString().split('T')[0]; }
+function daysBetween(a, b) { return Math.round((new Date(a)-new Date(b))/(1000*60*60*24)); }
+function fmtDate(d) {
+  const [y,m,day] = d.split('-');
+  return `${day}.${m}.${y}`;
+}
+function isPast(d) { return d < today(); }
+
+function allPeople(wDate) {
+  return [...new Set([...getService(wDate), ...getCleaning(wDate)])].filter(Boolean);
+}
+
+function addDays(dateStr, n) {
+  const d = new Date(dateStr); d.setDate(d.getDate() + n);
+  return d.toISOString().split('T')[0];
+}
+
+// Úklid probíhá vždy den PO svatbě
+function getCleaningPay(person) {
+  let total = 0;
+  WEDDINGS.forEach(w => {
+    const cleaning = getCleaning(w.date);
+    if (cleaning.length > 0 && cleaning.includes(person)) {
+      total += 5000 / cleaning.length;
+    }
+  });
+  return total;
+}
+
+function getCleaningEvents(person) {
+  return WEDDINGS.filter(w => getCleaning(w.date).includes(person)).map(w => {
+    const cleaning = getCleaning(w.date);
+    return {
+      date: addDays(w.date, 1),
+      weddingDate: w.date,
+      totalPeople: cleaning.length,
+      share: 5000 / cleaning.length,
+      team: cleaning
+    };
+  });
+}
+
+function personWorkEvents(name) {
+  const events = [];
+  WEDDINGS.forEach(w => {
+    const inService = getService(w.date).includes(name);
+    const inClean = getCleaning(w.date).includes(name);
+    if (!inService && !inClean) return;
+    events.push({
+      wedding: w,
+      weddingDate: w.date,
+      workDate: inService ? w.date : addDays(w.date, 1),
+      inService,
+      inClean,
+    });
+  });
+  return events.sort((a, b) => a.workDate.localeCompare(b.workDate));
+}
+
+function personWeddings(name) {
+  return WEDDINGS.filter(w => getService(w.date).includes(name) || getCleaning(w.date).includes(name));
+}
+
+function hoursForPerson(person, month) {
+  return hoursLog.filter(e => {
+    if (e.person !== person) return false;
+    if (month) {
+      const m = parseInt(e.date.split('-')[1]);
+      if (m !== month) return false;
+    }
+    return true;
+  });
+}
+
+function totalHours(person, month) {
+  return hoursForPerson(person, month).reduce((s,e) => s + e.hours, 0);
+}
+
+// ============================================================
+// PŘEHLED
+// ============================================================
+function renderPrehled() {
+  const now = today();
+  const upcoming = WEDDINGS.filter(w => w.date >= now).slice(0, 3);
+  const total = WEDDINGS.length;
+  const done = WEDDINGS.filter(w => w.date < now).length;
+  const remaining = total - done;
+  const totalHoursAll = hoursLog.reduce((s,e) => s+e.hours, 0);
+
+  // KPIs
+  document.getElementById('kpi-cards').innerHTML = `
+    <div class="card">
+      <div class="card-title">Celkem termínů 2026</div>
+      <div class="card-value">${total}</div>
+      <div class="card-sub">${done} proběhlo · ${remaining} zbývá</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Nejbližší termín</div>
+      <div class="card-value" style="font-size:1.3rem;">${upcoming[0] ? fmtDate(upcoming[0].date) : '—'}</div>
+      <div class="card-sub">${upcoming[0] ? `za ${daysBetween(upcoming[0].date, now)} dní · ${upcoming[0].coord||'?'}` : ''}</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Úklidy celkem 2026</div>
+      <div class="card-value">${WEDDINGS.length}</div>
+      <div class="card-sub">1 úklid den po každé svatbě</div>
+    </div>
+  `;
+
+  // Upcoming
+  const upcomingEl = document.getElementById('upcoming-list');
+  if (upcoming.length === 0) {
+    upcomingEl.innerHTML = '<div class="empty-state"><div>Žádné nadcházející termíny</div></div>';
+  } else {
+    upcomingEl.innerHTML = upcoming.map(w => {
+      const cc = coordClass(w.coord);
+      const days = daysBetween(w.date, now);
+      return `
+        <div class="wedding-mini coord-${cc}" style="margin-bottom:10px;cursor:pointer;" onclick="openWeddingModal('${w.date}')">
+          <div class="wedding-mini-top">
+            <div>
+              <div class="wedding-date-big">${fmtDate(w.date)} <span class="wedding-date-small">${w.day}</span></div>
+              <div style="margin-top:4px;">${coordTag(w.coord)} ${w.guests ? `<span class="tag" style="background:rgba(0,0,0,0.07)">${w.guests} hostů</span>` : ''}</div>
+            </div>
+            <div class="days-left">za ${days} dní</div>
+          </div>
+          <div style="margin-top:8px;font-size:0.8rem;color:var(--muted);">
+            Obsluha: ${getService(w.date).length ? getService(w.date).join(', ') : '<em>nepřiřazena</em>'}
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // Workload
+  const counts = {};
+  ALL_PEOPLE.forEach(p => counts[p] = 0);
+  WEDDINGS.forEach(w => allPeople(w.date).forEach(p => { if (counts[p] !== undefined) counts[p]++; }));
+  const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]).filter(([,v]) => v > 0);
+  const maxCount = sorted[0]?.[1] || 1;
+  document.getElementById('workload-chart').innerHTML = sorted.map(([name, count]) => `
+    <div class="workload-row">
+      <div class="workload-name" title="${name}">${name.split(' ')[0]}</div>
+      <div class="workload-bar-track">
+        <div class="workload-bar-fill" style="width:${(count/maxCount)*100}%"></div>
+      </div>
+      <div class="workload-count">${count}×</div>
+    </div>
+  `).join('');
+
+}
+
+// ============================================================
+// TERMÍNY
+// ============================================================
+function renderTerminy() {
+  const search = document.getElementById('filter-search').value.toLowerCase();
+  const coord = document.getElementById('filter-coord').value;
+  const month = document.getElementById('filter-month').value;
+  const incomplete = document.getElementById('filter-incomplete').checked;
+
+  let data = WEDDINGS.filter(w => {
+    if (coord && w.coord !== coord) return false;
+    if (month && !w.date.startsWith('2026-'+month)) return false;
+    if (incomplete && getService(w.date).length > 0 && getCleaning(w.date).length > 0) return false;
+    if (search) {
+      const hay = [w.date, w.coord, ...getService(w.date), ...getCleaning(w.date)].join(' ').toLowerCase();
+      if (!hay.includes(search)) return false;
+    }
+    return true;
+  });
+
+  const body = document.getElementById('terminy-body');
+  if (data.length === 0) {
+    body.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-state-icon">🔍</div><div>Žádné výsledky</div></div></td></tr>';
+    return;
+  }
+
+  body.innerHTML = data.map(w => {
+    const past = isPast(w.date);
+    const svc = getService(w.date);
+    const cln = getCleaning(w.date);
+    const noService = svc.length === 0;
+    const noCleaning = cln.length === 0;
+
+    const guestBar = w.guests
+      ? `<div class="guest-bar"><div class="guest-fill" style="width:${Math.min(w.guests,120)*0.7}px"></div><span class="guest-num">${w.guests}</span></div>`
+      : '<span class="guest-num">—</span>';
+
+    // Staff count: required vs actual, highlight red if understaffed
+    const req = w.staff;
+    const actual = svc.length;
+    let staffBadge = '';
+    if (req !== null && req !== undefined) {
+      const color = actual < req ? 'var(--red)' : actual > req ? 'var(--yellow)' : 'var(--green)';
+      staffBadge = `<span style="font-size:0.75rem;font-weight:700;color:${color};margin-left:4px;">(${actual}/${req})</span>`;
+    } else if (actual > 0) {
+      staffBadge = `<span style="font-size:0.75rem;color:var(--muted);margin-left:4px;">(${actual})</span>`;
+    }
+
+    const serviceHtml = noService
+      ? `<span style="color:var(--red);font-size:0.8rem;">⚠ nepřiřazena</span>${staffBadge}`
+      : svc.map(s => `<span class="tag tag-service">${s}</span>`).join('') + staffBadge;
+
+    const cleanDateLabel = !noCleaning ? (() => {
+      const d = new Date(w.date); d.setDate(d.getDate()+1);
+      return `<span style="font-size:0.72rem;color:var(--muted);display:block;margin-bottom:3px;">${fmtDate(d.toISOString().split('T')[0])}</span>`;
+    })() : '';
+
+    const cleanHtml = noCleaning
+      ? `<span style="color:var(--muted);font-size:0.8rem;">—</span>`
+      : cleanDateLabel + cln.map(s => `<span class="tag tag-cleaning">${s}</span>`).join('');
+
+    return `<tr class="${past?'past-event':''}" style="cursor:pointer;" onclick="openWeddingModal('${w.date}')">
+      <td><strong>${fmtDate(w.date)}</strong><br><span style="font-size:0.75rem;color:var(--muted)">${w.day}</span></td>
+      <td>${coordTag(w.coord)}</td>
+      <td>${guestBar}</td>
+      <td>${serviceHtml}</td>
+      <td>${cleanHtml}</td>
+      <td><button class="btn btn-sm btn-outline" onclick="event.stopPropagation();openWeddingModal('${w.date}')" style="white-space:nowrap">✏ Přihlásit</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function openWeddingModal(date) {
+  const w = WEDDINGS.find(x => x.date === date);
+  if (!w) return;
+
+  const cleanDateStr = fmtDate(addDays(w.date, 1));
+  const svc = getService(date);
+  const cln = getCleaning(date);
+
+  const req = w.staff, actual = svc.length;
+  let staffStatus = '';
+  if (req !== null && req !== undefined) {
+    if (actual < req) staffStatus = `<span style="color:var(--red);font-weight:600;"> ⚠ ${actual}/${req}</span>`;
+    else if (actual > req) staffStatus = `<span style="color:var(--yellow);font-weight:600;"> přesazeno ${actual}/${req}</span>`;
+    else staffStatus = `<span style="color:var(--green);font-weight:600;"> ✓ ${actual}/${req}</span>`;
+  }
+
+  const personOptions = ALL_PEOPLE.map(p => `<option value="${p}">${p}</option>`).join('');
+
+  const renderAssigned = (people, role, labelTag) => {
+    if (people.length === 0) return `<em style="color:var(--muted);font-size:0.85rem;">Nikdo přihlášen</em>`;
+    return people.map(p => `
+      <span class="tag ${labelTag}" style="margin:2px;">
+        ${p}
+        <button onclick="unassign('${date}','${p}','${role}')" style="background:none;border:none;cursor:pointer;font-size:0.85rem;color:inherit;padding:0 0 0 4px;line-height:1;" title="Odhlásit">×</button>
+      </span>`).join('');
+  };
+
+  document.getElementById('modal-content').innerHTML = `
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-title">${fmtDate(w.date)} — ${w.day}</div>
+    <div class="detail-row"><div class="detail-label">Koordinátor</div><div class="detail-val">${coordTag(w.coord)}</div></div>
+    <div class="detail-row"><div class="detail-label">Hosté</div><div class="detail-val">${w.guests || '—'}</div></div>
+    <div class="detail-row"><div class="detail-label">Požadovaná obsluha</div><div class="detail-val">${w.staff || '—'}${staffStatus}</div></div>
+
+    <div style="margin-top:20px;padding:16px;background:var(--blue-light);border-radius:8px;margin-bottom:12px;">
+      <div style="font-size:0.8rem;font-weight:700;color:var(--blue);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.4px;">
+        Obsluha — ${fmtDate(w.date)}
+      </div>
+      <div id="svc-list-${date}" style="margin-bottom:10px;min-height:24px;">
+        ${renderAssigned(svc, 'service', 'tag-service')}
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <select id="svc-pick-${date}" style="flex:1;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;">
+          <option value="">— Přidat osobu —</option>
+          ${ALL_PEOPLE.filter(p => !svc.includes(p)).map(p => `<option value="${p}">${p}</option>`).join('')}
+        </select>
+        <button class="btn btn-sm" onclick="signUp('${date}',document.getElementById('svc-pick-${date}').value,'service')">+ Přihlásit</button>
+      </div>
+    </div>
+
+    <div style="padding:16px;background:var(--green-light);border-radius:8px;">
+      <div style="font-size:0.8rem;font-weight:700;color:var(--green);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.4px;">
+        Úklid — ${cleanDateStr}
+        ${cln.length > 0 ? `<span style="font-weight:400;color:var(--muted);font-size:0.75rem;margin-left:6px;">(${(5000/cln.length).toFixed(0)} Kč/os.)</span>` : ''}
+      </div>
+      <div id="cln-list-${date}" style="margin-bottom:10px;min-height:24px;">
+        ${renderAssigned(cln, 'cleaning', 'tag-cleaning')}
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <select id="cln-pick-${date}" style="flex:1;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;">
+          <option value="">— Přidat osobu —</option>
+          ${ALL_PEOPLE.filter(p => !cln.includes(p)).map(p => `<option value="${p}">${p}</option>`).join('')}
+        </select>
+        <button class="btn btn-sm" style="background:var(--green);" onclick="signUp('${date}',document.getElementById('cln-pick-${date}').value,'cleaning')">+ Přihlásit</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('modal-overlay')) {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+}
+
+// ============================================================
+// ZAMĚSTNANEC
+// ============================================================
+function renderZamestnanec() {
+  const name = document.getElementById('person-select').value;
+  const container = document.getElementById('person-schedule');
+  const statsEl = document.getElementById('person-stats');
+
+  if (!name) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">👤</div><div>Vyberte zaměstnance</div></div>';
+    statsEl.innerHTML = '';
+    return;
+  }
+
+  const workEvents = personWorkEvents(name);
+  const upcoming = workEvents.filter(e => !isPast(e.workDate));
+  const past = workEvents.filter(e => isPast(e.workDate));
+  const totalH = totalHours(name, null);
+  const cleanPay = getCleaningPay(name);
+
+  statsEl.innerHTML = `
+    <div class="card" style="padding:10px 16px;min-width:120px;">
+      <div class="card-title">Termíny celkem</div>
+      <div class="card-value" style="font-size:1.4rem;">${workEvents.length}</div>
+    </div>
+    <div class="card" style="padding:10px 16px;min-width:120px;">
+      <div class="card-title">Nadcházející</div>
+      <div class="card-value" style="font-size:1.4rem;color:var(--accent);">${upcoming.length}</div>
+    </div>
+    <div class="card" style="padding:10px 16px;min-width:120px;">
+      <div class="card-title">Hodinovka 2026</div>
+      <div class="card-value" style="font-size:1.4rem;color:var(--blue);">${totalH.toFixed(1)}h</div>
+    </div>
+    ${cleanPay > 0 ? `<div class="card" style="padding:10px 16px;min-width:120px;">
+      <div class="card-title">Úklidy (Kč)</div>
+      <div class="card-value" style="font-size:1.4rem;color:var(--green);">${cleanPay.toLocaleString('cs-CZ',{maximumFractionDigits:0})}</div>
+    </div>` : ''}
+  `;
+
+  if (workEvents.length === 0) {
+    container.innerHTML = `<div class="alert alert-info">Žádné termíny pro <strong>${name}</strong></div>`;
+    return;
+  }
+
+  const renderSection = (title, items) => {
+    if (items.length === 0) return '';
+    return `
+      <div class="section-title" style="margin-top:20px;">${title}</div>
+      ${items.map(e => {
+        const w = e.wedding;
+        // Day of week: for cleaning it's the next day
+        const workDayName = e.inService ? w.day : (() => {
+          const days = ['Neděle','Pondělí','Úterý','Středa','Čtvrtek','Pátek','Sobota'];
+          return days[new Date(e.workDate).getDay()];
+        })();
+        const cleanTeam = e.inClean ? getCleaning(w.date).filter(n => n !== name) : [];
+        const serviceTeam = e.inService ? getService(w.date).filter(n => n !== name) : [];
+        return `
+          <div class="person-event" style="cursor:pointer;" onclick="openWeddingModal('${w.date}')">
+            <div class="event-date-col">
+              <div class="event-date-main">${fmtDate(e.workDate)}</div>
+              <div class="event-date-sub">${workDayName}</div>
+              ${e.inClean && !e.inService ? `<div style="font-size:0.7rem;color:var(--muted);">svatba: ${fmtDate(w.date)}</div>` : ''}
+            </div>
+            <div style="flex:1">
+              <div>${coordTag(w.coord)} ${w.guests?`<span class="tag" style="background:#eee;color:#666;">${w.guests} h.</span>`:''}</div>
+              <div class="event-role" style="margin-top:5px;">
+                ${e.inService?'<span class="tag tag-service">obsluha</span>':''}
+                ${e.inClean?`<span class="tag tag-cleaning">úklid · ${(5000/getCleaning(w.date).length).toFixed(0)} Kč</span>`:''}
+              </div>
+              <div style="font-size:0.78rem;color:var(--muted);margin-top:4px;">
+                ${e.inService && serviceTeam.length ? 'Tým obsluha: ' + serviceTeam.join(', ') : ''}
+                ${e.inService && e.inClean ? '<br>' : ''}
+                ${e.inClean && cleanTeam.length ? 'Tým úklid: ' + cleanTeam.join(', ') : ''}
+                ${e.inClean && cleanTeam.length === 0 && !e.inService ? '— sólo úklid' : ''}
+              </div>
+            </div>
+          </div>`;
+      }).join('')}
+    `;
+  };
+
+  container.innerHTML = `
+    <div class="table-container" style="padding:20px;">
+      ${renderSection(`Nadcházející (${upcoming.length})`, upcoming)}
+      ${renderSection(`Proběhlé (${past.length})`, past)}
+    </div>
+  `;
+}
+
+// ============================================================
+// HODINOVKA
+// ============================================================
+function addHoursEntry() {
+  const date = document.getElementById('h-date').value;
+  const person = document.getElementById('h-person').value;
+  const hours = parseFloat(document.getElementById('h-hours').value);
+  const note = document.getElementById('h-note').value.trim();
+  const msg = document.getElementById('h-msg');
+
+  if (!date || !person || !hours || hours <= 0) {
+    msg.innerHTML = '<div class="alert alert-error">Vyplňte datum, zaměstnance a hodiny.</div>';
+    return;
+  }
+
+  const entry = { id: Date.now().toString(), date, person, hours, note };
+  hoursLog.push(entry);
+  saveHours();
+
+  msg.innerHTML = '<div class="alert alert-success">✓ Záznam přidán.</div>';
+  document.getElementById('h-hours').value = '';
+  document.getElementById('h-note').value = '';
+  setTimeout(() => msg.innerHTML = '', 3000);
+
+  renderHodinovka();
+  renderPrehled();
+}
+
+function deleteHoursEntry(id) {
+  hoursLog = hoursLog.filter(e => e.id !== id);
+  saveHours();
+  renderHodinovka();
+  renderPrehled();
+}
+
+function renderHodinovka() {
+  const filterPerson = document.getElementById('h-filter-person').value;
+  const filterMonth = parseInt(document.getElementById('h-filter-month').value) || null;
+  const container = document.getElementById('hodinovka-content');
+
+  let data = hoursLog;
+  if (filterPerson) data = data.filter(e => e.person === filterPerson);
+  if (filterMonth) data = data.filter(e => parseInt(e.date.split('-')[1]) === filterMonth);
+
+  // Group by month
+  const byMonth = {};
+  data.forEach(e => {
+    const m = parseInt(e.date.split('-')[1]);
+    if (!byMonth[m]) byMonth[m] = [];
+    byMonth[m].push(e);
+  });
+
+  if (Object.keys(byMonth).length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">⏱</div><div>Žádné záznamy</div></div>';
+    return;
+  }
+
+  container.innerHTML = Object.keys(byMonth).sort((a,b)=>a-b).map(m => {
+    const entries = byMonth[m].sort((a,b) => a.date.localeCompare(b.date));
+    const total = entries.reduce((s,e) => s+e.hours, 0);
+
+    // Per-person totals
+    const personTotals = {};
+    entries.forEach(e => {
+      personTotals[e.person] = (personTotals[e.person] || 0) + e.hours;
+    });
+
+    return `
+      <div class="month-section">
+        <div class="month-header">
+          <span>${MONTH_NAMES[m]} 2026</span>
+          <span style="font-size:0.9rem;color:var(--muted);">Celkem: <strong>${total.toFixed(1)} h</strong></span>
+        </div>
+        <div class="table-container">
+          <div class="table-wrap">
+            <table class="hours-table">
+              <thead><tr><th>Datum</th><th>Zaměstnanec</th><th style="text-align:right">Hodiny</th><th>Poznámka</th><th></th></tr></thead>
+              <tbody>
+                ${entries.map(e => `
+                  <tr>
+                    <td>${fmtDate(e.date)}</td>
+                    <td>${e.person}</td>
+                    <td class="hours-num">${e.hours.toFixed(1)}</td>
+                    <td style="font-size:0.8rem;color:var(--muted)">${e.note||'—'}</td>
+                    <td><button class="delete-btn" onclick="deleteHoursEntry('${e.id}')" title="Smazat">✕</button></td>
+                  </tr>`).join('')}
+                ${Object.entries(personTotals).map(([p,h]) => `
+                  <tr>
+                    <td class="total-row" colspan="1" style="border-top:2px solid var(--border);"></td>
+                    <td class="total-row" style="border-top:2px solid var(--border);">${p}</td>
+                    <td class="hours-num total-row" style="border-top:2px solid var(--border);">${h.toFixed(1)}</td>
+                    <td class="total-row" colspan="2" style="border-top:2px solid var(--border);">celkem</td>
+                  </tr>`).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ============================================================
+// VÝPLATY
+// ============================================================
+function renderVyplaty() {
+  const months = [...new Set(hoursLog.map(e => parseInt(e.date.split('-')[1])))].sort((a,b)=>a-b);
+  // Show all people who have either hours OR cleaning events
+  const people = ALL_PEOPLE.filter(p =>
+    hoursLog.some(e => e.person === p) || getCleaningEvents(p).length > 0
+  );
+
+  if (people.length === 0) {
+    document.getElementById('payroll-content').innerHTML = '<div class="empty-state"><div>Nejsou žádné záznamy.</div></div>';
+    return;
+  }
+
+  // --- HODINOVKA SUMMARY TABLE ---
+  let html = `
+    <div class="section-title">Hodinovka — mzdové náklady</div>
+    <div class="table-container" style="margin-bottom:28px;">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Zaměstnanec</th>
+              <th>Sazba (Kč/h)</th>
+              ${months.map(m => `<th>${MONTH_NAMES[m]}</th>`).join('')}
+              <th>Celkem hodin</th>
+              <th>Celkem Kč (hod.)</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${people.filter(p=>hoursLog.some(e=>e.person===p)).map(p => {
+              const rate = rates[p] || 150;
+              const monthHours = months.map(m => totalHours(p, m));
+              const totalH = monthHours.reduce((s,h)=>s+h, 0);
+              const totalPay = totalH * rate;
+              return `
+                <tr>
+                  <td><strong>${p}</strong></td>
+                  <td>
+                    <input class="rate-input" type="number" value="${rate}" min="0" step="10"
+                      onchange="rates['${p}']=parseFloat(this.value)||0;saveRates();renderVyplaty();">
+                  </td>
+                  ${monthHours.map(h => `<td style="text-align:right">${h > 0 ? h.toFixed(1)+'h' : '—'}</td>`).join('')}
+                  <td style="text-align:right;font-weight:600;">${totalH.toFixed(1)}h</td>
+                  <td class="pay-amount" style="text-align:right;">${totalPay.toLocaleString('cs-CZ')} Kč</td>
+                </tr>`;
+            }).join('')}
+          </tbody>
+          <tfoot>
+            <tr style="background:var(--accent-light);font-weight:700;">
+              <td colspan="2">CELKEM</td>
+              ${months.map(m => {
+                const total = people.reduce((s,p)=>s+totalHours(p,m),0);
+                return `<td style="text-align:right">${total > 0 ? total.toFixed(1)+'h' : '—'}</td>`;
+              }).join('')}
+              <td style="text-align:right">${people.reduce((s,p)=>s+totalHours(p,null),0).toFixed(1)}h</td>
+              <td class="pay-amount" style="text-align:right;">${people.reduce((s,p)=>s+totalHours(p,null)*(rates[p]||150),0).toLocaleString('cs-CZ')} Kč</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+    <p class="notice" style="margin-bottom:28px;">Kliknutím na sazbu ji přímo upravíte. Sazby jsou uloženy v prohlížeči.</p>
+
+    <!-- CLEANING PAY TABLE — řazeno dle data úklidu -->
+    <div class="section-title">Úklid — odměny dle termínu (5 000 Kč / akci ÷ počet osob)</div>
+    <div class="table-container" style="margin-bottom:28px;">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Datum úklidu</th>
+              <th>Datum svatby</th>
+              <th>Koordinátor</th>
+              <th style="text-align:center">Osob</th>
+              <th style="text-align:right">Kč / os.</th>
+              <th>Přiřazení zaměstnanci</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${WEDDINGS
+              .map(w => ({ w, team: getCleaning(w.date), cleanDate: addDays(w.date, 1) }))
+              .filter(({team}) => team.length > 0)
+              .sort((a, b) => a.cleanDate.localeCompare(b.cleanDate))
+              .map(({w, team, cleanDate}) => {
+                const share = 5000 / team.length;
+                const peopleHtml = team.map(p =>
+                  `<div style="display:flex;justify-content:space-between;align-items:center;padding:2px 0;border-bottom:1px solid var(--border);">
+                    <span style="font-size:0.85rem;">${p}</span>
+                    <span style="font-size:0.82rem;font-weight:700;color:var(--green);white-space:nowrap;margin-left:12px;">${share.toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</span>
+                  </div>`
+                ).join('');
+                return `
+                  <tr>
+                    <td><strong>${fmtDate(cleanDate)}</strong></td>
+                    <td style="color:var(--muted);font-size:0.85rem;">${fmtDate(w.date)}</td>
+                    <td>${coordTag(w.coord)}</td>
+                    <td style="text-align:center;font-weight:600;">${team.length}</td>
+                    <td style="text-align:right;font-weight:700;color:var(--green);">${share.toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
+                    <td style="min-width:220px;">${peopleHtml}</td>
+                  </tr>`;
+              }).join('')}
+          </tbody>
+          <tfoot>
+            <tr style="background:var(--accent-light);font-weight:700;">
+              <td colspan="3">CELKEM</td>
+              <td style="text-align:center;">${WEDDINGS.filter(w=>getCleaning(w.date).length>0).length} akcí</td>
+              <td style="text-align:right;color:var(--green);">${(5000).toLocaleString('cs-CZ')} Kč</td>
+              <td style="font-size:0.8rem;color:var(--muted);">Celkem vyplaceno: ${people.reduce((s,p)=>s+getCleaningPay(p),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- GRAND TOTAL -->
+    <div class="section-title">Celkové náklady</div>
+    <div class="table-container">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Zaměstnanec</th><th>Hodinovka (Kč)</th><th>Úklidy (Kč)</th><th>CELKEM (Kč)</th></tr></thead>
+          <tbody>
+            ${people.map(p => {
+              const hoursPay = totalHours(p,null) * (rates[p]||150);
+              const cleanPay = getCleaningPay(p);
+              const grand = hoursPay + cleanPay;
+              if (grand === 0) return '';
+              return `<tr>
+                <td><strong>${p}</strong></td>
+                <td style="text-align:right;">${hoursPay > 0 ? hoursPay.toLocaleString('cs-CZ') + ' Kč' : '—'}</td>
+                <td style="text-align:right;">${cleanPay > 0 ? cleanPay.toLocaleString('cs-CZ',{maximumFractionDigits:0}) + ' Kč' : '—'}</td>
+                <td class="pay-amount" style="text-align:right;">${grand.toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+          <tfoot>
+            <tr style="background:var(--accent-light);font-weight:700;">
+              <td>CELKEM</td>
+              <td style="text-align:right;">${people.reduce((s,p)=>s+totalHours(p,null)*(rates[p]||150),0).toLocaleString('cs-CZ')} Kč</td>
+              <td style="text-align:right;">${people.reduce((s,p)=>s+getCleaningPay(p),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
+              <td class="pay-amount" style="text-align:right;">${people.reduce((s,p)=>s+totalHours(p,null)*(rates[p]||150)+getCleaningPay(p),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  `;
+  document.getElementById('payroll-content').innerHTML = html;
+}
+
+// ============================================================
+// PAYROLL LOCK
+// ============================================================
+const ADMIN_PASSWORD = 'matejhonza2026';
+let payrollUnlocked = false;
+
+function renderPayrollLock(errorMsg) {
+  document.getElementById('payroll-unlocked-content').style.display = 'none';
+  document.getElementById('payroll-lock-screen').innerHTML = `
+    <div class="lock-screen">
+      <div class="lock-icon">🔐</div>
+      <div class="lock-title">Sekce Výplaty je chráněna heslem</div>
+      <div class="lock-sub">Zadejte administrátorské heslo pro zobrazení mzdových dat</div>
+      <div class="lock-form">
+        <input class="lock-input" type="password" id="pwd-input" placeholder="Heslo"
+          onkeydown="if(event.key==='Enter') checkPayrollPassword()">
+        <button class="btn" onclick="checkPayrollPassword()">Odemknout</button>
+      </div>
+      ${errorMsg ? `<div class="lock-error">❌ ${errorMsg}</div>` : ''}
+    </div>
+  `;
+  setTimeout(() => document.getElementById('pwd-input')?.focus(), 50);
+}
+
+function checkPayrollPassword() {
+  const val = document.getElementById('pwd-input')?.value || '';
+  if (val === ADMIN_PASSWORD) {
+    payrollUnlocked = true;
+    document.getElementById('payroll-lock-screen').innerHTML = '';
+    document.getElementById('payroll-unlocked-content').style.display = 'block';
+    renderVyplaty();
+    // Update tab label
+    document.querySelectorAll('.tab').forEach(t => {
+      if (t.textContent.includes('Výplaty')) t.innerHTML = '💰 Výplaty 🔓';
+    });
+  } else {
+    payrollUnlocked = false;
+    renderPayrollLock('Nesprávné heslo. Zkuste znovu.');
+  }
+}
+
+function lockPayroll() {
+  payrollUnlocked = false;
+  document.getElementById('payroll-unlocked-content').style.display = 'none';
+  renderPayrollLock();
+  document.querySelectorAll('.tab').forEach(t => {
+    if (t.textContent.includes('Výplaty')) t.innerHTML = '💰 Výplaty 🔒';
+  });
+}
+
+// ============================================================
+// TAB NAVIGATION
+// ============================================================
+function showTab(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (name === 'prehled') renderPrehled();
+  if (name === 'terminy') renderTerminy();
+  if (name === 'zamestnanec') renderZamestnanec();
+  if (name === 'hodinovka') renderHodinovka();
+  if (name === 'vyplaty') {
+    if (payrollUnlocked) renderVyplaty();
+    else renderPayrollLock();
+  }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+async function init() {
+  await loadState();
+  document.getElementById('loading-overlay').style.display = 'none';
+
+  // Header date
+  document.getElementById('hdr-date').textContent = new Date().toLocaleDateString('cs-CZ', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+
+  // Populate person selects
+  const personSelects = ['person-select','h-person','h-filter-person'];
+  personSelects.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const hasEmpty = el.querySelector('option[value=""]');
+    ALL_PEOPLE.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p;
+      opt.textContent = p;
+      el.appendChild(opt);
+    });
+  });
+
+  // Set today's date on hours form
+  document.getElementById('h-date').value = today();
+
+  // Initial render
+  renderPrehled();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
