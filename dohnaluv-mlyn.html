@@ -168,9 +168,12 @@
   /* WORKLOAD BAR */
   .workload-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
   .workload-name { width: 140px; font-size: 0.85rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .workload-bar-track { flex: 1; height: 12px; background: #ede8e0; border-radius: 6px; overflow: hidden; }
-  .workload-bar-fill { height: 100%; background: var(--accent); border-radius: 6px; transition: width 0.3s; }
-  .workload-count { font-size: 0.8rem; color: var(--muted); width: 50px; text-align: right; }
+  .workload-bar-track { flex: 1; height: 12px; background: #ede8e0; border-radius: 6px; overflow: hidden; display: flex; }
+  .workload-bar-service { height: 100%; background: var(--blue); transition: width 0.3s; }
+  .workload-bar-clean { height: 100%; background: var(--green); transition: width 0.3s; }
+  .workload-count { font-size: 0.8rem; color: var(--muted); width: 90px; text-align: right; white-space: nowrap; }
+  .workload-legend { display: flex; gap: 16px; margin-bottom: 12px; font-size: 0.8rem; color: var(--muted); }
+  .workload-legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
 
   /* TOOLTIP */
   .has-tip { cursor: help; border-bottom: 1px dashed var(--muted); }
@@ -323,6 +326,13 @@
       <option value="">— Vyberte zaměstnance —</option>
     </select>
     <div id="person-stats" style="display:flex; gap:12px; flex-wrap:wrap;"></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+    <input id="new-employee-input" type="text" placeholder="Jméno nového zaměstnance…"
+      style="padding:8px 14px;border:1px solid var(--border);border-radius:8px;font-size:0.88rem;outline:none;min-width:240px;"
+      onkeydown="if(event.key==='Enter')addEmployee()">
+    <button class="btn btn-outline btn-sm" onclick="addEmployee()">+ Přidat zaměstnance</button>
+    <span id="new-employee-msg" style="font-size:0.85rem;color:var(--green);font-weight:500;"></span>
   </div>
   <div id="person-schedule"></div>
 </div>
@@ -482,11 +492,12 @@ const SEED_HOURS = [
   {date:'2026-04-14',person:'Monika Kenša',hours:6,note:''},
 ];
 
-const ALL_PEOPLE = [
+const SEED_PEOPLE = [
   'Tomáš Grochal','Monika Kenša','Jan Kenša','Tereza Puršová','Petra Grochalová',
   'Lenka Helísková','Petra Pospíšilová','Kamča Zavadilová','Lucka Dohnalová',
   'Matěj Dohnal','Anežka Suchánková','Lenka Matine','Nikola Škarpová','Elena Hluk'
 ];
+let ALL_PEOPLE = [...SEED_PEOPLE];
 
 const MONTH_NAMES = ['','Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
 
@@ -500,6 +511,14 @@ let weddingAssignments = {}; // { 'YYYY-MM-DD': { service: [...], cleaning: [...
 async function loadState() {
   const snapshot = await db.ref('/').once('value');
   const data = snapshot.val() || {};
+
+  // People
+  if (data.people && Array.isArray(data.people) && data.people.length > 0) {
+    ALL_PEOPLE = data.people;
+  } else {
+    ALL_PEOPLE = [...SEED_PEOPLE];
+    savePeople();
+  }
 
   // Hours
   if (data.hoursLog) {
@@ -541,6 +560,41 @@ async function loadState() {
 function saveHours() { db.ref('hoursLog').set(hoursLog); }
 function saveRates() { db.ref('rates').set(rates); }
 function saveAssignments() { db.ref('weddingAssignments').set(weddingAssignments); }
+function savePeople() { db.ref('people').set(ALL_PEOPLE); }
+
+function populateSelects() {
+  const personSelects = ['person-select','h-person','h-filter-person'];
+  personSelects.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const currentVal = el.value;
+    // Keep only the empty placeholder option
+    while (el.options.length > 1) el.remove(1);
+    ALL_PEOPLE.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p; opt.textContent = p;
+      el.appendChild(opt);
+    });
+    if (currentVal) el.value = currentVal;
+  });
+}
+
+function addEmployee() {
+  const input = document.getElementById('new-employee-input');
+  const name = input.value.trim();
+  if (!name) return;
+  if (ALL_PEOPLE.includes(name)) {
+    document.getElementById('new-employee-msg').textContent = 'Zaměstnanec již existuje.';
+    return;
+  }
+  ALL_PEOPLE.push(name);
+  if (!rates[name]) { rates[name] = 150; saveRates(); }
+  savePeople();
+  populateSelects();
+  input.value = '';
+  document.getElementById('new-employee-msg').textContent = `✓ ${name} přidán/a do týmu.`;
+  setTimeout(() => { document.getElementById('new-employee-msg').textContent = ''; }, 3000);
+}
 
 // Assignment helpers — all rendering reads through these
 function getService(date) { return (weddingAssignments[date] || {service:[]}).service; }
@@ -726,21 +780,35 @@ function renderPrehled() {
     }).join('');
   }
 
-  // Workload
-  const counts = {};
-  ALL_PEOPLE.forEach(p => counts[p] = 0);
-  WEDDINGS.forEach(w => allPeople(w.date).forEach(p => { if (counts[p] !== undefined) counts[p]++; }));
-  const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]).filter(([,v]) => v > 0);
-  const maxCount = sorted[0]?.[1] || 1;
-  document.getElementById('workload-chart').innerHTML = sorted.map(([name, count]) => `
-    <div class="workload-row">
-      <div class="workload-name" title="${name}">${name.split(' ')[0]}</div>
-      <div class="workload-bar-track">
-        <div class="workload-bar-fill" style="width:${(count/maxCount)*100}%"></div>
-      </div>
-      <div class="workload-count">${count}×</div>
+  // Workload — split service vs cleaning
+  const svcCounts = {}, clnCounts = {};
+  ALL_PEOPLE.forEach(p => { svcCounts[p] = 0; clnCounts[p] = 0; });
+  WEDDINGS.forEach(w => {
+    getService(w.date).forEach(p => { if (svcCounts[p] !== undefined) svcCounts[p]++; });
+    getCleaning(w.date).forEach(p => { if (clnCounts[p] !== undefined) clnCounts[p]++; });
+  });
+  const sortedWorkload = ALL_PEOPLE
+    .map(p => ({ name: p, svc: svcCounts[p]||0, cln: clnCounts[p]||0, total: (svcCounts[p]||0)+(clnCounts[p]||0) }))
+    .filter(r => r.total > 0)
+    .sort((a, b) => b.total - a.total);
+  const maxTotal = sortedWorkload[0]?.total || 1;
+  document.getElementById('workload-chart').innerHTML = `
+    <div class="workload-legend">
+      <span><span class="workload-legend-dot" style="background:var(--blue)"></span>Obsluha</span>
+      <span><span class="workload-legend-dot" style="background:var(--green)"></span>Úklid</span>
     </div>
-  `).join('');
+    ${sortedWorkload.map(r => `
+    <div class="workload-row">
+      <div class="workload-name" title="${r.name}">${r.name.split(' ')[0]}</div>
+      <div class="workload-bar-track">
+        <div class="workload-bar-service" style="width:${(r.svc/maxTotal)*100}%"></div>
+        <div class="workload-bar-clean" style="width:${(r.cln/maxTotal)*100}%"></div>
+      </div>
+      <div class="workload-count" title="Obsluha: ${r.svc}×, Úklid: ${r.cln}×">
+        <span style="color:var(--blue)">${r.svc}×</span> + <span style="color:var(--green)">${r.cln}×</span>
+      </div>
+    </div>`).join('')}
+  `;
 
 }
 
@@ -909,26 +977,29 @@ function renderZamestnanec() {
   const workEvents = personWorkEvents(name);
   const upcoming = workEvents.filter(e => !isPast(e.workDate));
   const past = workEvents.filter(e => isPast(e.workDate));
-  const totalH = totalHours(name, null);
-  const cleanPay = getCleaningPay(name);
+
+  const totalService = workEvents.filter(e => e.inService).length;
+  const totalClean = workEvents.filter(e => e.inClean).length;
+  const upcomingService = upcoming.filter(e => e.inService).length;
+  const upcomingClean = upcoming.filter(e => e.inClean).length;
 
   statsEl.innerHTML = `
     <div class="card" style="padding:10px 16px;min-width:120px;">
-      <div class="card-title">Termíny celkem</div>
-      <div class="card-value" style="font-size:1.4rem;">${workEvents.length}</div>
+      <div class="card-title">Termíny — Svatba</div>
+      <div class="card-value" style="font-size:1.4rem;color:var(--blue);">${totalService}</div>
     </div>
     <div class="card" style="padding:10px 16px;min-width:120px;">
-      <div class="card-title">Nadcházející</div>
-      <div class="card-value" style="font-size:1.4rem;color:var(--accent);">${upcoming.length}</div>
+      <div class="card-title">Termíny — Úklid</div>
+      <div class="card-value" style="font-size:1.4rem;color:var(--green);">${totalClean}</div>
     </div>
     <div class="card" style="padding:10px 16px;min-width:120px;">
-      <div class="card-title">Hodinovka 2026</div>
-      <div class="card-value" style="font-size:1.4rem;color:var(--blue);">${totalH.toFixed(1)}h</div>
+      <div class="card-title">Nadcházející — Svatba</div>
+      <div class="card-value" style="font-size:1.4rem;color:var(--accent);">${upcomingService}</div>
     </div>
-    ${cleanPay > 0 ? `<div class="card" style="padding:10px 16px;min-width:120px;">
-      <div class="card-title">Úklidy (Kč)</div>
-      <div class="card-value" style="font-size:1.4rem;color:var(--green);">${cleanPay.toLocaleString('cs-CZ',{maximumFractionDigits:0})}</div>
-    </div>` : ''}
+    <div class="card" style="padding:10px 16px;min-width:120px;">
+      <div class="card-title">Nadcházející — Úklid</div>
+      <div class="card-value" style="font-size:1.4rem;color:var(--accent);">${upcomingClean}</div>
+    </div>
   `;
 
   if (workEvents.length === 0) {
@@ -1313,18 +1384,7 @@ async function init() {
   document.getElementById('hdr-date').textContent = new Date().toLocaleDateString('cs-CZ', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
 
   // Populate person selects
-  const personSelects = ['person-select','h-person','h-filter-person'];
-  personSelects.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const hasEmpty = el.querySelector('option[value=""]');
-    ALL_PEOPLE.forEach(p => {
-      const opt = document.createElement('option');
-      opt.value = p;
-      opt.textContent = p;
-      el.appendChild(opt);
-    });
-  });
+  populateSelects();
 
   // Set today's date on hours form
   document.getElementById('h-date').value = today();
