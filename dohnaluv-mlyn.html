@@ -1017,6 +1017,14 @@ function renderTerminy() {
   }).join('');
 }
 
+function updateGuests(date, val) {
+  const w = WEDDINGS.find(x => x.date === date);
+  if (!w) return;
+  const n = parseInt(val);
+  w.guests = isNaN(n) || val === '' ? null : n;
+  refreshAll(date);
+}
+
 function updateRequiredStaff(date, val) {
   const w = WEDDINGS.find(x => x.date === date);
   if (!w) return;
@@ -1068,7 +1076,11 @@ function openWeddingModal(date) {
     <button class="modal-close" onclick="closeModal()">×</button>
     <div class="modal-title">${fmtDate(w.date)} — ${w.day}</div>
     <div class="detail-row"><div class="detail-label">Koordinátor</div><div class="detail-val">${coordTag(w.coord)}</div></div>
-    <div class="detail-row"><div class="detail-label">Hosté</div><div class="detail-val">${w.guests || '—'}</div></div>
+    <div class="detail-row"><div class="detail-label">Hosté</div><div class="detail-val">
+      <input type="number" min="0" max="1000" value="${w.guests || ''}" placeholder="—"
+        style="width:80px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
+        onchange="updateGuests('${date}', this.value)">
+    </div></div>
     <div class="detail-row"><div class="detail-label">Požadovaná obsluha</div><div class="detail-val" style="display:flex;align-items:center;gap:8px;">
       <input type="number" min="0" max="20" value="${w.staff || ''}" placeholder="—"
         style="width:64px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
