@@ -1148,19 +1148,19 @@ function renderZamestnanec() {
   const upcoming = workEvents.filter(e => !isPast(e.workDate));
   const past = workEvents.filter(e => isPast(e.workDate));
 
-  const totalService = workEvents.filter(e => e.inService).length;
-  const totalClean = workEvents.filter(e => e.inClean).length;
+  const pastService = past.filter(e => e.inService).length;
+  const pastClean = past.filter(e => e.inClean).length;
   const upcomingService = upcoming.filter(e => e.inService).length;
   const upcomingClean = upcoming.filter(e => e.inClean).length;
 
   statsEl.innerHTML = `
     <div class="card" style="padding:10px 16px;min-width:120px;">
-      <div class="card-title">Termíny — Svatba</div>
-      <div class="card-value" style="font-size:1.4rem;color:var(--blue);">${totalService}</div>
+      <div class="card-title">Proběhlé — Svatba</div>
+      <div class="card-value" style="font-size:1.4rem;color:var(--blue);">${pastService}</div>
     </div>
     <div class="card" style="padding:10px 16px;min-width:120px;">
-      <div class="card-title">Termíny — Úklid</div>
-      <div class="card-value" style="font-size:1.4rem;color:var(--green);">${totalClean}</div>
+      <div class="card-title">Proběhlé — Úklid</div>
+      <div class="card-value" style="font-size:1.4rem;color:var(--green);">${pastClean}</div>
     </div>
     <div class="card" style="padding:10px 16px;min-width:120px;">
       <div class="card-title">Nadcházející — Svatba</div>
