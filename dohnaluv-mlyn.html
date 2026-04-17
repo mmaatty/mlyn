@@ -399,6 +399,10 @@
     <div id="h-msg" style="margin-top:10px;"></div>
   </div>
   <div class="filters" style="margin-bottom:16px;">
+    <div class="view-toggle">
+      <button class="view-btn active" id="h-view-btn-list" onclick="setHodinovkaView('list')">☰ Seznam</button>
+      <button class="view-btn" id="h-view-btn-cal" onclick="setHodinovkaView('calendar')">📅 Kalendář</button>
+    </div>
     <select id="h-filter-person" onchange="renderHodinovka()" style="min-width:180px;">
       <option value="">Všichni zaměstnanci</option>
     </select>
@@ -414,7 +418,17 @@
       <option value="10">Říjen</option>
     </select>
   </div>
-  <div id="hodinovka-content"></div>
+  <div id="hodinovka-list-view">
+    <div id="hodinovka-content"></div>
+  </div>
+  <div id="hodinovka-cal-view" style="display:none;">
+    <div class="cal-nav">
+      <button class="cal-nav-btn" onclick="hCalPrevMonth()">‹</button>
+      <div class="cal-nav-title" id="h-cal-title"></div>
+      <button class="cal-nav-btn" onclick="hCalNextMonth()">›</button>
+    </div>
+    <div class="cal-grid" id="h-cal-grid"></div>
+  </div>
 </div>
 
 <!-- ===================== PAGE: VÝPLATY ===================== -->
@@ -1247,15 +1261,92 @@ function addHoursEntry() {
   document.getElementById('h-note').value = '';
   setTimeout(() => msg.innerHTML = '', 3000);
 
-  renderHodinovka();
+  renderHodinovka(); if (hodinovkaView === 'calendar') renderHodinovkaCalendar();
   renderPrehled();
 }
 
 function deleteHoursEntry(id) {
   hoursLog = hoursLog.filter(e => e.id !== id);
   saveHours();
-  renderHodinovka();
+  renderHodinovka(); if (hodinovkaView === 'calendar') renderHodinovkaCalendar();
   renderPrehled();
+}
+
+// ---- HODINOVKA CALENDAR VIEW ----
+let hodinovkaView = 'list';
+let hCalYear = 2026, hCalMonth = new Date().getMonth() + 1;
+
+function setHodinovkaView(v) {
+  hodinovkaView = v;
+  document.getElementById('h-view-btn-list').classList.toggle('active', v === 'list');
+  document.getElementById('h-view-btn-cal').classList.toggle('active', v === 'calendar');
+  document.getElementById('hodinovka-list-view').style.display = v === 'list' ? '' : 'none';
+  document.getElementById('hodinovka-cal-view').style.display = v === 'calendar' ? '' : 'none';
+  if (v === 'calendar') renderHodinovkaCalendar();
+}
+
+function hCalPrevMonth() {
+  hCalMonth--; if (hCalMonth < 1) { hCalMonth = 12; hCalYear--; }
+  renderHodinovkaCalendar();
+}
+function hCalNextMonth() {
+  hCalMonth++; if (hCalMonth > 12) { hCalMonth = 1; hCalYear++; }
+  renderHodinovkaCalendar();
+}
+
+function renderHodinovkaCalendar() {
+  const filterPerson = document.getElementById('h-filter-person').value;
+  document.getElementById('h-cal-title').textContent = `${MONTH_NAMES[hCalMonth]} ${hCalYear}`;
+
+  // Build map: dateStr -> entries[]
+  let data = hoursLog;
+  if (filterPerson) data = data.filter(e => e.person === filterPerson);
+  const byDate = {};
+  data.forEach(e => {
+    if (!byDate[e.date]) byDate[e.date] = [];
+    byDate[e.date].push(e);
+  });
+
+  const todayStr = today();
+  const firstDay = new Date(hCalYear, hCalMonth - 1, 1);
+  const lastDay = new Date(hCalYear, hCalMonth, 0);
+  let startDow = firstDay.getDay();
+  startDow = startDow === 0 ? 6 : startDow - 1;
+
+  const DOW = ['Po','Út','St','Čt','Pá','So','Ne'];
+  let html = DOW.map(d => `<div class="cal-dow">${d}</div>`).join('');
+
+  for (let i = 0; i < startDow; i++) html += `<div class="cal-cell other-month"></div>`;
+
+  for (let d = 1; d <= lastDay.getDate(); d++) {
+    const mm = String(hCalMonth).padStart(2,'0');
+    const dd = String(d).padStart(2,'0');
+    const dateStr = `${hCalYear}-${mm}-${dd}`;
+    const entries = byDate[dateStr] || [];
+    const isToday = dateStr === todayStr;
+    const dayTotal = entries.reduce((s, e) => s + e.hours, 0);
+
+    let events = entries.map(e =>
+      `<div class="cal-event" style="background:var(--accent-light);color:var(--accent);border-left:3px solid var(--accent);" title="${e.person}: ${e.hours}h${e.note?' — '+e.note:''}">
+        ${filterPerson ? '' : `<strong>${e.person.split(' ')[0]}</strong> · `}${e.hours}h${e.note ? ` <span style="opacity:0.7">${e.note}</span>` : ''}
+      </div>`
+    ).join('');
+
+    if (dayTotal > 0 && !filterPerson) {
+      events += `<div style="font-size:0.7rem;color:var(--muted);text-align:right;margin-top:2px;">Σ ${dayTotal.toFixed(1)}h</div>`;
+    }
+
+    html += `<div class="cal-cell${isToday?' today':''}">
+      <div class="cal-cell-day">${d}</div>
+      ${events}
+    </div>`;
+  }
+
+  const total = startDow + lastDay.getDate();
+  const remaining = total % 7 === 0 ? 0 : 7 - (total % 7);
+  for (let i = 0; i < remaining; i++) html += `<div class="cal-cell other-month"></div>`;
+
+  document.getElementById('h-cal-grid').innerHTML = html;
 }
 
 function renderHodinovka() {
@@ -1536,7 +1627,7 @@ function showTab(name) {
   if (name === 'prehled') renderPrehled();
   if (name === 'terminy') renderTerminy();
   if (name === 'zamestnanec') renderZamestnanec();
-  if (name === 'hodinovka') renderHodinovka();
+  if (name === 'hodinovka') renderHodinovka(); if (hodinovkaView === 'calendar') renderHodinovkaCalendar();
   if (name === 'vyplaty') {
     if (payrollUnlocked) renderVyplaty();
     else renderPayrollLock();
