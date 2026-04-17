@@ -322,6 +322,41 @@
       <input type="checkbox" id="filter-incomplete" onchange="renderTerminy()"> Jen neúplné
     </label>
     <button class="btn btn-outline btn-sm" onclick="document.getElementById('filter-search').value='';document.getElementById('filter-coord').value='';document.getElementById('filter-month').value='';document.getElementById('filter-incomplete').checked=false;renderTerminy()">Resetovat</button>
+    <button class="btn btn-sm" onclick="openNewWeddingForm()" style="margin-left:auto;">+ Přidat svatbu</button>
+  </div>
+
+  <!-- NEW WEDDING FORM -->
+  <div id="new-wedding-form" style="display:none;" class="card" style="margin-bottom:20px;">
+    <div class="section-title" style="margin-bottom:16px;">Nová svatba</div>
+    <div class="form-row" style="flex-wrap:wrap;gap:16px;">
+      <div class="form-group">
+        <label>Datum *</label>
+        <input type="date" id="nw-date">
+      </div>
+      <div class="form-group">
+        <label>Koordinátor *</label>
+        <select id="nw-coord">
+          <option value="">— Vyberte —</option>
+          <option>Honza + Verča</option>
+          <option>Matěj</option>
+          <option>Grochy</option>
+          <option>Eliška a Vojta</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Hosté</label>
+        <input type="number" id="nw-guests" min="0" max="1000" placeholder="—" style="width:90px;">
+      </div>
+      <div class="form-group">
+        <label>Požadovaná obsluha</label>
+        <input type="number" id="nw-staff" min="0" max="20" placeholder="—" style="width:90px;">
+      </div>
+      <div class="form-group" style="justify-content:flex-end;align-items:flex-end;gap:8px;display:flex;">
+        <button class="btn btn-outline btn-sm" onclick="closeNewWeddingForm()">Zrušit</button>
+        <button class="btn btn-sm" onclick="addNewWedding()">Uložit</button>
+      </div>
+    </div>
+    <div id="nw-msg" style="margin-top:10px;font-size:0.85rem;"></div>
   </div>
   <div id="terminy-list-view">
     <div class="table-wrap">
@@ -454,7 +489,7 @@
 // ============================================================
 // DATA
 // ============================================================
-const WEDDINGS = [
+const SEED_WEDDINGS = [
   {date:'2026-04-18',day:'Sobota',coord:'Honza + Verča',staff:5,guests:100,service:['Lenka Helísková','Jan Kenša','Monika Kenša','Petra Pospíšilová'],cleaning:['Monika Kenša','Petra Grochalová','Petra Pospíšilová','Lenka Helísková','Lucka Dohnalová']},
   {date:'2026-04-25',day:'Sobota',coord:'Matěj',staff:4,guests:60,service:['Matěj Dohnal','Petra Pospíšilová','Tereza Puršová','Lenka Helísková'],cleaning:['Petra Grochalová','Petra Pospíšilová','Kamča Zavadilová','Lenka Helísková','Monika Kenša']},
   {date:'2026-05-02',day:'Sobota',coord:'Honza + Verča',staff:null,guests:60,service:[],cleaning:['Monika Kenša','Lenka Helísková']},
@@ -505,6 +540,8 @@ const WEDDINGS = [
   {date:'2026-10-10',day:'Sobota',coord:'Eliška a Vojta',staff:null,guests:50,service:[],cleaning:[]},
 ];
 
+let WEDDINGS = [...SEED_WEDDINGS]; // merged with custom weddings from Firebase
+
 // Pre-loaded hours from original Excel (March + April 2026)
 const SEED_HOURS = [
   {date:'2026-03-10',person:'Tomáš Grochal',hours:6.5,note:''},
@@ -552,6 +589,7 @@ const MONTH_NAMES = ['','Leden','Únor','Březen','Duben','Květen','Červen','�
 let hoursLog = [];
 let rates = {};
 let weddingAssignments = {}; // { 'YYYY-MM-DD': { service: [...], cleaning: [...] } }
+let customWeddings = []; // user-created weddings, persisted in Firebase
 
 async function loadState() {
   const snapshot = await db.ref('/').once('value');
@@ -586,6 +624,15 @@ async function loadState() {
     saveRates();
   }
 
+  // Custom weddings
+  if (data.customWeddings) {
+    customWeddings = toArr(data.customWeddings).filter(Boolean);
+  } else {
+    customWeddings = [];
+  }
+  // Rebuild WEDDINGS = seed + custom, sorted by date
+  WEDDINGS = [...SEED_WEDDINGS, ...customWeddings].sort((a, b) => a.date.localeCompare(b.date));
+
   // Assignments — seeded from WEDDINGS on first load
   if (data.weddingAssignments) {
     weddingAssignments = data.weddingAssignments;
@@ -618,6 +665,7 @@ function saveHours() { db.ref('hoursLog').set(hoursLog); }
 function saveRates() { db.ref('rates').set(rates); }
 function saveAssignments() { db.ref('weddingAssignments').set(weddingAssignments); }
 function savePeople() { db.ref('people').set(ALL_PEOPLE); }
+function saveCustomWeddings() { db.ref('customWeddings').set(customWeddings); }
 
 function populateSelects() {
   const personSelects = ['person-select','h-person','h-filter-person'];
@@ -881,6 +929,47 @@ function renderPrehled() {
 // ---- CALENDAR VIEW ----
 let terminyView = 'list';
 let calYear = 2026, calMonth = 4; // start at April 2026
+
+function openNewWeddingForm() {
+  document.getElementById('new-wedding-form').style.display = 'block';
+  document.getElementById('nw-date').value = '';
+  document.getElementById('nw-coord').value = '';
+  document.getElementById('nw-guests').value = '';
+  document.getElementById('nw-staff').value = '';
+  document.getElementById('nw-msg').textContent = '';
+}
+function closeNewWeddingForm() {
+  document.getElementById('new-wedding-form').style.display = 'none';
+}
+
+function addNewWedding() {
+  const date = document.getElementById('nw-date').value;
+  const coord = document.getElementById('nw-coord').value;
+  const guests = parseInt(document.getElementById('nw-guests').value) || null;
+  const staff = parseInt(document.getElementById('nw-staff').value) || null;
+  const msg = document.getElementById('nw-msg');
+
+  if (!date) { msg.style.color='var(--red)'; msg.textContent = 'Datum je povinné.'; return; }
+  if (!coord) { msg.style.color='var(--red)'; msg.textContent = 'Koordinátor je povinný.'; return; }
+  if (WEDDINGS.find(w => w.date === date)) { msg.style.color='var(--red)'; msg.textContent = 'Na tento datum již existuje svatba.'; return; }
+
+  const days = ['Neděle','Pondělí','Úterý','Středa','Čtvrtek','Pátek','Sobota'];
+  const dayName = days[new Date(date).getDay()];
+
+  const newWedding = { date, day: dayName, coord, staff, guests, service: [], cleaning: [] };
+  customWeddings.push(newWedding);
+  WEDDINGS = [...SEED_WEDDINGS, ...customWeddings].sort((a, b) => a.date.localeCompare(b.date));
+
+  // Initialize assignment slot
+  weddingAssignments[date] = { service: [], cleaning: [] };
+  saveCustomWeddings();
+  saveAssignments();
+
+  closeNewWeddingForm();
+  renderTerminy();
+  if (terminyView === 'calendar') renderCalendar();
+  renderPrehled();
+}
 
 function setTerminyView(v) {
   terminyView = v;
