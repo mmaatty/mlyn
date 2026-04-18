@@ -72,7 +72,9 @@
   th { background: #f3ede5; color: var(--muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.4px; padding: 10px 12px; text-align: left; border-bottom: 2px solid var(--border); position: sticky; top: 0; }
   td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
   tr:hover td { background: var(--accent-light); }
-  tr.past-event td { opacity: 0.5; }
+  tr.past-event td { background: #f0ede8; color: #9a8f82; }
+  tr.past-event td .tag { opacity: 0.6; }
+  tr.past-event td strong { color: #9a8f82; }
 
   /* TAGS */
   .tag { display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; margin: 1px; }
@@ -433,6 +435,52 @@
     </div>
     <div id="h-msg" style="margin-top:10px;"></div>
   </div>
+  <!-- JEDNORÁZOVÉ NÁKLADY -->
+  <div class="hours-form card" style="margin-bottom:20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;cursor:pointer;" onclick="toggleExpenseForm()">
+      <div class="section-title" style="margin-bottom:0;">💸 Jednorázové náklady</div>
+      <span id="expense-toggle-icon" style="font-size:1.1rem;color:var(--muted);">▼</span>
+    </div>
+    <div id="expense-form-body" style="display:none;">
+      <div class="form-row" style="margin-bottom:10px;">
+        <div class="form-group">
+          <label>Datum</label>
+          <input type="date" id="exp-date">
+        </div>
+        <div class="form-group">
+          <label>Zaměstnanec</label>
+          <select id="exp-person">
+            <option value="">Vyberte...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Typ výdaje</label>
+          <select id="exp-type">
+            <option value="">Vyberte...</option>
+            <option>Pohonné hmoty</option>
+            <option>Materiál</option>
+            <option>Občerstvení</option>
+            <option>Doprava</option>
+            <option>Ostatní</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Částka (Kč)</label>
+          <input type="number" id="exp-amount" min="0" step="1" style="width:110px;" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label>Poznámka (volitelné)</label>
+          <input type="text" id="exp-note" placeholder="Upřesnění..." style="width:180px;">
+        </div>
+        <div class="form-group" style="justify-content:flex-end;">
+          <button class="btn" onclick="addExpenseEntry()">Přidat</button>
+        </div>
+      </div>
+      <div id="exp-msg" style="margin-top:6px;font-size:0.85rem;"></div>
+      <div id="exp-list"></div>
+    </div>
+  </div>
+
   <div class="filters" style="margin-bottom:16px;">
     <div class="view-toggle">
       <button class="view-btn active" id="h-view-btn-list" onclick="setHodinovkaView('list')">☰ Seznam</button>
@@ -590,6 +638,7 @@ let hoursLog = [];
 let rates = {};
 let weddingAssignments = {}; // { 'YYYY-MM-DD': { service: [...], cleaning: [...] } }
 let customWeddings = []; // user-created weddings, persisted in Firebase
+let expenses = []; // jednorázové náklady
 
 async function loadState() {
   const snapshot = await db.ref('/').once('value');
@@ -622,6 +671,13 @@ async function loadState() {
     rates = {};
     ALL_PEOPLE.forEach(p => rates[p] = 150);
     saveRates();
+  }
+
+  // Expenses
+  if (data.expenses) {
+    expenses = toArr(data.expenses).filter(Boolean);
+  } else {
+    expenses = [];
   }
 
   // Custom weddings
@@ -666,9 +722,10 @@ function saveRates() { db.ref('rates').set(rates); }
 function saveAssignments() { db.ref('weddingAssignments').set(weddingAssignments); }
 function savePeople() { db.ref('people').set(ALL_PEOPLE); }
 function saveCustomWeddings() { db.ref('customWeddings').set(customWeddings); }
+function saveExpenses() { db.ref('expenses').set(expenses); }
 
 function populateSelects() {
-  const personSelects = ['person-select','h-person','h-filter-person'];
+  const personSelects = ['person-select','h-person','h-filter-person','exp-person'];
   personSelects.forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
@@ -1365,6 +1422,80 @@ function deleteHoursEntry(id) {
 let hodinovkaView = 'list';
 let hCalYear = 2026, hCalMonth = new Date().getMonth() + 1;
 
+function toggleExpenseForm() {
+  const body = document.getElementById('expense-form-body');
+  const icon = document.getElementById('expense-toggle-icon');
+  const open = body.style.display === 'none';
+  body.style.display = open ? 'block' : 'none';
+  icon.textContent = open ? '▲' : '▼';
+  if (open) renderExpenseList();
+}
+
+function addExpenseEntry() {
+  const date = document.getElementById('exp-date').value;
+  const person = document.getElementById('exp-person').value;
+  const type = document.getElementById('exp-type').value;
+  const amount = parseFloat(document.getElementById('exp-amount').value);
+  const note = document.getElementById('exp-note').value.trim();
+  const msg = document.getElementById('exp-msg');
+
+  if (!date || !person || !type || isNaN(amount) || amount <= 0) {
+    msg.style.color = 'var(--red)'; msg.textContent = 'Vyplňte datum, zaměstnance, typ a částku.'; return;
+  }
+  expenses.push({ id: 'exp_' + Date.now(), date, person, type, amount, note });
+  saveExpenses();
+  document.getElementById('exp-date').value = today();
+  document.getElementById('exp-person').value = '';
+  document.getElementById('exp-type').value = '';
+  document.getElementById('exp-amount').value = '';
+  document.getElementById('exp-note').value = '';
+  msg.style.color = 'var(--green)'; msg.textContent = '✓ Náklad přidán.';
+  setTimeout(() => { msg.textContent = ''; }, 2500);
+  renderExpenseList();
+}
+
+function deleteExpenseEntry(id) {
+  expenses = expenses.filter(e => e.id !== id);
+  saveExpenses();
+  renderExpenseList();
+}
+
+function renderExpenseList() {
+  const el = document.getElementById('exp-list');
+  if (!el) return;
+  if (expenses.length === 0) { el.innerHTML = '<div class="empty-state" style="padding:12px;font-size:0.85rem;color:var(--muted);">Žádné záznamy.</div>'; return; }
+  const sorted = [...expenses].sort((a, b) => b.date.localeCompare(a.date));
+  const total = expenses.reduce((s, e) => s + e.amount, 0);
+  el.innerHTML = `
+    <div style="margin-top:14px;overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+        <thead><tr style="background:#f3ede5;">
+          <th style="padding:8px 10px;text-align:left;color:var(--muted);font-size:0.75rem;text-transform:uppercase;">Datum</th>
+          <th style="padding:8px 10px;text-align:left;color:var(--muted);font-size:0.75rem;text-transform:uppercase;">Zaměstnanec</th>
+          <th style="padding:8px 10px;text-align:left;color:var(--muted);font-size:0.75rem;text-transform:uppercase;">Typ</th>
+          <th style="padding:8px 10px;text-align:right;color:var(--muted);font-size:0.75rem;text-transform:uppercase;">Částka</th>
+          <th style="padding:8px 10px;text-align:left;color:var(--muted);font-size:0.75rem;text-transform:uppercase;">Poznámka</th>
+          <th></th>
+        </tr></thead>
+        <tbody>
+          ${sorted.map(e => `<tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:8px 10px;">${fmtDate(e.date)}</td>
+            <td style="padding:8px 10px;">${e.person}</td>
+            <td style="padding:8px 10px;"><span class="tag" style="background:var(--yellow-light);color:var(--yellow);">${e.type}</span></td>
+            <td style="padding:8px 10px;text-align:right;font-weight:700;">${e.amount.toLocaleString('cs-CZ')} Kč</td>
+            <td style="padding:8px 10px;color:var(--muted);font-size:0.8rem;">${e.note || '—'}</td>
+            <td style="padding:8px 10px;"><button class="delete-btn" onclick="deleteExpenseEntry('${e.id}')" title="Smazat">✕</button></td>
+          </tr>`).join('')}
+          <tr style="border-top:2px solid var(--border);">
+            <td colspan="3" style="padding:8px 10px;font-weight:700;">Celkem</td>
+            <td style="padding:8px 10px;text-align:right;font-weight:700;color:var(--accent);">${total.toLocaleString('cs-CZ')} Kč</td>
+            <td colspan="2"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>`;
+}
+
 function setHodinovkaView(v) {
   hodinovkaView = v;
   document.getElementById('h-view-btn-list').classList.toggle('active', v === 'list');
@@ -1738,6 +1869,7 @@ async function init() {
 
   // Set today's date on hours form
   document.getElementById('h-date').value = today();
+  document.getElementById('exp-date').value = today();
 
   // Initial render
   renderPrehled();
