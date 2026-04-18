@@ -1337,40 +1337,57 @@ function renderZamestnanec() {
     return;
   }
 
+  const DOW = ['Neděle','Pondělí','Úterý','Středa','Čtvrtek','Pátek','Sobota'];
+
   const renderSection = (title, items) => {
     if (items.length === 0) return '';
+
+    // Expand each event into separate rows per role, then sort by date
+    const rows = [];
+    items.forEach(e => {
+      const w = e.wedding;
+      if (e.inService) rows.push({ type: 'service', date: w.date, day: w.day, w });
+      if (e.inClean)   rows.push({ type: 'cleaning', date: addDays(w.date, 1), day: DOW[new Date(addDays(w.date,1)).getDay()], w });
+    });
+    rows.sort((a, b) => a.date.localeCompare(b.date));
+
     return `
-      <div class="section-title" style="margin-top:20px;">${title}</div>
-      ${items.map(e => {
-        const w = e.wedding;
-        // Day of week: for cleaning it's the next day
-        const workDayName = e.inService ? w.day : (() => {
-          const days = ['Neděle','Pondělí','Úterý','Středa','Čtvrtek','Pátek','Sobota'];
-          return days[new Date(e.workDate).getDay()];
-        })();
-        const cleanTeam = e.inClean ? getCleaning(w.date).filter(n => n !== name) : [];
-        const serviceTeam = e.inService ? getService(w.date).filter(n => n !== name) : [];
-        return `
-          <div class="person-event" style="cursor:pointer;" onclick="openWeddingModal('${w.date}')">
-            <div class="event-date-col">
-              <div class="event-date-main">${fmtDate(e.workDate)}</div>
-              <div class="event-date-sub">${workDayName}</div>
-              ${e.inClean && !e.inService ? `<div style="font-size:0.7rem;color:var(--muted);">svatba: ${fmtDate(w.date)}</div>` : ''}
-            </div>
-            <div style="flex:1">
-              <div>${coordTag(w.coord)} ${w.guests?`<span class="tag" style="background:#eee;color:#666;">${w.guests} hostů</span>`:''}</div>
-              <div class="event-role" style="margin-top:5px;">
-                ${e.inService?'<span class="tag tag-service">obsluha</span>':''}
-                ${e.inClean?`<span class="tag tag-cleaning">úklid · ${(5000/getCleaning(w.date).length).toFixed(0)} Kč</span>`:''}
+      <div class="section-title" style="margin-top:20px;">${title} <span style="font-size:0.75rem;color:var(--muted);font-weight:400;">(${rows.length} záznamů)</span></div>
+      ${rows.map(r => {
+        const w = r.w;
+        if (r.type === 'service') {
+          const team = getService(w.date);
+          const teammates = team.filter(n => n !== name);
+          return `
+            <div class="person-event" style="cursor:pointer;" onclick="openWeddingModal('${w.date}')">
+              <div class="event-date-col">
+                <div class="event-date-main">${fmtDate(r.date)}</div>
+                <div class="event-date-sub">${r.day}</div>
               </div>
-              <div style="font-size:0.78rem;color:var(--muted);margin-top:4px;">
-                ${e.inService && serviceTeam.length ? 'Tým obsluha: ' + serviceTeam.join(', ') : ''}
-                ${e.inService && e.inClean ? '<br>' : ''}
-                ${e.inClean && cleanTeam.length ? 'Tým úklid: ' + cleanTeam.join(', ') : ''}
-                ${e.inClean && cleanTeam.length === 0 && !e.inService ? '— sólo úklid' : ''}
+              <div style="flex:1">
+                <div>${coordTag(w.coord)} ${w.guests?`<span class="tag" style="background:#eee;color:#666;">${w.guests} hostů</span>`:''}</div>
+                <div class="event-role" style="margin-top:5px;"><span class="tag tag-service">obsluha</span></div>
+                ${teammates.length ? `<div style="font-size:0.78rem;color:var(--muted);margin-top:4px;">Obsluhuje: ${teammates.join(', ')}</div>` : ''}
               </div>
-            </div>
-          </div>`;
+            </div>`;
+        } else {
+          const team = getCleaning(w.date);
+          const teammates = team.filter(n => n !== name);
+          const pay = team.length > 0 ? (5000 / team.length).toFixed(0) : 0;
+          return `
+            <div class="person-event" style="cursor:pointer;" onclick="openWeddingModal('${w.date}')">
+              <div class="event-date-col">
+                <div class="event-date-main">${fmtDate(r.date)}</div>
+                <div class="event-date-sub">${r.day}</div>
+                <div style="font-size:0.7rem;color:var(--muted);">svatba: ${fmtDate(w.date)}</div>
+              </div>
+              <div style="flex:1">
+                <div>${coordTag(w.coord)}</div>
+                <div class="event-role" style="margin-top:5px;"><span class="tag tag-cleaning">úklid · ${pay} Kč</span></div>
+                ${teammates.length ? `<div style="font-size:0.78rem;color:var(--muted);margin-top:4px;">Uklízí: ${teammates.join(', ')}</div>` : ''}
+              </div>
+            </div>`;
+        }
       }).join('')}
     `;
   };
