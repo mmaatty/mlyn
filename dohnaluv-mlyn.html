@@ -282,7 +282,7 @@
 
 <!-- ===================== PAGE: PŘEHLED ===================== -->
 <div class="page active" id="page-prehled">
-  <div class="grid-3" id="kpi-cards"></div>
+  <div class="grid-2" id="kpi-cards"></div>
   <div class="grid-2">
     <div>
       <div class="section-title">Nadcházející termíny</div>
@@ -916,11 +916,6 @@ function renderPrehled() {
       <div class="card-title">Nejbližší termín</div>
       <div class="card-value" style="font-size:1.3rem;">${upcoming[0] ? fmtDate(upcoming[0].date) : '—'}</div>
       <div class="card-sub">${upcoming[0] ? `za ${daysBetween(upcoming[0].date, now)} dní · ${upcoming[0].coord||'?'}` : ''}</div>
-    </div>
-    <div class="card">
-      <div class="card-title">Úklidy celkem 2026</div>
-      <div class="card-value">${WEDDINGS.length}</div>
-      <div class="card-sub">1 úklid den po každé svatbě</div>
     </div>
   `;
 
