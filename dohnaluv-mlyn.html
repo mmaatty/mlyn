@@ -640,6 +640,7 @@ let payrollMonth = null; // null = vše, jinak 'YYYY-MM'
 let weddingAssignments = {}; // { 'YYYY-MM-DD': { service: [...], cleaning: [...] } }
 let customWeddings = []; // user-created weddings, persisted in Firebase
 let expenses = []; // jednorázové náklady
+let weddingFeedback = {}; // { 'YYYY-MM-DD': 'text...' }
 
 async function loadState() {
   const snapshot = await db.ref('/').once('value');
@@ -680,6 +681,9 @@ async function loadState() {
   } else {
     expenses = [];
   }
+
+  // Feedback
+  weddingFeedback = data.weddingFeedback || {};
 
   // Custom weddings
   if (data.customWeddings) {
@@ -724,6 +728,11 @@ function saveAssignments() { db.ref('weddingAssignments').set(weddingAssignments
 function savePeople() { db.ref('people').set(ALL_PEOPLE); }
 function saveCustomWeddings() { db.ref('customWeddings').set(customWeddings); }
 function saveExpenses() { db.ref('expenses').set(expenses); }
+function saveFeedback() { db.ref('weddingFeedback').set(weddingFeedback); }
+function updateFeedback(date, val) {
+  weddingFeedback[date] = val;
+  saveFeedback();
+}
 
 function populateSelects() {
   const personSelects = ['person-select','h-person','h-filter-person','exp-person'];
@@ -1286,6 +1295,14 @@ function openWeddingModal(date) {
         <button class="btn btn-sm" style="background:var(--green);" onclick="signUp('${date}',document.getElementById('cln-pick-${date}').value,'cleaning')">+ Přihlásit</button>
       </div>
     </div>
+
+    <div style="margin-top:16px;">
+      <div style="font-size:0.8rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:6px;">Feedback</div>
+      <textarea id="feedback-${date}"
+        style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:0.85rem;font-family:inherit;resize:vertical;min-height:80px;background:#fafafa;"
+        placeholder="Poznámky ke svatbě, co se povedlo, co zlepšit..."
+        oninput="updateFeedback('${date}', this.value)">${weddingFeedback[date] || ''}</textarea>
+    </div>
   `;
   document.getElementById('modal-overlay').classList.add('open');
 }
@@ -1371,15 +1388,14 @@ function renderZamestnanec() {
                 <div class="event-date-sub">${r.day}</div>
               </div>
               <div style="flex:1">
-                <div>${coordTag(w.coord)} ${w.guests?`<span class="tag" style="background:#eee;color:#666;">${w.guests} hostů</span>`:''}</div>
-                <div class="event-role" style="margin-top:5px;"><span class="tag tag-service">obsluha</span></div>
-                ${teammates.length ? `<div style="font-size:0.78rem;color:var(--muted);margin-top:4px;">Obsluhuje: ${teammates.join(', ')}</div>` : ''}
+                <div class="event-role" style="margin-bottom:5px;"><span class="tag tag-service" style="font-size:0.9rem;font-weight:700;padding:4px 12px;">obsluha</span></div>
+                <div style="font-size:0.78rem;color:var(--muted);">${w.coord}${w.guests ? ` · ${w.guests} hostů` : ''}</div>
+                ${teammates.length ? `<div style="font-size:0.78rem;color:var(--muted);margin-top:3px;">Obsluhuje: ${teammates.join(', ')}</div>` : ''}
               </div>
             </div>`;
         } else {
           const team = getCleaning(w.date);
           const teammates = team.filter(n => n !== name);
-          const pay = team.length > 0 ? (5000 / team.length).toFixed(0) : 0;
           return `
             <div class="person-event" style="cursor:pointer;" onclick="openWeddingModal('${w.date}')">
               <div class="event-date-col">
@@ -1388,9 +1404,9 @@ function renderZamestnanec() {
                 <div style="font-size:0.7rem;color:var(--muted);">svatba: ${fmtDate(w.date)}</div>
               </div>
               <div style="flex:1">
-                <div>${coordTag(w.coord)}</div>
-                <div class="event-role" style="margin-top:5px;"><span class="tag tag-cleaning">úklid · ${pay} Kč</span></div>
-                ${teammates.length ? `<div style="font-size:0.78rem;color:var(--muted);margin-top:4px;">Uklízí: ${teammates.join(', ')}</div>` : ''}
+                <div class="event-role" style="margin-bottom:5px;"><span class="tag tag-cleaning" style="font-size:0.9rem;font-weight:700;padding:4px 12px;">úklid</span></div>
+                <div style="font-size:0.78rem;color:var(--muted);">${w.coord}</div>
+                ${teammates.length ? `<div style="font-size:0.78rem;color:var(--muted);margin-top:3px;">Uklízí: ${teammates.join(', ')}</div>` : ''}
               </div>
             </div>`;
         }
