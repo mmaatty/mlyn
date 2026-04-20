@@ -1153,21 +1153,31 @@ function renderTerminy() {
       ? `<span style="color:var(--red);font-size:0.8rem;">⚠ nepřiřazena</span>${staffBadge}`
       : svc.map(s => `<span class="tag tag-service">${s}</span>`).join('') + staffBadge;
 
+    const CLEAN_REQ = 4;
     const cleanDateLabel = !noCleaning ? (() => {
       const d = new Date(w.date); d.setDate(d.getDate()+1);
       return `<span style="font-size:0.72rem;color:var(--muted);display:block;margin-bottom:3px;">${fmtDate(d.toISOString().split('T')[0])}</span>`;
     })() : '';
 
+    const cleanUnderstaffed = !past && cln.length < CLEAN_REQ;
+    const cleanBadge = cleanUnderstaffed
+      ? `<span style="font-size:0.75rem;font-weight:700;color:${cln.length===0?'var(--red)':'var(--yellow)'};margin-left:4px;">(${cln.length}/${CLEAN_REQ})</span>`
+      : `<span style="font-size:0.75rem;color:var(--muted);margin-left:4px;">(${cln.length}/${CLEAN_REQ})</span>`;
+
     const cleanHtml = noCleaning
-      ? `<span style="color:var(--muted);font-size:0.8rem;">—</span>`
-      : cleanDateLabel + cln.map(s => `<span class="tag tag-cleaning">${s}</span>`).join('');
+      ? `<span style="color:var(--red);font-size:0.8rem;">⚠ nepřiřazen</span>${cleanBadge}`
+      : cleanDateLabel + cln.map(s => `<span class="tag tag-cleaning">${s}</span>`).join('') + cleanBadge;
+
+    const cleanCellStyle = !past && cleanUnderstaffed
+      ? `background:${cln.length===0?'var(--red-light)':'var(--yellow-light)'};`
+      : '';
 
     return `<tr class="${past?'past-event':''}" style="cursor:pointer;" onclick="openWeddingModal('${w.date}')">
       <td><strong>${fmtDate(w.date)}</strong><br><span style="font-size:0.75rem;color:var(--muted)">${w.day}</span></td>
       <td>${coordTag(w.coord)}</td>
       <td>${guestBar}</td>
       <td>${serviceHtml}</td>
-      <td>${cleanHtml}</td>
+      <td style="${cleanCellStyle}">${cleanHtml}</td>
       <td><button class="btn btn-sm btn-outline" onclick="event.stopPropagation();openWeddingModal('${w.date}')" style="white-space:nowrap">✏ Přihlásit</button></td>
     </tr>`;
   }).join('');
