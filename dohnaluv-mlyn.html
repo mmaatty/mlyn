@@ -1113,7 +1113,7 @@ function renderTerminy() {
   let data = WEDDINGS.filter(w => {
     if (coord && w.coord !== coord) return false;
     if (month && !w.date.startsWith('2026-'+month)) return false;
-    if (incomplete && getService(w.date).length > 0 && getCleaning(w.date).length > 0) return false;
+    if (incomplete && getService(w.date).length > 0 && getCleaning(w.date).length >= 4) return false;
     if (search) {
       const hay = [w.date, w.coord, ...getService(w.date), ...getCleaning(w.date)].join(' ').toLowerCase();
       if (!hay.includes(search)) return false;
