@@ -636,6 +636,7 @@ const MONTH_NAMES = ['','Leden','Únor','Březen','Duben','Květen','Červen','�
 // ============================================================
 let hoursLog = [];
 let rates = {};
+let payrollMonth = null; // null = vše, jinak 'YYYY-MM'
 let weddingAssignments = {}; // { 'YYYY-MM-DD': { service: [...], cleaning: [...] } }
 let customWeddings = []; // user-created weddings, persisted in Firebase
 let expenses = []; // jednorázové náklady
@@ -1650,9 +1651,20 @@ function renderHodinovka() {
 // ============================================================
 // VÝPLATY
 // ============================================================
+function setPayrollMonth(m) {
+  payrollMonth = m;
+  renderVyplaty();
+}
+
 function renderVyplaty() {
-  const months = [...new Set(hoursLog.map(e => parseInt(e.date.split('-')[1])))].sort((a,b)=>a-b);
-  // Show all people who have either hours OR cleaning events
+  // Collect all months with data (hours or cleaning)
+  const hoursMonths = hoursLog.map(e => e.date.substring(0,7));
+  const cleanMonths = WEDDINGS
+    .filter(w => getCleaning(w.date).length > 0)
+    .map(w => addDays(w.date, 1).substring(0,7));
+  const allMonths = [...new Set([...hoursMonths, ...cleanMonths])].sort();
+
+  // People with any data
   const people = ALL_PEOPLE.filter(p =>
     hoursLog.some(e => e.person === p) || getCleaningEvents(p).length > 0
   );
@@ -1662,8 +1674,40 @@ function renderVyplaty() {
     return;
   }
 
-  // --- HODINOVKA SUMMARY TABLE ---
-  let html = `
+  // Filtered subsets
+  const fHours = payrollMonth
+    ? hoursLog.filter(e => e.date.startsWith(payrollMonth))
+    : hoursLog;
+  const fWeddings = payrollMonth
+    ? WEDDINGS.filter(w => addDays(w.date, 1).startsWith(payrollMonth))
+    : WEDDINGS;
+
+  // Filtered helpers
+  const fPersonHours = (person) => fHours.filter(e => e.person === person).reduce((s,e)=>s+e.hours,0);
+  const fPersonCleanPay = (person) => fWeddings.reduce((s,w)=>{
+    const team = getCleaning(w.date);
+    return team.includes(person) ? s + 5000/team.length : s;
+  }, 0);
+
+  // Month columns for hodinovka (all months view)
+  const monthNums = [...new Set(hoursLog.map(e => parseInt(e.date.split('-')[1])))].sort((a,b)=>a-b);
+
+  // Filter buttons
+  const filterHtml = `
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;align-items:center;">
+      <span style="font-size:0.82rem;color:var(--muted);font-weight:600;margin-right:4px;">Měsíc:</span>
+      <button class="view-btn${payrollMonth===null?' active':''}" onclick="setPayrollMonth(null)">Vše</button>
+      ${allMonths.map(ym => {
+        const mn = parseInt(ym.split('-')[1]);
+        return `<button class="view-btn${payrollMonth===ym?' active':''}" onclick="setPayrollMonth('${ym}')">${MONTH_NAMES[mn]}</button>`;
+      }).join('')}
+    </div>`;
+
+  // --- HODINOVKA TABLE ---
+  const hoursLabel = payrollMonth ? `Hodiny (${MONTH_NAMES[parseInt(payrollMonth.split('-')[1])]})` : null;
+  const hodinovkaPeople = people.filter(p => fHours.some(e => e.person === p));
+
+  const hodinovkaHtml = hodinovkaPeople.length === 0 ? '' : `
     <div class="section-title">Hodinovka — mzdové náklady</div>
     <div class="table-container" style="margin-bottom:28px;">
       <div class="table-wrap">
@@ -1672,16 +1716,18 @@ function renderVyplaty() {
             <tr>
               <th>Zaměstnanec</th>
               <th>Sazba (Kč/h)</th>
-              ${months.map(m => `<th>${MONTH_NAMES[m]}</th>`).join('')}
-              <th>Celkem hodin</th>
-              <th>Celkem Kč (hod.)</th>
+              ${payrollMonth
+                ? `<th style="text-align:right">${hoursLabel}</th>`
+                : monthNums.map(m => `<th style="text-align:right">${MONTH_NAMES[m]}</th>`).join('')
+              }
+              <th style="text-align:right">Celkem hodin</th>
+              <th style="text-align:right">Celkem Kč</th>
             </tr>
           </thead>
           <tbody>
-            ${people.filter(p=>hoursLog.some(e=>e.person===p)).map(p => {
+            ${hodinovkaPeople.map(p => {
               const rate = rates[p] || 150;
-              const monthHours = months.map(m => totalHours(p, m));
-              const totalH = monthHours.reduce((s,h)=>s+h, 0);
+              const totalH = fPersonHours(p);
               const totalPay = totalH * rate;
               return `
                 <tr>
@@ -1690,7 +1736,13 @@ function renderVyplaty() {
                     <input class="rate-input" type="number" value="${rate}" min="0" step="10"
                       onchange="rates['${p}']=parseFloat(this.value)||0;saveRates();renderVyplaty();">
                   </td>
-                  ${monthHours.map(h => `<td style="text-align:right">${h > 0 ? h.toFixed(1)+'h' : '—'}</td>`).join('')}
+                  ${payrollMonth
+                    ? `<td style="text-align:right">${totalH > 0 ? totalH.toFixed(1)+'h' : '—'}</td>`
+                    : monthNums.map(m => {
+                        const h = hoursLog.filter(e=>e.person===p&&parseInt(e.date.split('-')[1])===m).reduce((s,e)=>s+e.hours,0);
+                        return `<td style="text-align:right">${h > 0 ? h.toFixed(1)+'h' : '—'}</td>`;
+                      }).join('')
+                  }
                   <td style="text-align:right;font-weight:600;">${totalH.toFixed(1)}h</td>
                   <td class="pay-amount" style="text-align:right;">${totalPay.toLocaleString('cs-CZ')} Kč</td>
                 </tr>`;
@@ -1699,20 +1751,29 @@ function renderVyplaty() {
           <tfoot>
             <tr style="background:var(--accent-light);font-weight:700;">
               <td colspan="2">CELKEM</td>
-              ${months.map(m => {
-                const total = people.reduce((s,p)=>s+totalHours(p,m),0);
-                return `<td style="text-align:right">${total > 0 ? total.toFixed(1)+'h' : '—'}</td>`;
-              }).join('')}
-              <td style="text-align:right">${people.reduce((s,p)=>s+totalHours(p,null),0).toFixed(1)}h</td>
-              <td class="pay-amount" style="text-align:right;">${people.reduce((s,p)=>s+totalHours(p,null)*(rates[p]||150),0).toLocaleString('cs-CZ')} Kč</td>
+              ${payrollMonth
+                ? `<td style="text-align:right">${hodinovkaPeople.reduce((s,p)=>s+fPersonHours(p),0).toFixed(1)}h</td>`
+                : monthNums.map(m => {
+                    const t = hodinovkaPeople.reduce((s,p)=>s+hoursLog.filter(e=>e.person===p&&parseInt(e.date.split('-')[1])===m).reduce((ss,e)=>ss+e.hours,0),0);
+                    return `<td style="text-align:right">${t>0?t.toFixed(1)+'h':'—'}</td>`;
+                  }).join('')
+              }
+              <td style="text-align:right">${hodinovkaPeople.reduce((s,p)=>s+fPersonHours(p),0).toFixed(1)}h</td>
+              <td class="pay-amount" style="text-align:right;">${hodinovkaPeople.reduce((s,p)=>s+fPersonHours(p)*(rates[p]||150),0).toLocaleString('cs-CZ')} Kč</td>
             </tr>
           </tfoot>
         </table>
       </div>
     </div>
-    <p class="notice" style="margin-bottom:28px;">Kliknutím na sazbu ji přímo upravíte. Sazby jsou uloženy v prohlížeči.</p>
+    <p class="notice" style="margin-bottom:28px;">Kliknutím na sazbu ji přímo upravíte. Sazby jsou uloženy v cloudu.</p>`;
 
-    <!-- CLEANING PAY TABLE — řazeno dle data úklidu -->
+  // --- CLEANING TABLE ---
+  const cleaningRows = fWeddings
+    .map(w => ({ w, team: getCleaning(w.date), cleanDate: addDays(w.date, 1) }))
+    .filter(({team}) => team.length > 0)
+    .sort((a,b) => a.cleanDate.localeCompare(b.cleanDate));
+
+  const cleaningHtml = cleaningRows.length === 0 ? '' : `
     <div class="section-title">Úklid — odměny dle termínu (5 000 Kč / akci ÷ počet osob)</div>
     <div class="table-container" style="margin-bottom:28px;">
       <div class="table-wrap">
@@ -1728,51 +1789,48 @@ function renderVyplaty() {
             </tr>
           </thead>
           <tbody>
-            ${WEDDINGS
-              .map(w => ({ w, team: getCleaning(w.date), cleanDate: addDays(w.date, 1) }))
-              .filter(({team}) => team.length > 0)
-              .sort((a, b) => a.cleanDate.localeCompare(b.cleanDate))
-              .map(({w, team, cleanDate}) => {
-                const share = 5000 / team.length;
-                const peopleHtml = team.map(p =>
-                  `<div style="display:flex;justify-content:space-between;align-items:center;padding:2px 0;border-bottom:1px solid var(--border);">
-                    <span style="font-size:0.85rem;">${p}</span>
-                    <span style="font-size:0.82rem;font-weight:700;color:var(--green);white-space:nowrap;margin-left:12px;">${share.toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</span>
-                  </div>`
-                ).join('');
-                return `
-                  <tr>
-                    <td><strong>${fmtDate(cleanDate)}</strong></td>
-                    <td style="color:var(--muted);font-size:0.85rem;">${fmtDate(w.date)}</td>
-                    <td>${coordTag(w.coord)}</td>
-                    <td style="text-align:center;font-weight:600;">${team.length}</td>
-                    <td style="text-align:right;font-weight:700;color:var(--green);">${share.toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
-                    <td style="min-width:220px;">${peopleHtml}</td>
-                  </tr>`;
-              }).join('')}
+            ${cleaningRows.map(({w, team, cleanDate}) => {
+              const share = 5000 / team.length;
+              const peopleHtml = team.map(p =>
+                `<div style="display:flex;justify-content:space-between;align-items:center;padding:2px 0;border-bottom:1px solid var(--border);">
+                  <span style="font-size:0.85rem;">${p}</span>
+                  <span style="font-size:0.82rem;font-weight:700;color:var(--green);white-space:nowrap;margin-left:12px;">${share.toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</span>
+                </div>`
+              ).join('');
+              return `
+                <tr>
+                  <td><strong>${fmtDate(cleanDate)}</strong></td>
+                  <td style="color:var(--muted);font-size:0.85rem;">${fmtDate(w.date)}</td>
+                  <td>${coordTag(w.coord)}</td>
+                  <td style="text-align:center;font-weight:600;">${team.length}</td>
+                  <td style="text-align:right;font-weight:700;color:var(--green);">${share.toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
+                  <td style="min-width:220px;">${peopleHtml}</td>
+                </tr>`;
+            }).join('')}
           </tbody>
           <tfoot>
             <tr style="background:var(--accent-light);font-weight:700;">
               <td colspan="3">CELKEM</td>
-              <td style="text-align:center;">${WEDDINGS.filter(w=>getCleaning(w.date).length>0).length} akcí</td>
+              <td style="text-align:center;">${cleaningRows.length} akcí</td>
               <td style="text-align:right;color:var(--green);">${(5000).toLocaleString('cs-CZ')} Kč</td>
-              <td style="font-size:0.8rem;color:var(--muted);">Celkem vyplaceno: ${people.reduce((s,p)=>s+getCleaningPay(p),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
+              <td style="font-size:0.8rem;color:var(--muted);">Celkem vyplaceno: ${cleaningRows.reduce((s,{team})=>s+5000,0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
             </tr>
           </tfoot>
         </table>
       </div>
-    </div>
+    </div>`;
 
-    <!-- GRAND TOTAL -->
-    <div class="section-title">Celkové náklady</div>
+  // --- GRAND TOTAL ---
+  const grandHtml = `
+    <div class="section-title">Celkové náklady${payrollMonth ? ` — ${MONTH_NAMES[parseInt(payrollMonth.split('-')[1])]}` : ''}</div>
     <div class="table-container">
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Zaměstnanec</th><th>Hodinovka (Kč)</th><th>Úklidy (Kč)</th><th>CELKEM (Kč)</th></tr></thead>
+          <thead><tr><th>Zaměstnanec</th><th style="text-align:right">Hodinovka (Kč)</th><th style="text-align:right">Úklidy (Kč)</th><th style="text-align:right">CELKEM (Kč)</th></tr></thead>
           <tbody>
             ${people.map(p => {
-              const hoursPay = totalHours(p,null) * (rates[p]||150);
-              const cleanPay = getCleaningPay(p);
+              const hoursPay = fPersonHours(p) * (rates[p]||150);
+              const cleanPay = fPersonCleanPay(p);
               const grand = hoursPay + cleanPay;
               if (grand === 0) return '';
               return `<tr>
@@ -1786,16 +1844,16 @@ function renderVyplaty() {
           <tfoot>
             <tr style="background:var(--accent-light);font-weight:700;">
               <td>CELKEM</td>
-              <td style="text-align:right;">${people.reduce((s,p)=>s+totalHours(p,null)*(rates[p]||150),0).toLocaleString('cs-CZ')} Kč</td>
-              <td style="text-align:right;">${people.reduce((s,p)=>s+getCleaningPay(p),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
-              <td class="pay-amount" style="text-align:right;">${people.reduce((s,p)=>s+totalHours(p,null)*(rates[p]||150)+getCleaningPay(p),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
+              <td style="text-align:right;">${people.reduce((s,p)=>s+fPersonHours(p)*(rates[p]||150),0).toLocaleString('cs-CZ')} Kč</td>
+              <td style="text-align:right;">${people.reduce((s,p)=>s+fPersonCleanPay(p),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
+              <td class="pay-amount" style="text-align:right;">${people.reduce((s,p)=>s+fPersonHours(p)*(rates[p]||150)+fPersonCleanPay(p),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
             </tr>
           </tfoot>
         </table>
       </div>
-    </div>
-  `;
-  document.getElementById('payroll-content').innerHTML = html;
+    </div>`;
+
+  document.getElementById('payroll-content').innerHTML = filterHtml + hodinovkaHtml + cleaningHtml + grandHtml;
 }
 
 // ============================================================
