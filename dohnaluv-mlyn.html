@@ -521,7 +521,10 @@
   <div id="crm-unlocked-content" style="display:none;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
       <h2 style="font-size:1.2rem;font-weight:700;">🤝 CRM</h2>
-      <button class="unlock-badge" onclick="lockCrm()" title="Zamknout sekci">🔒 Zamknout</button>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <button class="btn" onclick="openCrmForm()">＋ Přidat svatbu</button>
+        <button class="unlock-badge" onclick="lockCrm()" title="Zamknout sekci">🔒 Zamknout</button>
+      </div>
     </div>
     <div id="crm-content">
       <div class="filters">
@@ -535,6 +538,48 @@
         <button class="btn" onclick="clearCrmFilters()" style="background:var(--muted);">Zrušit filtry</button>
       </div>
       <div class="table-wrap" id="crm-table-wrap"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CRM ADD MODAL -->
+<div class="modal-overlay" id="crm-modal-overlay" onclick="closeCrmForm(event)" style="display:none;">
+  <div class="modal" style="max-width:480px;" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeCrmForm()">×</button>
+    <div class="modal-title">＋ Nová svatba</div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div>
+        <label style="font-size:0.8rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;">DATUM A DEN *</label>
+        <input id="crm-new-datum" type="date" class="filters" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;">
+      </div>
+      <div>
+        <label style="font-size:0.8rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;">JMÉNO A PŘÍJMENÍ *</label>
+        <input id="crm-new-jmeno" type="text" placeholder="např. Nováková" class="filters" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;">
+      </div>
+      <div>
+        <label style="font-size:0.8rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;">KONTAKT</label>
+        <textarea id="crm-new-kontakt" rows="2" placeholder="email&#10;telefon" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;font-family:inherit;resize:vertical;box-sizing:border-box;"></textarea>
+      </div>
+      <div>
+        <label style="font-size:0.8rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;">KOORDINÁTOR</label>
+        <select id="crm-new-koord" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;background:#fff;"></select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label style="font-size:0.8rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;">POČET OSOB</label>
+          <input id="crm-new-osoby" type="number" min="0" placeholder="0" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:0.8rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;">POČET OBSLUHY</label>
+          <input id="crm-new-obsluha" type="number" min="0" placeholder="0" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;box-sizing:border-box;">
+        </div>
+      </div>
+      <div>
+        <label style="font-size:0.8rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;">POZNÁMKA</label>
+        <textarea id="crm-new-poznamka" rows="2" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;font-family:inherit;resize:vertical;box-sizing:border-box;"></textarea>
+      </div>
+      <div id="crm-form-error" style="color:var(--red);font-size:0.85rem;display:none;"></div>
+      <button class="btn" onclick="submitCrmForm()" style="width:100%;padding:11px;font-size:0.95rem;">Uložit svatbu</button>
     </div>
   </div>
 </div>
@@ -2118,10 +2163,23 @@ const crmEvents = [
 ];
 
 const CRM_MESICE = ['','Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
+const CRM_DNY = ['Neděle','Pondělí','Úterý','Středa','Čtvrtek','Pátek','Sobota'];
 
 function parseCrmDatum(datum) {
   const m = (datum || '').match(/(\d+)\.\s*(\d+)\.\s*(\d{4})/);
   return m ? { month: parseInt(m[2]), year: parseInt(m[3]) } : null;
+}
+
+function formatCrmDatum(iso) {
+  if (!iso) return '';
+  const d = new Date(iso + 'T12:00:00');
+  return `${d.getDate()}. ${d.getMonth()+1}. ${d.getFullYear()} — ${CRM_DNY[d.getDay()]}`;
+}
+
+function crmDatumToIso(czech) {
+  const m = (czech || '').match(/(\d+)\.\s*(\d+)\.\s*(\d{4})/);
+  if (!m) return '';
+  return `${m[3]}-${String(m[2]).padStart(2,'0')}-${String(m[1]).padStart(2,'0')}`;
 }
 
 function clearCrmFilters() {
@@ -2180,6 +2238,10 @@ function editCrmCell(td, globalIdx, key, type) {
   } else if (type === 'kc') {
     el = document.createElement('input');
     el.type = 'number'; el.value = current ?? '';
+  } else if (key === 'datum') {
+    el = document.createElement('input');
+    el.type = 'date'; el.value = crmDatumToIso(current);
+    el.addEventListener('change', () => { saveCrmCell(globalIdx, key, formatCrmDatum(el.value)); });
   } else if (key === 'kontakt') {
     el = document.createElement('textarea');
     el.value = current ?? ''; el.rows = 3;
@@ -2261,15 +2323,18 @@ function renderCrm() {
     return;
   }
 
-  const headCols = filtered.map(({ e }) =>
-    `<th style="min-width:190px;text-align:left;background:#f3ede5;padding:10px 14px;border-bottom:2px solid var(--border);">
-      ${e.datum}<br><span style="font-weight:500;font-size:0.85rem;color:var(--accent);">${e.jmeno}</span>
+  const headCols = filtered.map(({ e, i }) =>
+    `<th style="min-width:190px;text-align:left;background:#f3ede5;padding:10px 14px;border-bottom:2px solid var(--border);position:sticky;top:0;z-index:2;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+        <div>${e.datum}<br><span style="font-weight:500;font-size:0.85rem;color:var(--accent);">${e.jmeno}</span></div>
+        <button onclick="deleteCrmEvent(${i})" title="Smazat svatbu" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:1rem;padding:0;line-height:1;flex-shrink:0;" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--muted)'">🗑</button>
+      </div>
     </th>`
   ).join('');
 
   const rows = CRM_FIELDS.map((f, fi) => {
-    const bg = fi % 2 !== 0 ? 'background:#faf7f3;' : '';
-    const labelTd = `<td style="${bg}padding:9px 14px;font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;color:var(--muted);white-space:nowrap;border-right:2px solid var(--border);">${f.label}</td>`;
+    const bg = fi % 2 !== 0 ? '#faf7f3' : '#ffffff';
+    const labelTd = `<td style="background:${bg};padding:9px 14px;font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;color:var(--muted);white-space:nowrap;border-right:2px solid var(--border);position:sticky;left:0;z-index:1;">${f.label}</td>`;
 
     const cells = filtered.map(({ e, i }) => {
       const v = e[f.key];
@@ -2278,7 +2343,7 @@ function renderCrm() {
         const opts = CRM_COORDS.map(o =>
           `<option value="${o}" ${v === o ? 'selected' : ''}>${o || '—'}</option>`
         ).join('');
-        return `<td style="${bg}padding:6px 10px;">
+        return `<td style="background:${bg};padding:6px 10px;">
           <select onchange="saveCrmCell(${i},'koordinator',this.value)"
             style="border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:0.88rem;background:#fff;cursor:pointer;width:100%;">
             ${opts}
@@ -2292,20 +2357,82 @@ function renderCrm() {
       else display = crmTxt(v);
 
       const hint = v == null || v === '' ? ' title="Klikněte pro úpravu"' : '';
-      return `<td style="${bg}padding:9px 14px;font-size:0.88rem;cursor:pointer;" ${hint}
+      return `<td style="background:${bg};padding:9px 14px;font-size:0.88rem;cursor:pointer;" ${hint}
         onclick="editCrmCell(this,${i},'${f.key}','${f.type || 'text'}')">${display}</td>`;
     }).join('');
 
     return `<tr>${labelTd}${cells}</tr>`;
   }).join('');
 
+  wrap.style.cssText = 'overflow:auto;max-height:75vh;';
   wrap.innerHTML = `<table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
     <thead><tr>
-      <th style="background:#f3ede5;color:var(--muted);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.4px;padding:10px 14px;border-bottom:2px solid var(--border);border-right:2px solid var(--border);white-space:nowrap;">Pole</th>
+      <th style="background:#f3ede5;color:var(--muted);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.4px;padding:10px 14px;border-bottom:2px solid var(--border);border-right:2px solid var(--border);white-space:nowrap;position:sticky;top:0;left:0;z-index:3;">Pole</th>
       ${headCols}
     </tr></thead>
     <tbody>${rows}</tbody>
   </table>`;
+}
+
+function deleteCrmEvent(globalIdx) {
+  const e = crmEvents[globalIdx];
+  if (!e) return;
+  if (!confirm(`Opravdu chcete smazat svatbu "${e.jmeno}" (${e.datum})?`)) return;
+  crmEvents.splice(globalIdx, 1);
+  saveCrmToStorage();
+  renderCrm();
+}
+
+function openCrmForm() {
+  const overlay = document.getElementById('crm-modal-overlay');
+  overlay.style.display = 'flex';
+  document.getElementById('crm-new-datum').value = '';
+  document.getElementById('crm-new-jmeno').value = '';
+  document.getElementById('crm-new-kontakt').value = '';
+  document.getElementById('crm-new-osoby').value = '';
+  document.getElementById('crm-new-obsluha').value = '';
+  document.getElementById('crm-new-poznamka').value = '';
+  document.getElementById('crm-form-error').style.display = 'none';
+  const koord = document.getElementById('crm-new-koord');
+  koord.innerHTML = CRM_COORDS.map(c => `<option value="${c}">${c || '— nevybráno —'}</option>`).join('');
+  setTimeout(() => document.getElementById('crm-new-datum').focus(), 50);
+}
+
+function closeCrmForm(e) {
+  if (e && e.target !== document.getElementById('crm-modal-overlay')) return;
+  document.getElementById('crm-modal-overlay').style.display = 'none';
+}
+
+function submitCrmForm() {
+  const datumIso = document.getElementById('crm-new-datum').value;
+  const jmeno    = document.getElementById('crm-new-jmeno').value.trim();
+  const errEl    = document.getElementById('crm-form-error');
+
+  if (!datumIso || !jmeno) {
+    errEl.textContent = 'Datum a jméno jsou povinné.';
+    errEl.style.display = 'block';
+    return;
+  }
+  const datum = formatCrmDatum(datumIso);
+
+  const osoby   = document.getElementById('crm-new-osoby').value;
+  const obsluha = document.getElementById('crm-new-obsluha').value;
+
+  crmEvents.push({
+    datum,
+    jmeno,
+    kontakt:      document.getElementById('crm-new-kontakt').value.trim(),
+    koordinator:  document.getElementById('crm-new-koord').value,
+    pocetOsob:    osoby   !== '' ? Number(osoby)   : null,
+    pocetObsluhy: obsluha !== '' ? Number(obsluha) : null,
+    poznamka:     document.getElementById('crm-new-poznamka').value.trim(),
+    cateringValkovi: '', maringotka: '', kava: '',
+    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null,
+  });
+
+  saveCrmToStorage();
+  document.getElementById('crm-modal-overlay').style.display = 'none';
+  renderCrm();
 }
 
 // ============================================================
