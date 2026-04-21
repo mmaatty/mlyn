@@ -278,6 +278,7 @@
   <div class="tab" onclick="showTab('zamestnanec')">👤 Zaměstnanec</div>
   <div class="tab" onclick="showTab('hodinovka')">⏱ Hodinovka</div>
   <div class="tab" onclick="showTab('vyplaty')">💰 Výplaty 🔒</div>
+  <div class="tab" onclick="showTab('crm')">🤝 CRM 🔒</div>
 </div>
 
 <!-- ===================== PAGE: PŘEHLED ===================== -->
@@ -511,6 +512,24 @@
       <button class="cal-nav-btn" onclick="hCalNextMonth()">›</button>
     </div>
     <div class="cal-grid" id="h-cal-grid"></div>
+  </div>
+</div>
+
+<!-- ===================== PAGE: CRM ===================== -->
+<div class="page" id="page-crm">
+  <div id="crm-lock-screen"></div>
+  <div id="crm-unlocked-content" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+      <h2 style="font-size:1.2rem;font-weight:700;">🤝 CRM</h2>
+      <button class="unlock-badge" onclick="lockCrm()" title="Zamknout sekci">🔒 Zamknout</button>
+    </div>
+    <div id="crm-content">
+      <div class="card" style="text-align:center;padding:48px 24px;color:var(--muted);">
+        <div style="font-size:2.5rem;margin-bottom:12px;">🤝</div>
+        <div style="font-size:1rem;font-weight:600;">Sekce CRM je připravena</div>
+        <div style="font-size:0.88rem;margin-top:6px;">Obsah bude doplněn.</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1949,6 +1968,53 @@ function lockPayroll() {
   });
 }
 
+// CRM LOCK
+// ============================================================
+const CRM_PASSWORD = 'Mlyn2026';
+let crmUnlocked = false;
+
+function renderCrmLock(errorMsg) {
+  document.getElementById('crm-unlocked-content').style.display = 'none';
+  document.getElementById('crm-lock-screen').innerHTML = `
+    <div class="lock-screen">
+      <div class="lock-icon">🔐</div>
+      <div class="lock-title">Sekce CRM je chráněna heslem</div>
+      <div class="lock-sub">Zadejte heslo pro zobrazení CRM</div>
+      <div class="lock-form">
+        <input class="lock-input" type="password" id="crm-pwd-input" placeholder="Heslo"
+          onkeydown="if(event.key==='Enter') checkCrmPassword()">
+        <button class="btn" onclick="checkCrmPassword()">Odemknout</button>
+      </div>
+      ${errorMsg ? `<div class="lock-error">❌ ${errorMsg}</div>` : ''}
+    </div>
+  `;
+  setTimeout(() => document.getElementById('crm-pwd-input')?.focus(), 50);
+}
+
+function checkCrmPassword() {
+  const val = document.getElementById('crm-pwd-input')?.value || '';
+  if (val === CRM_PASSWORD) {
+    crmUnlocked = true;
+    document.getElementById('crm-lock-screen').innerHTML = '';
+    document.getElementById('crm-unlocked-content').style.display = 'block';
+    document.querySelectorAll('.tab').forEach(t => {
+      if (t.textContent.includes('CRM')) t.innerHTML = '🤝 CRM 🔓';
+    });
+  } else {
+    crmUnlocked = false;
+    renderCrmLock('Nesprávné heslo. Zkuste znovu.');
+  }
+}
+
+function lockCrm() {
+  crmUnlocked = false;
+  document.getElementById('crm-unlocked-content').style.display = 'none';
+  renderCrmLock();
+  document.querySelectorAll('.tab').forEach(t => {
+    if (t.textContent.includes('CRM')) t.innerHTML = '🤝 CRM 🔒';
+  });
+}
+
 // ============================================================
 // TAB NAVIGATION
 // ============================================================
@@ -1964,6 +2030,10 @@ function showTab(name) {
   if (name === 'vyplaty') {
     if (payrollUnlocked) renderVyplaty();
     else renderPayrollLock();
+  }
+  if (name === 'crm') {
+    if (crmUnlocked) {}
+    else renderCrmLock();
   }
 }
 
