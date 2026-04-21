@@ -641,6 +641,7 @@ let weddingAssignments = {}; // { 'YYYY-MM-DD': { service: [...], cleaning: [...
 let customWeddings = []; // user-created weddings, persisted in Firebase
 let expenses = []; // jednorázové náklady
 let weddingFeedback = {}; // { 'YYYY-MM-DD': 'text...' }
+let weddingRating = {};   // { 'YYYY-MM-DD': 'green'|'orange'|'red'|null }
 
 async function loadState() {
   const snapshot = await db.ref('/').once('value');
@@ -684,6 +685,7 @@ async function loadState() {
 
   // Feedback
   weddingFeedback = data.weddingFeedback || {};
+  weddingRating = data.weddingRating || {};
 
   // Custom weddings
   if (data.customWeddings) {
@@ -732,6 +734,13 @@ function saveFeedback() { db.ref('weddingFeedback').set(weddingFeedback); }
 function updateFeedback(date, val) {
   weddingFeedback[date] = val;
   saveFeedback();
+}
+function saveRating() { db.ref('weddingRating').set(weddingRating); }
+function setRating(date, color) {
+  weddingRating[date] = weddingRating[date] === color ? null : color;
+  saveRating();
+  openWeddingModal(date);
+  renderTerminy();
 }
 
 function populateSelects() {
@@ -1181,8 +1190,11 @@ function renderTerminy() {
       ? `background:${cln.length===0?'var(--red-light)':'var(--yellow-light)'};`
       : '';
 
+    const rating = weddingRating[w.date];
+    const ratingDot = rating ? `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${{green:'#4a7c59',orange:'#c98b2e',red:'#b94040'}[rating]};margin-left:6px;vertical-align:middle;" title="${{green:'Pozitivní',orange:'Střední',red:'Negativní'}[rating]}"></span>` : '';
+
     return `<tr class="${past?'past-event':''}" style="cursor:pointer;" onclick="openWeddingModal('${w.date}')">
-      <td><strong>${fmtDate(w.date)}</strong><br><span style="font-size:0.75rem;color:var(--muted)">${w.day}</span></td>
+      <td><strong>${fmtDate(w.date)}</strong>${ratingDot}<br><span style="font-size:0.75rem;color:var(--muted)">${w.day}</span></td>
       <td>${coordTag(w.coord)}</td>
       <td>${guestBar}</td>
       <td>${serviceHtml}</td>
@@ -1251,11 +1263,6 @@ function openWeddingModal(date) {
     <button class="modal-close" onclick="closeModal()">×</button>
     <div class="modal-title">${fmtDate(w.date)} — ${w.day}</div>
     <div class="detail-row"><div class="detail-label">Koordinátor</div><div class="detail-val">${coordTag(w.coord)}</div></div>
-    <div class="detail-row"><div class="detail-label">Hosté</div><div class="detail-val">
-      <input type="number" min="0" max="1000" value="${w.guests || ''}" placeholder="—"
-        style="width:80px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
-        onchange="updateGuests('${date}', this.value)">
-    </div></div>
     <div class="detail-row"><div class="detail-label">Požadovaná obsluha</div><div class="detail-val" style="display:flex;align-items:center;gap:8px;">
       <input type="number" min="0" max="20" value="${w.staff || ''}" placeholder="—"
         style="width:64px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
@@ -1297,7 +1304,18 @@ function openWeddingModal(date) {
     </div>
 
     <div style="margin-top:16px;">
-      <div style="font-size:0.8rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:6px;">Feedback</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+        <div style="font-size:0.8rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;">Feedback</div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          ${[['green','#4a7c59','Pozitivní'],['orange','#c98b2e','Střední'],['red','#b94040','Negativní']].map(([c,hex,label]) => {
+            const active = weddingRating[date] === c;
+            return `<button onclick="setRating('${date}','${c}')" title="${label}"
+              style="width:22px;height:22px;border-radius:50%;border:3px solid ${active ? hex : 'transparent'};
+              background:${hex};cursor:pointer;opacity:${active ? '1' : '0.35'};
+              transition:all 0.15s;outline:${active ? '2px solid '+hex : 'none'};outline-offset:2px;"></button>`;
+          }).join('')}
+        </div>
+      </div>
       <textarea id="feedback-${date}"
         style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:0.85rem;font-family:inherit;resize:vertical;min-height:80px;background:#fafafa;"
         placeholder="Poznámky ke svatbě, co se povedlo, co zlepšit..."
@@ -1386,11 +1404,11 @@ function renderZamestnanec() {
               <div class="event-date-col">
                 <div class="event-date-main">${fmtDate(r.date)}</div>
                 <div class="event-date-sub">${r.day}</div>
+                <div style="margin-top:5px;"><span class="tag tag-service" style="font-size:0.85rem;font-weight:700;padding:3px 10px;">obsluha</span></div>
               </div>
               <div style="flex:1">
-                <div class="event-role" style="margin-bottom:5px;"><span class="tag tag-service" style="font-size:0.9rem;font-weight:700;padding:4px 12px;">obsluha</span></div>
-                <div style="font-size:0.78rem;color:var(--muted);">${w.coord}${w.guests ? ` · ${w.guests} hostů` : ''}</div>
-                ${teammates.length ? `<div style="font-size:0.78rem;color:var(--muted);margin-top:3px;">Obsluhuje: ${teammates.join(', ')}</div>` : ''}
+                <div>${coordTag(w.coord)}</div>
+                ${teammates.length ? `<div style="font-size:0.78rem;color:var(--muted);margin-top:4px;">Obsluhuje: ${teammates.join(', ')}</div>` : ''}
               </div>
             </div>`;
         } else {
@@ -1401,12 +1419,11 @@ function renderZamestnanec() {
               <div class="event-date-col">
                 <div class="event-date-main">${fmtDate(r.date)}</div>
                 <div class="event-date-sub">${r.day}</div>
-                <div style="font-size:0.7rem;color:var(--muted);">svatba: ${fmtDate(w.date)}</div>
+                <div style="margin-top:5px;"><span class="tag tag-cleaning" style="font-size:0.85rem;font-weight:700;padding:3px 10px;">úklid</span></div>
               </div>
               <div style="flex:1">
-                <div class="event-role" style="margin-bottom:5px;"><span class="tag tag-cleaning" style="font-size:0.9rem;font-weight:700;padding:4px 12px;">úklid</span></div>
-                <div style="font-size:0.78rem;color:var(--muted);">${w.coord}</div>
-                ${teammates.length ? `<div style="font-size:0.78rem;color:var(--muted);margin-top:3px;">Uklízí: ${teammates.join(', ')}</div>` : ''}
+                <div>${coordTag(w.coord)}</div>
+                ${teammates.length ? `<div style="font-size:0.78rem;color:var(--muted);margin-top:4px;">Uklízí: ${teammates.join(', ')}</div>` : ''}
               </div>
             </div>`;
         }
