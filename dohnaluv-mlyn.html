@@ -2048,8 +2048,7 @@ function checkCrmPassword() {
     crmUnlocked = true;
     document.getElementById('crm-lock-screen').innerHTML = '';
     document.getElementById('crm-unlocked-content').style.display = 'block';
-    loadCrmFromStorage();
-    renderCrm();
+    subscribeCrm();
     document.querySelectorAll('.tab').forEach(t => {
       if (t.textContent.includes('CRM')) t.innerHTML = '🤝 CRM 🔓';
     });
@@ -2061,6 +2060,7 @@ function checkCrmPassword() {
 
 function lockCrm() {
   crmUnlocked = false;
+  unsubscribeCrm();
   document.getElementById('crm-unlocked-content').style.display = 'none';
   renderCrmLock();
   document.querySelectorAll('.tab').forEach(t => {
@@ -2203,21 +2203,35 @@ function crmTxt(v) {
   return v != null && v !== '' ? String(v).replace(/\n/g, '<br>') : `<span style="color:var(--muted)">—</span>`;
 }
 
-function saveCrmToStorage() {
-  try { localStorage.setItem('crmEvents_v1', JSON.stringify(crmEvents)); } catch(e) {}
+let _crmListener = null;
+
+function saveCrmToFirebase() {
+  db.ref('crmEvents').set(crmEvents);
 }
-function loadCrmFromStorage() {
-  try {
-    const saved = localStorage.getItem('crmEvents_v1');
-    if (!saved) return;
-    const parsed = JSON.parse(saved);
-    parsed.forEach((saved, i) => { if (crmEvents[i]) Object.assign(crmEvents[i], saved); });
-  } catch(e) {}
+
+function subscribeCrm() {
+  if (_crmListener) return;
+  _crmListener = db.ref('crmEvents').on('value', snapshot => {
+    const data = snapshot.val();
+    if (Array.isArray(data) && data.length > 0) {
+      crmEvents.splice(0, crmEvents.length, ...data);
+    } else if (data === null) {
+      db.ref('crmEvents').set(crmEvents);
+    }
+    renderCrm();
+  });
+}
+
+function unsubscribeCrm() {
+  if (_crmListener) {
+    db.ref('crmEvents').off('value', _crmListener);
+    _crmListener = null;
+  }
 }
 
 function saveCrmCell(globalIdx, key, value) {
   crmEvents[globalIdx][key] = value;
-  saveCrmToStorage();
+  saveCrmToFirebase();
   renderCrm();
 }
 
@@ -2379,7 +2393,7 @@ function deleteCrmEvent(globalIdx) {
   if (!e) return;
   if (!confirm(`Opravdu chcete smazat svatbu "${e.jmeno}" (${e.datum})?`)) return;
   crmEvents.splice(globalIdx, 1);
-  saveCrmToStorage();
+  saveCrmToFirebase();
   renderCrm();
 }
 
@@ -2430,7 +2444,7 @@ function submitCrmForm() {
     doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null,
   });
 
-  saveCrmToStorage();
+  saveCrmToFirebase();
   document.getElementById('crm-modal-overlay').style.display = 'none';
   renderCrm();
 }
