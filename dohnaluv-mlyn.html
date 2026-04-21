@@ -524,10 +524,37 @@
       <button class="unlock-badge" onclick="lockCrm()" title="Zamknout sekci">🔒 Zamknout</button>
     </div>
     <div id="crm-content">
-      <div class="card" style="text-align:center;padding:48px 24px;color:var(--muted);">
-        <div style="font-size:2.5rem;margin-bottom:12px;">🤝</div>
-        <div style="font-size:1rem;font-weight:600;">Sekce CRM je připravena</div>
-        <div style="font-size:0.88rem;margin-top:6px;">Obsah bude doplněn.</div>
+      <div class="filters">
+        <input type="text" id="crm-search" placeholder="Hledat jméno..." oninput="renderCrm()" style="min-width:200px;">
+      </div>
+      <div class="table-wrap">
+        <table id="crm-table">
+          <thead>
+            <tr>
+              <th>Datum</th>
+              <th>Jméno a příjmení</th>
+              <th>Kontakt</th>
+              <th>Potvrzení</th>
+              <th>Osob</th>
+              <th>Obsluha</th>
+              <th>Jména obsluhy</th>
+              <th>Cena obsluhy</th>
+              <th>Obsluha placena</th>
+              <th>Kauce 5 000 Kč</th>
+              <th>Catering Válkovi</th>
+              <th>Maringotka</th>
+              <th>Káva</th>
+              <th>Doplatek pronájmu</th>
+              <th>Doplatek placen</th>
+              <th>Koňská bar</th>
+              <th>Výzdoba Heyday</th>
+              <th>Taxi</th>
+              <th>Celkem k úhradě</th>
+              <th>Poznámka</th>
+            </tr>
+          </thead>
+          <tbody id="crm-tbody"></tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -1997,6 +2024,7 @@ function checkCrmPassword() {
     crmUnlocked = true;
     document.getElementById('crm-lock-screen').innerHTML = '';
     document.getElementById('crm-unlocked-content').style.display = 'block';
+    renderCrm();
     document.querySelectorAll('.tab').forEach(t => {
       if (t.textContent.includes('CRM')) t.innerHTML = '🤝 CRM 🔓';
     });
@@ -2013,6 +2041,57 @@ function lockCrm() {
   document.querySelectorAll('.tab').forEach(t => {
     if (t.textContent.includes('CRM')) t.innerHTML = '🤝 CRM 🔒';
   });
+}
+
+// CRM TABLE
+// ============================================================
+const crmEvents = []; // data budou doplněna
+
+function renderCrm() {
+  const search = (document.getElementById('crm-search')?.value || '').toLowerCase();
+  const filtered = crmEvents.filter(e => !search || (e.jmeno || '').toLowerCase().includes(search));
+  const tbody = document.getElementById('crm-tbody');
+  if (!tbody) return;
+
+  const badge = v => v === 'ANO'
+    ? `<span class="tag" style="background:var(--green-light);color:var(--green);">ANO</span>`
+    : v === 'NE'
+    ? `<span class="tag" style="background:var(--red-light);color:var(--red);">NE</span>`
+    : v || '<span style="color:var(--muted)">—</span>';
+
+  const kc = v => v != null ? v.toLocaleString('cs-CZ') + ' Kč' : '<span style="color:var(--muted)">—</span>';
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="20" style="text-align:center;padding:48px;color:var(--muted);">
+      <div style="font-size:2rem;margin-bottom:8px;">📋</div>
+      <div style="font-weight:600;">Žádné záznamy</div>
+      <div style="font-size:0.85rem;margin-top:4px;">Zatím nebyla přidána žádná akce.</div>
+    </td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(e => `<tr>
+    <td><strong>${e.datum || '—'}</strong></td>
+    <td>${e.jmeno || '—'}</td>
+    <td style="font-size:0.82rem;white-space:pre-line;">${e.kontakt || '—'}</td>
+    <td>${badge(e.potvrzeni)}</td>
+    <td style="text-align:center;">${e.pocetOsob ?? '—'}</td>
+    <td style="text-align:center;">${e.pocetObsluhy ?? '—'}</td>
+    <td style="font-size:0.82rem;">${e.jmenaObsluhy || '—'}</td>
+    <td style="text-align:right;">${kc(e.cenaObsluhy)}</td>
+    <td>${badge(e.obsluhaUhrazena)}</td>
+    <td>${badge(e.kauce)}</td>
+    <td>${badge(e.cateringValkovi)}</td>
+    <td>${badge(e.maringotka)}</td>
+    <td>${badge(e.kava)}</td>
+    <td style="text-align:right;">${kc(e.doplatekPronajmu)}</td>
+    <td>${badge(e.doplatekUhrazen)}</td>
+    <td>${badge(e.konskBar)}</td>
+    <td>${badge(e.vyzdoba)}</td>
+    <td>${badge(e.taxi)}</td>
+    <td style="text-align:right;font-weight:600;">${kc(e.celkem)}</td>
+    <td style="font-size:0.82rem;max-width:180px;">${e.poznamka || '—'}</td>
+  </tr>`).join('');
 }
 
 // ============================================================
@@ -2032,7 +2111,7 @@ function showTab(name) {
     else renderPayrollLock();
   }
   if (name === 'crm') {
-    if (crmUnlocked) {}
+    if (crmUnlocked) renderCrm();
     else renderCrmLock();
   }
 }
