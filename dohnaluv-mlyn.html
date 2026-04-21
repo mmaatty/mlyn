@@ -525,37 +525,16 @@
     </div>
     <div id="crm-content">
       <div class="filters">
-        <input type="text" id="crm-search" placeholder="Hledat jméno..." oninput="renderCrm()" style="min-width:200px;">
+        <input type="text" id="crm-search" placeholder="Název svatby..." oninput="renderCrm()" style="min-width:180px;">
+        <select id="crm-search-mesic" onchange="renderCrm()" style="min-width:160px;">
+          <option value="">Všechny měsíce</option>
+        </select>
+        <select id="crm-search-coord" onchange="renderCrm()" style="min-width:160px;">
+          <option value="">Všichni koordinátoři</option>
+        </select>
+        <button class="btn" onclick="clearCrmFilters()" style="background:var(--muted);">Zrušit filtry</button>
       </div>
-      <div class="table-wrap">
-        <table id="crm-table">
-          <thead>
-            <tr>
-              <th>Datum</th>
-              <th>Jméno a příjmení</th>
-              <th>Kontakt</th>
-              <th>Potvrzení</th>
-              <th>Osob</th>
-              <th>Obsluha</th>
-              <th>Jména obsluhy</th>
-              <th>Cena obsluhy</th>
-              <th>Obsluha placena</th>
-              <th>Kauce 5 000 Kč</th>
-              <th>Catering Válkovi</th>
-              <th>Maringotka</th>
-              <th>Káva</th>
-              <th>Doplatek pronájmu</th>
-              <th>Doplatek placen</th>
-              <th>Koňská bar</th>
-              <th>Výzdoba Heyday</th>
-              <th>Taxi</th>
-              <th>Celkem k úhradě</th>
-              <th>Poznámka</th>
-            </tr>
-          </thead>
-          <tbody id="crm-tbody"></tbody>
-        </table>
-      </div>
+      <div class="table-wrap" id="crm-table-wrap"></div>
     </div>
   </div>
 </div>
@@ -2024,6 +2003,7 @@ function checkCrmPassword() {
     crmUnlocked = true;
     document.getElementById('crm-lock-screen').innerHTML = '';
     document.getElementById('crm-unlocked-content').style.display = 'block';
+    loadCrmFromStorage();
     renderCrm();
     document.querySelectorAll('.tab').forEach(t => {
       if (t.textContent.includes('CRM')) t.innerHTML = '🤝 CRM 🔓';
@@ -2045,53 +2025,287 @@ function lockCrm() {
 
 // CRM TABLE
 // ============================================================
-const crmEvents = []; // data budou doplněna
+const CRM_FIELDS = [
+  { key: 'koordinator',      label: 'Koordinátor' },
+  { key: 'datum',            label: 'Datum a den' },
+  { key: 'jmeno',            label: 'Jméno a příjmení' },
+  { key: 'kontakt',          label: 'Kontakt' },
+  { key: 'pocetOsob',        label: 'Počet osob' },
+  { key: 'pocetObsluhy',     label: 'Počet obsluhy (250 Kč/hod)' },
+  { key: 'cateringValkovi',  label: 'Catering Válkovi', type: 'bool' },
+  { key: 'maringotka',       label: 'Maringotka (4 000 Kč — Adam)', type: 'bool' },
+  { key: 'kava',             label: 'Káva (1 500 Kč)', type: 'bool' },
+  { key: 'doplatekPronajmu', label: 'Doplatek pronájmu mlýna', type: 'kc' },
+  { key: 'konskBar',         label: 'Koňská bar (5 000 Kč — Honza)', type: 'bool' },
+  { key: 'vyzdoba',          label: 'Výzdoba Heyday (provize 1 000 Kč)', type: 'bool' },
+  { key: 'celkem',           label: 'Celkem k úhradě po svatbě', type: 'kc' },
+  { key: 'poznamka',         label: 'Poznámka' },
+];
+
+const crmEvents = [
+  {
+    koordinator: '', datum: '25. 4. 2026 — sobota', jmeno: 'Pospěch',
+    kontakt: 'lukpospech@gmail.com\n737 354 083',
+    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
+    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
+  },
+  {
+    koordinator: '', datum: '14. 5. 2026 — čtvrtek', jmeno: 'Větříčková',
+    kontakt: 'tereza.vetrickova@gmail.com\n776 744 616',
+    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
+    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
+  },
+  {
+    koordinator: '', datum: '16. 5. 2026 — sobota', jmeno: 'Vojáčková',
+    kontakt: 'vojackovamichaela@gmail.com\n605 321 073',
+    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
+    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
+  },
+  {
+    koordinator: '', datum: '13. 6. 2026 — sobota', jmeno: 'Felt',
+    kontakt: 'tomasfelt@icloud.com\n720 440 344',
+    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
+    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
+  },
+  {
+    koordinator: '', datum: '23. 7. 2026 — čtvrtek', jmeno: 'Zbrožková',
+    kontakt: 'z.valerie@seznam.cz\n724 001 636',
+    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
+    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
+  },
+  {
+    koordinator: '', datum: '25. 7. 2026 — sobota', jmeno: 'Galuščiaková',
+    kontakt: 'galusciakova.z@gmail.com\n602 844 570',
+    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
+    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
+  },
+  {
+    koordinator: '', datum: '13. 8. 2026 — čtvrtek', jmeno: 'Kolísková',
+    kontakt: 'koliskova.andrea@gmail.com\n776 768 067',
+    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
+    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
+  },
+  {
+    koordinator: '', datum: '15. 8. 2026 — sobota', jmeno: 'Schoffer',
+    kontakt: 'david.schoffer@cz-bosh.com\n730 846 600',
+    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
+    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
+  },
+  {
+    koordinator: '', datum: '20. 8. 2026 — čtvrtek', jmeno: 'Kremr',
+    kontakt: 'matejkremr@gmail.com\n608 945 536',
+    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
+    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
+  },
+  {
+    koordinator: '', datum: '22. 8. 2026 — sobota', jmeno: 'Alinče',
+    kontakt: 'antoninalince1@gmail.com\n773 213 489',
+    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
+    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
+  },
+  {
+    koordinator: '', datum: '10. 9. 2026 — čtvrtek', jmeno: 'Pomykalová',
+    kontakt: 'kacka.pomykalova@gmail.com\n722 636 351',
+    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
+    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
+  },
+  {
+    koordinator: '', datum: '12. 9. 2026 — sobota', jmeno: 'Valová',
+    kontakt: 'unka.valova@gmail.com\n732 809 840',
+    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
+    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
+  },
+];
+
+const CRM_MESICE = ['','Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
+
+function parseCrmDatum(datum) {
+  const m = (datum || '').match(/(\d+)\.\s*(\d+)\.\s*(\d{4})/);
+  return m ? { month: parseInt(m[2]), year: parseInt(m[3]) } : null;
+}
+
+function clearCrmFilters() {
+  document.getElementById('crm-search').value = '';
+  document.getElementById('crm-search-mesic').value = '';
+  document.getElementById('crm-search-coord').value = '';
+  renderCrm();
+}
+
+const CRM_COORDS = ['', 'Matěj', 'Honza', 'Vojta', 'Grochy'];
+
+function crmBadge(v) {
+  if (v === 'ANO') return `<span class="tag" style="background:var(--green-light);color:var(--green);">ANO</span>`;
+  if (v === 'NE')  return `<span class="tag" style="background:var(--red-light);color:var(--red);">NE</span>`;
+  return `<span style="color:var(--muted)">—</span>`;
+}
+function crmKc(v) {
+  return v != null && v !== '' ? `<strong>${Number(v).toLocaleString('cs-CZ')} Kč</strong>` : `<span style="color:var(--muted)">—</span>`;
+}
+function crmTxt(v) {
+  return v != null && v !== '' ? String(v).replace(/\n/g, '<br>') : `<span style="color:var(--muted)">—</span>`;
+}
+
+function saveCrmToStorage() {
+  try { localStorage.setItem('crmEvents_v1', JSON.stringify(crmEvents)); } catch(e) {}
+}
+function loadCrmFromStorage() {
+  try {
+    const saved = localStorage.getItem('crmEvents_v1');
+    if (!saved) return;
+    const parsed = JSON.parse(saved);
+    parsed.forEach((saved, i) => { if (crmEvents[i]) Object.assign(crmEvents[i], saved); });
+  } catch(e) {}
+}
+
+function saveCrmCell(globalIdx, key, value) {
+  crmEvents[globalIdx][key] = value;
+  saveCrmToStorage();
+  renderCrm();
+}
+
+function editCrmCell(td, globalIdx, key, type) {
+  if (td.querySelector('input,select,textarea')) return;
+  const current = crmEvents[globalIdx][key];
+  let el;
+
+  if (type === 'bool') {
+    el = document.createElement('select');
+    ['', 'ANO', 'NE'].forEach(o => {
+      const opt = document.createElement('option');
+      opt.value = o; opt.textContent = o || '—';
+      if (current === o) opt.selected = true;
+      el.appendChild(opt);
+    });
+    el.addEventListener('change', () => { saveCrmCell(globalIdx, key, el.value); });
+  } else if (type === 'kc') {
+    el = document.createElement('input');
+    el.type = 'number'; el.value = current ?? '';
+  } else if (key === 'kontakt') {
+    el = document.createElement('textarea');
+    el.value = current ?? ''; el.rows = 3;
+    el.style.resize = 'vertical';
+  } else {
+    el = document.createElement('input');
+    el.type = 'text'; el.value = current ?? '';
+  }
+
+  el.style.cssText = 'width:100%;border:1px solid var(--accent);border-radius:4px;padding:4px 8px;font-size:0.88rem;font-family:inherit;box-sizing:border-box;';
+  td.innerHTML = '';
+  td.appendChild(el);
+  el.focus();
+  if (el.select) el.select();
+
+  const commit = () => {
+    let val = el.value;
+    if (type === 'kc') val = val !== '' ? Number(val) : null;
+    saveCrmCell(globalIdx, key, val);
+  };
+  el.addEventListener('blur', commit);
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && el.tagName !== 'TEXTAREA') { e.preventDefault(); el.blur(); }
+    if (e.key === 'Escape') renderCrm();
+  });
+}
 
 function renderCrm() {
-  const search = (document.getElementById('crm-search')?.value || '').toLowerCase();
-  const filtered = crmEvents.filter(e => !search || (e.jmeno || '').toLowerCase().includes(search));
-  const tbody = document.getElementById('crm-tbody');
-  if (!tbody) return;
+  const search      = (document.getElementById('crm-search')?.value       || '').toLowerCase();
+  const searchMesic = (document.getElementById('crm-search-mesic')?.value || '');
+  const searchCoord = (document.getElementById('crm-search-coord')?.value || '').toLowerCase();
 
-  const badge = v => v === 'ANO'
-    ? `<span class="tag" style="background:var(--green-light);color:var(--green);">ANO</span>`
-    : v === 'NE'
-    ? `<span class="tag" style="background:var(--red-light);color:var(--red);">NE</span>`
-    : v || '<span style="color:var(--muted)">—</span>';
+  // populate month/year dropdown
+  const mesicSelect = document.getElementById('crm-search-mesic');
+  if (mesicSelect) {
+    const cur = mesicSelect.value;
+    const months = [...new Map(
+      crmEvents.map(e => parseCrmDatum(e.datum)).filter(Boolean)
+        .map(d => [`${d.year}-${String(d.month).padStart(2,'0')}`, d])
+    ).values()].sort((a,b) => a.year - b.year || a.month - b.month);
+    mesicSelect.innerHTML = '<option value="">Všechny měsíce</option>' +
+      months.map(d => {
+        const val = `${d.year}-${String(d.month).padStart(2,'0')}`;
+        return `<option value="${val}" ${cur === val ? 'selected' : ''}>${CRM_MESICE[d.month]} ${d.year}</option>`;
+      }).join('');
+  }
 
-  const kc = v => v != null ? v.toLocaleString('cs-CZ') + ' Kč' : '<span style="color:var(--muted)">—</span>';
+  const coordSelect = document.getElementById('crm-search-coord');
+  if (coordSelect) {
+    const cur = coordSelect.value;
+    const used = [...new Set(crmEvents.map(e => e.koordinator).filter(Boolean))].sort();
+    coordSelect.innerHTML = '<option value="">Všichni koordinátoři</option>' +
+      used.map(c => `<option value="${c.toLowerCase()}" ${cur === c.toLowerCase() ? 'selected' : ''}>${c}</option>`).join('');
+  }
+
+  const filtered = crmEvents
+    .map((e, i) => ({ e, i }))
+    .filter(({ e }) => {
+      if (search && !(e.jmeno || '').toLowerCase().includes(search)) return false;
+      if (searchCoord && !(e.koordinator || '').toLowerCase().includes(searchCoord)) return false;
+      if (searchMesic) {
+        const d = parseCrmDatum(e.datum);
+        if (!d) return false;
+        const val = `${d.year}-${String(d.month).padStart(2,'0')}`;
+        if (val !== searchMesic) return false;
+      }
+      return true;
+    });
+
+  const wrap = document.getElementById('crm-table-wrap');
+  if (!wrap) return;
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="20" style="text-align:center;padding:48px;color:var(--muted);">
+    wrap.innerHTML = `<div style="text-align:center;padding:48px;color:var(--muted);">
       <div style="font-size:2rem;margin-bottom:8px;">📋</div>
       <div style="font-weight:600;">Žádné záznamy</div>
-      <div style="font-size:0.85rem;margin-top:4px;">Zatím nebyla přidána žádná akce.</div>
-    </td></tr>`;
+      <div style="font-size:0.85rem;margin-top:4px;">Žádná akce neodpovídá hledání.</div>
+    </div>`;
     return;
   }
 
-  tbody.innerHTML = filtered.map(e => `<tr>
-    <td><strong>${e.datum || '—'}</strong></td>
-    <td>${e.jmeno || '—'}</td>
-    <td style="font-size:0.82rem;white-space:pre-line;">${e.kontakt || '—'}</td>
-    <td>${badge(e.potvrzeni)}</td>
-    <td style="text-align:center;">${e.pocetOsob ?? '—'}</td>
-    <td style="text-align:center;">${e.pocetObsluhy ?? '—'}</td>
-    <td style="font-size:0.82rem;">${e.jmenaObsluhy || '—'}</td>
-    <td style="text-align:right;">${kc(e.cenaObsluhy)}</td>
-    <td>${badge(e.obsluhaUhrazena)}</td>
-    <td>${badge(e.kauce)}</td>
-    <td>${badge(e.cateringValkovi)}</td>
-    <td>${badge(e.maringotka)}</td>
-    <td>${badge(e.kava)}</td>
-    <td style="text-align:right;">${kc(e.doplatekPronajmu)}</td>
-    <td>${badge(e.doplatekUhrazen)}</td>
-    <td>${badge(e.konskBar)}</td>
-    <td>${badge(e.vyzdoba)}</td>
-    <td>${badge(e.taxi)}</td>
-    <td style="text-align:right;font-weight:600;">${kc(e.celkem)}</td>
-    <td style="font-size:0.82rem;max-width:180px;">${e.poznamka || '—'}</td>
-  </tr>`).join('');
+  const headCols = filtered.map(({ e }) =>
+    `<th style="min-width:190px;text-align:left;background:#f3ede5;padding:10px 14px;border-bottom:2px solid var(--border);">
+      ${e.datum}<br><span style="font-weight:500;font-size:0.85rem;color:var(--accent);">${e.jmeno}</span>
+    </th>`
+  ).join('');
+
+  const rows = CRM_FIELDS.map((f, fi) => {
+    const bg = fi % 2 !== 0 ? 'background:#faf7f3;' : '';
+    const labelTd = `<td style="${bg}padding:9px 14px;font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;color:var(--muted);white-space:nowrap;border-right:2px solid var(--border);">${f.label}</td>`;
+
+    const cells = filtered.map(({ e, i }) => {
+      const v = e[f.key];
+
+      if (f.key === 'koordinator') {
+        const opts = CRM_COORDS.map(o =>
+          `<option value="${o}" ${v === o ? 'selected' : ''}>${o || '—'}</option>`
+        ).join('');
+        return `<td style="${bg}padding:6px 10px;">
+          <select onchange="saveCrmCell(${i},'koordinator',this.value)"
+            style="border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:0.88rem;background:#fff;cursor:pointer;width:100%;">
+            ${opts}
+          </select>
+        </td>`;
+      }
+
+      let display;
+      if (f.type === 'bool') display = crmBadge(v);
+      else if (f.type === 'kc') display = crmKc(v);
+      else display = crmTxt(v);
+
+      const hint = v == null || v === '' ? ' title="Klikněte pro úpravu"' : '';
+      return `<td style="${bg}padding:9px 14px;font-size:0.88rem;cursor:pointer;" ${hint}
+        onclick="editCrmCell(this,${i},'${f.key}','${f.type || 'text'}')">${display}</td>`;
+    }).join('');
+
+    return `<tr>${labelTd}${cells}</tr>`;
+  }).join('');
+
+  wrap.innerHTML = `<table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
+    <thead><tr>
+      <th style="background:#f3ede5;color:var(--muted);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.4px;padding:10px 14px;border-bottom:2px solid var(--border);border-right:2px solid var(--border);white-space:nowrap;">Pole</th>
+      ${headCols}
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
 }
 
 // ============================================================
