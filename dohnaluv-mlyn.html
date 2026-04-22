@@ -833,7 +833,14 @@ function toggleRentCols() {
 function saveContact() { db.ref('weddingContact').set(weddingContact); }
 function saveRentDeposit() { db.ref('weddingRentDeposit').set(weddingRentDeposit); }
 function saveRentBalance() { db.ref('weddingRentBalance').set(weddingRentBalance); }
-function updateContact(date, val) { weddingContact[date] = val; saveContact(); }
+function updateContact(date, val) {
+  weddingContact[date] = val;
+  saveContact();
+  const row = document.querySelector(`#terminy-body tr[onclick="openWeddingModal('${date}')"]`);
+  if (row) row.cells[0].innerHTML = val
+    ? `<span style="font-size:0.85rem;">${val}</span>`
+    : '<span style="color:var(--muted);font-size:0.8rem;">—</span>';
+}
 function updateRentDeposit(date, val) { weddingRentDeposit[date] = val === '' ? null : Number(val); saveRentDeposit(); renderTerminy(); }
 function updateRentBalance(date, val) { weddingRentBalance[date] = val === '' ? null : Number(val); saveRentBalance(); renderTerminy(); }
 function setRating(date, color) {
@@ -1383,7 +1390,7 @@ function openWeddingModal(date) {
     <div class="detail-row"><div class="detail-label">Jméno a kontakt</div><div class="detail-val">
       <input type="text" value="${(weddingContact[w.date]||'').replace(/"/g,'&quot;')}" placeholder="Jméno, tel. nebo email..."
         style="width:100%;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
-        onchange="updateContact('${w.date}', this.value)">
+        oninput="updateContact('${w.date}', this.value)">
     </div></div>
     <div class="detail-row"><div class="detail-label">Koordinátor</div><div class="detail-val">${coordTag(w.coord)}</div></div>
     <div class="detail-row"><div class="detail-label">Nájem záloha (CZK)</div><div class="detail-val">
