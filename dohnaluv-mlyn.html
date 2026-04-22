@@ -78,7 +78,7 @@
   #terminy-table.rent-collapsed .col-rent,
   #terminy-table.rent-collapsed .col-rent-th { max-width: 0; padding-left: 0; padding-right: 0; opacity: 0; border: none; }
   .rent-toggle-btn { background: none; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-size: 0.75rem; padding: 2px 5px; margin-left: 6px; color: var(--muted); vertical-align: middle; transition: transform 0.3s; }
-  #terminy-table.rent-collapsed .rent-toggle-btn { transform: scaleX(-1); }
+  #terminy-table.rent-collapsed #rent-toggle-btn { content: '▶'; }
   tr:hover td { background: var(--accent-light); }
   tr.past-event td { background: #f0ede8; color: #9a8f82; }
   tr.past-event td .tag { opacity: 0.6; }
@@ -380,8 +380,9 @@
             <th>Hosté</th>
             <th>Obsluha (požad./skut.)</th>
             <th>Úklid (druhý den)</th>
-            <th class="col-rent-th">Nájem záloha (CZK)</th>
-            <th class="col-rent-th">Nájem doplatek (CZK)<button class="rent-toggle-btn" onclick="toggleRentCols()" title="Skrýt/zobrazit nájmové sloupce">◀</button></th>
+            <th style="width:28px;padding:4px 2px;text-align:center;"><button class="rent-toggle-btn" id="rent-toggle-btn" onclick="toggleRentCols()" title="Skrýt/zobrazit nájem">◀</button></th>
+            <th class="col-rent-th">Nájem záloha</th>
+            <th class="col-rent-th">Nájem doplatek</th>
             <th></th>
           </tr>
         </thead>
@@ -824,7 +825,10 @@ function updateFeedback(date, val) {
 }
 function saveRating() { db.ref('weddingRating').set(weddingRating); }
 function toggleRentCols() {
-  document.getElementById('terminy-table').classList.toggle('rent-collapsed');
+  const table = document.getElementById('terminy-table');
+  table.classList.toggle('rent-collapsed');
+  const btn = document.getElementById('rent-toggle-btn');
+  if (btn) btn.textContent = table.classList.contains('rent-collapsed') ? '▶' : '◀';
 }
 function saveContact() { db.ref('weddingContact').set(weddingContact); }
 function saveRentDeposit() { db.ref('weddingRentDeposit').set(weddingRentDeposit); }
@@ -1300,6 +1304,7 @@ function renderTerminy() {
       <td>${guestBar}</td>
       <td>${serviceHtml}</td>
       <td style="${cleanCellStyle}">${cleanHtml}</td>
+      <td style="width:28px;padding:0;"></td>
       <td class="col-rent" style="text-align:right;">${deposit != null ? `<strong>${deposit.toLocaleString('cs-CZ')} Kč</strong>` : '<span style="color:var(--muted);">—</span>'}</td>
       <td class="col-rent" style="text-align:right;">${balance != null ? `<strong>${balance.toLocaleString('cs-CZ')} Kč</strong>` : '<span style="color:var(--muted);">—</span>'}</td>
       <td><button class="btn btn-sm btn-outline" onclick="event.stopPropagation();openWeddingModal('${w.date}')" style="white-space:nowrap">✏ Přihlásit</button></td>
@@ -1310,7 +1315,7 @@ function renderTerminy() {
   const totalDeposit = WEDDINGS.reduce((s, w) => s + (weddingRentDeposit[w.date] || 0), 0);
   const totalBalance = WEDDINGS.reduce((s, w) => s + (weddingRentBalance[w.date] || 0), 0);
   body.innerHTML += `<tr style="background:var(--bg-card);font-weight:700;border-top:2px solid var(--border);">
-    <td colspan="6" style="text-align:right;font-size:0.85rem;color:var(--muted);padding-right:12px;">Celkem (všechny svatby):</td>
+    <td colspan="7" style="text-align:right;font-size:0.85rem;color:var(--muted);padding-right:12px;">Celkem (všechny svatby):</td>
     <td class="col-rent" style="text-align:right;white-space:nowrap;">${totalDeposit.toLocaleString('cs-CZ')} Kč</td>
     <td class="col-rent" style="text-align:right;white-space:nowrap;">${totalBalance.toLocaleString('cs-CZ')} Kč</td>
     <td></td>
