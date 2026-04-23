@@ -390,6 +390,7 @@
       </table>
     </div>
     <p class="notice" style="margin-top:12px;">Kliknutím na řádek zobrazíte detail termínu.</p>
+    <div id="najem-summary" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;"></div>
   </div>
   <div id="terminy-cal-view" style="display:none;">
     <div class="cal-nav">
@@ -1319,14 +1320,37 @@ function renderTerminy() {
   }).join('');
 
   // Totals row
-  const totalDeposit = WEDDINGS.reduce((s, w) => s + (weddingRentDeposit[w.date] || 0), 0);
-  const totalBalance = WEDDINGS.reduce((s, w) => s + (weddingRentBalance[w.date] || 0), 0);
+  const totalDeposit = data.reduce((s, w) => s + (weddingRentDeposit[w.date] || 0), 0);
+  const totalBalance = data.reduce((s, w) => s + (weddingRentBalance[w.date] || 0), 0);
   body.innerHTML += `<tr style="background:var(--bg-card);font-weight:700;border-top:2px solid var(--border);">
     <td colspan="7" style="text-align:right;font-size:0.85rem;color:var(--muted);padding-right:12px;">Celkem (všechny svatby):</td>
     <td class="col-rent" style="text-align:right;white-space:nowrap;">${totalDeposit.toLocaleString('cs-CZ')} Kč</td>
     <td class="col-rent" style="text-align:right;white-space:nowrap;">${totalBalance.toLocaleString('cs-CZ')} Kč</td>
     <td></td>
   </tr>`;
+
+  // Rent summary cards (respects active filters)
+  const todayStr = today();
+  const balancePaid   = data.filter(w => w.date <= todayStr).reduce((s, w) => s + (weddingRentBalance[w.date] || 0), 0);
+  const balanceFuture = data.filter(w => w.date >  todayStr).reduce((s, w) => s + (weddingRentBalance[w.date] || 0), 0);
+  const fmt = n => n.toLocaleString('cs-CZ') + ' Kč';
+  document.getElementById('najem-summary').innerHTML = `
+    <div class="card" style="padding:12px 20px;min-width:160px;">
+      <div class="card-title">Záloha celkem</div>
+      <div class="card-value" style="font-size:1.3rem;color:var(--green);">${fmt(totalDeposit)}</div>
+      <div style="font-size:0.75rem;color:var(--muted);margin-top:2px;">všechny zálohy zaplaceny</div>
+    </div>
+    <div class="card" style="padding:12px 20px;min-width:160px;">
+      <div class="card-title">Doplatek — zaplaceno</div>
+      <div class="card-value" style="font-size:1.3rem;color:var(--green);">${fmt(balancePaid)}</div>
+      <div style="font-size:0.75rem;color:var(--muted);margin-top:2px;">svatby do dneška</div>
+    </div>
+    <div class="card" style="padding:12px 20px;min-width:160px;">
+      <div class="card-title">Doplatek — bude zaplaceno</div>
+      <div class="card-value" style="font-size:1.3rem;color:var(--accent);">${fmt(balanceFuture)}</div>
+      <div style="font-size:0.75rem;color:var(--muted);margin-top:2px;">nadcházející svatby</div>
+    </div>
+  `;
 }
 
 function updateGuests(date, val) {
