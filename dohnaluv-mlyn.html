@@ -725,9 +725,10 @@ let customWeddings = []; // user-created weddings, persisted in Firebase
 let expenses = []; // jednorázové náklady
 let weddingFeedback = {}; // { 'YYYY-MM-DD': 'text...' }
 let weddingRating = {};   // { 'YYYY-MM-DD': 'green'|'orange'|'red'|null }
-let weddingContact = {};     // { 'YYYY-MM-DD': 'jméno a kontakt' }
-let weddingRentDeposit = {}; // { 'YYYY-MM-DD': number } záloha v CZK
-let weddingRentBalance = {}; // { 'YYYY-MM-DD': number } doplatek v CZK
+let weddingContact = {};      // { 'YYYY-MM-DD': 'jméno a kontakt' }
+let weddingRentDeposit = {};  // { 'YYYY-MM-DD': number } záloha v CZK
+let weddingRentBalance = {};  // { 'YYYY-MM-DD': number } doplatek v CZK
+let weddingCoordOverride = {}; // { 'YYYY-MM-DD': 'coord' } přepsání koordinátora
 
 async function loadState() {
   const snapshot = await db.ref('/').once('value');
@@ -775,6 +776,7 @@ async function loadState() {
   weddingContact = data.weddingContact || {};
   weddingRentDeposit = data.weddingRentDeposit || {};
   weddingRentBalance = data.weddingRentBalance || {};
+  weddingCoordOverride = data.weddingCoordOverride || {};
 
   // Custom weddings
   if (data.customWeddings) {
@@ -830,6 +832,14 @@ function toggleRentCols() {
   table.classList.toggle('rent-collapsed');
   const btn = document.getElementById('rent-toggle-btn');
   if (btn) btn.textContent = table.classList.contains('rent-collapsed') ? '▶' : '◀';
+}
+function getCoord(date) { return weddingCoordOverride[date] || (WEDDINGS.find(w => w.date === date) || {}).coord || ''; }
+function saveCoordOverride() { db.ref('weddingCoordOverride').set(weddingCoordOverride); }
+function updateCoord(date, val) {
+  weddingCoordOverride[date] = val;
+  saveCoordOverride();
+  const row = document.querySelector(`#terminy-body tr[onclick="openWeddingModal('${date}')"]`);
+  if (row) row.cells[2].innerHTML = coordTag(val);
 }
 function saveContact() { db.ref('weddingContact').set(weddingContact); }
 function saveRentDeposit() { db.ref('weddingRentDeposit').set(weddingRentDeposit); }
@@ -1237,11 +1247,11 @@ function renderTerminy() {
   const incomplete = document.getElementById('filter-incomplete').checked;
 
   let data = WEDDINGS.filter(w => {
-    if (coord && w.coord !== coord) return false;
+    if (coord && getCoord(w.date) !== coord) return false;
     if (month && !w.date.startsWith('2026-'+month)) return false;
     if (incomplete && getService(w.date).length > 0 && getCleaning(w.date).length >= 4) return false;
     if (search) {
-      const hay = [w.date, w.coord, ...getService(w.date), ...getCleaning(w.date)].join(' ').toLowerCase();
+      const hay = [w.date, getCoord(w.date), ...getService(w.date), ...getCleaning(w.date)].join(' ').toLowerCase();
       if (!hay.includes(search)) return false;
     }
     return true;
@@ -1308,7 +1318,7 @@ function renderTerminy() {
     return `<tr class="${past?'past-event':''}" style="cursor:pointer;" onclick="openWeddingModal('${w.date}')">
       <td style="max-width:160px;word-break:break-word;">${contact ? `<span style="font-size:0.85rem;">${contact}</span>` : '<span style="color:var(--muted);font-size:0.8rem;">—</span>'}</td>
       <td><strong>${fmtDate(w.date)}</strong>${ratingDot}<br><span style="font-size:0.75rem;color:var(--muted)">${w.day}</span></td>
-      <td>${coordTag(w.coord)}</td>
+      <td>${coordTag(getCoord(w.date))}</td>
       <td>${guestBar}</td>
       <td>${serviceHtml}</td>
       <td style="${cleanCellStyle}">${cleanHtml}</td>
@@ -1416,7 +1426,11 @@ function openWeddingModal(date) {
         style="width:100%;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
         oninput="updateContact('${w.date}', this.value)">
     </div></div>
-    <div class="detail-row"><div class="detail-label">Koordinátor</div><div class="detail-val">${coordTag(w.coord)}</div></div>
+    <div class="detail-row"><div class="detail-label">Koordinátor</div><div class="detail-val">
+      <select style="padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;" onchange="updateCoord('${w.date}', this.value)">
+        ${['Honza + Verča','Matěj','Grochy','Eliška a Vojta'].map(c => `<option value="${c}" ${getCoord(w.date)===c?'selected':''}>${c}</option>`).join('')}
+      </select>
+    </div></div>
     <div class="detail-row"><div class="detail-label">Nájem záloha (CZK)</div><div class="detail-val">
       <input type="number" min="0" value="${weddingRentDeposit[w.date] ?? ''}" placeholder="—"
         style="width:120px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
