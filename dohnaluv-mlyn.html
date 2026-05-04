@@ -2067,6 +2067,11 @@ function renderVyplaty() {
     </div>`;
 
   // --- GRAND TOTAL ---
+  // paymentPaid structure: { 'YYYY-MM': { 'person': number } }
+  const getPaid = (person, month) => month
+    ? ((paymentPaid[month] || {})[person] || 0)
+    : allMonths.reduce((s, ym) => s + ((paymentPaid[ym] || {})[person] || 0), 0);
+
   const grandHtml = `
     <div class="section-title">Celkové náklady${payrollMonth ? ` — ${MONTH_NAMES[parseInt(payrollMonth.split('-')[1])]}` : ''}</div>
     <div class="table-container">
@@ -2079,22 +2084,23 @@ function renderVyplaty() {
               const cleanPay = fPersonCleanPay(p);
               const grand = hoursPay + cleanPay;
               if (grand === 0) return '';
-              const paid = paymentPaid[p] || 0;
+              const paid = getPaid(p, payrollMonth);
               const remaining = grand - paid;
+              const paidCell = payrollMonth
+                ? `<input class="rate-input" type="number" min="0" step="10"
+                    value="${paid || ''}"
+                    placeholder="0"
+                    style="width:100px;text-align:right;"
+                    onchange="if(!paymentPaid['${payrollMonth}'])paymentPaid['${payrollMonth}']={};paymentPaid['${payrollMonth}']['${p.replace(/'/g,"\\'")}'] = parseFloat(this.value)||0; savePaymentPaid(); renderVyplaty();">`
+                : `<span style="font-weight:600;">${paid > 0 ? paid.toLocaleString('cs-CZ',{maximumFractionDigits:0})+' Kč' : '—'}</span>`;
               return `<tr>
                 <td><strong>${p}</strong></td>
                 <td style="text-align:right;">${hoursPay > 0 ? hoursPay.toLocaleString('cs-CZ') + ' Kč' : '—'}</td>
                 <td style="text-align:right;">${cleanPay > 0 ? cleanPay.toLocaleString('cs-CZ',{maximumFractionDigits:0}) + ' Kč' : '—'}</td>
                 <td class="pay-amount" style="text-align:right;">${grand.toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
-                <td style="text-align:right;">
-                  <input class="rate-input" type="number" min="0" step="10"
-                    value="${paid || ''}"
-                    placeholder="0"
-                    style="width:100px;text-align:right;"
-                    onchange="paymentPaid['${p.replace(/'/g,"\\'")}'] = parseFloat(this.value)||0; savePaymentPaid(); renderVyplaty();">
-                </td>
+                <td style="text-align:right;">${paidCell}</td>
                 <td style="text-align:right;font-weight:700;color:${remaining > 0 ? 'var(--red)' : 'var(--green)'};">
-                  ${remaining !== 0 ? remaining.toLocaleString('cs-CZ',{maximumFractionDigits:0}) + ' Kč' : '✓ uhrazeno'}
+                  ${remaining > 0 ? remaining.toLocaleString('cs-CZ',{maximumFractionDigits:0}) + ' Kč' : '✓ uhrazeno'}
                 </td>
               </tr>`;
             }).join('')}
@@ -2105,8 +2111,8 @@ function renderVyplaty() {
               <td style="text-align:right;">${people.reduce((s,p)=>s+fPersonHours(p)*(rates[p]||150),0).toLocaleString('cs-CZ')} Kč</td>
               <td style="text-align:right;">${people.reduce((s,p)=>s+fPersonCleanPay(p),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
               <td class="pay-amount" style="text-align:right;">${people.reduce((s,p)=>s+fPersonHours(p)*(rates[p]||150)+fPersonCleanPay(p),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
-              <td style="text-align:right;">${people.reduce((s,p)=>s+(paymentPaid[p]||0),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
-              <td style="text-align:right;">${people.reduce((s,p)=>s+(fPersonHours(p)*(rates[p]||150)+fPersonCleanPay(p))-(paymentPaid[p]||0),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
+              <td style="text-align:right;">${people.reduce((s,p)=>s+getPaid(p,payrollMonth),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
+              <td style="text-align:right;">${people.reduce((s,p)=>s+(fPersonHours(p)*(rates[p]||150)+fPersonCleanPay(p))-getPaid(p,payrollMonth),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
             </tr>
           </tfoot>
         </table>
