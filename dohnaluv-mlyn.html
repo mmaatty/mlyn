@@ -330,9 +330,9 @@
       <option value="10">Říjen</option>
     </select>
     <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;cursor:pointer;">
-      <input type="checkbox" id="filter-incomplete" onchange="renderTerminy()"> Jen neúplné
+      <input type="checkbox" id="filter-future" onchange="renderTerminy()"> Jen nadcházející
     </label>
-    <button class="btn btn-outline btn-sm" onclick="document.getElementById('filter-search').value='';document.getElementById('filter-coord').value='';document.getElementById('filter-month').value='';document.getElementById('filter-incomplete').checked=false;renderTerminy()">Resetovat</button>
+    <button class="btn btn-outline btn-sm" onclick="document.getElementById('filter-search').value='';document.getElementById('filter-coord').value='';document.getElementById('filter-month').value='';document.getElementById('filter-future').checked=false;renderTerminy()">Resetovat</button>
     <button class="btn btn-sm" onclick="openNewWeddingForm()" style="margin-left:auto;">+ Přidat svatbu</button>
   </div>
 
@@ -1253,12 +1253,12 @@ function renderTerminy() {
   const search = document.getElementById('filter-search').value.toLowerCase();
   const coord = document.getElementById('filter-coord').value;
   const month = document.getElementById('filter-month').value;
-  const incomplete = document.getElementById('filter-incomplete').checked;
+  const futureOnly = document.getElementById('filter-future').checked;
 
   let data = WEDDINGS.filter(w => {
     if (coord && getCoord(w.date) !== coord) return false;
     if (month && !w.date.startsWith('2026-'+month)) return false;
-    if (incomplete && getService(w.date).length > 0 && getCleaning(w.date).length >= 4) return false;
+    if (futureOnly && isPast(w.date)) return false;
     if (search) {
       const hay = [w.date, getCoord(w.date), ...getService(w.date), ...getCleaning(w.date)].join(' ').toLowerCase();
       if (!hay.includes(search)) return false;
