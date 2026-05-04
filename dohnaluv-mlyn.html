@@ -723,6 +723,7 @@ let payrollMonth = null; // null = vše, jinak 'YYYY-MM'
 let weddingAssignments = {}; // { 'YYYY-MM-DD': { service: [...], cleaning: [...] } }
 let customWeddings = []; // user-created weddings, persisted in Firebase
 let expenses = []; // jednorázové náklady
+let paymentPaid = {}; // { 'person': number } — kolik bylo uhrazeno
 let weddingFeedback = {}; // { 'YYYY-MM-DD': 'text...' }
 let weddingRating = {};   // { 'YYYY-MM-DD': 'green'|'orange'|'red'|null }
 let weddingContact = {};      // { 'YYYY-MM-DD': 'jméno a kontakt' }
@@ -769,6 +770,9 @@ async function loadState() {
   } else {
     expenses = [];
   }
+
+  // Payment paid (výplaty)
+  paymentPaid = data.paymentPaid || {};
 
   // Feedback
   weddingFeedback = data.weddingFeedback || {};
@@ -821,6 +825,11 @@ function saveAssignments() { db.ref('weddingAssignments').set(weddingAssignments
 function savePeople() { db.ref('people').set(ALL_PEOPLE); }
 function saveCustomWeddings() { db.ref('customWeddings').set(customWeddings); }
 function saveExpenses() { db.ref('expenses').set(expenses); }
+function savePaymentPaid() { db.ref('paymentPaid').set(paymentPaid); }
+function updateExpenseField(id, field, value) {
+  const exp = expenses.find(e => e.id === id);
+  if (exp) { exp[field] = value; saveExpenses(); }
+}
 function saveFeedback() { db.ref('weddingFeedback').set(weddingFeedback); }
 function updateFeedback(date, val) {
   weddingFeedback[date] = val;
@@ -1709,6 +1718,8 @@ function renderExpenseList() {
           <th style="padding:8px 10px;text-align:left;color:var(--muted);font-size:0.75rem;text-transform:uppercase;">Typ</th>
           <th style="padding:8px 10px;text-align:right;color:var(--muted);font-size:0.75rem;text-transform:uppercase;">Částka</th>
           <th style="padding:8px 10px;text-align:left;color:var(--muted);font-size:0.75rem;text-transform:uppercase;">Poznámka</th>
+          <th style="padding:8px 10px;text-align:right;color:var(--muted);font-size:0.75rem;text-transform:uppercase;">Schváleno k propl.</th>
+          <th style="padding:8px 10px;text-align:left;color:var(--muted);font-size:0.75rem;text-transform:uppercase;">Poznámka k propl.</th>
           <th></th>
         </tr></thead>
         <tbody>
@@ -1718,12 +1729,26 @@ function renderExpenseList() {
             <td style="padding:8px 10px;"><span class="tag" style="background:var(--yellow-light);color:var(--yellow);">${e.type}</span></td>
             <td style="padding:8px 10px;text-align:right;font-weight:700;">${e.amount.toLocaleString('cs-CZ')} Kč</td>
             <td style="padding:8px 10px;color:var(--muted);font-size:0.8rem;">${e.note || '—'}</td>
+            <td style="padding:8px 10px;text-align:right;">
+              <input class="rate-input" type="number" min="0" step="10"
+                value="${e.approved != null ? e.approved : ''}"
+                placeholder="—"
+                style="width:90px;text-align:right;"
+                onchange="updateExpenseField('${e.id}','approved',parseFloat(this.value)||null)">
+            </td>
+            <td style="padding:8px 10px;">
+              <input class="rate-input" type="text"
+                value="${(e.approvalNote||'').replace(/"/g,'&quot;')}"
+                placeholder="Poznámka..."
+                style="min-width:160px;"
+                onchange="updateExpenseField('${e.id}','approvalNote',this.value.trim())">
+            </td>
             <td style="padding:8px 10px;"><button class="delete-btn" onclick="deleteExpenseEntry('${e.id}')" title="Smazat">✕</button></td>
           </tr>`).join('')}
           <tr style="border-top:2px solid var(--border);">
             <td colspan="3" style="padding:8px 10px;font-weight:700;">Celkem</td>
             <td style="padding:8px 10px;text-align:right;font-weight:700;color:var(--accent);">${total.toLocaleString('cs-CZ')} Kč</td>
-            <td colspan="2"></td>
+            <td colspan="4"></td>
           </tr>
         </tbody>
       </table>
@@ -2047,18 +2072,30 @@ function renderVyplaty() {
     <div class="table-container">
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Zaměstnanec</th><th style="text-align:right">Hodinovka (Kč)</th><th style="text-align:right">Úklidy (Kč)</th><th style="text-align:right">CELKEM (Kč)</th></tr></thead>
+          <thead><tr><th>Zaměstnanec</th><th style="text-align:right">Hodinovka (Kč)</th><th style="text-align:right">Úklidy (Kč)</th><th style="text-align:right">CELKEM (Kč)</th><th style="text-align:right">Proplaceno (Kč)</th><th style="text-align:right">Zbývá proplatit (Kč)</th></tr></thead>
           <tbody>
             ${people.map(p => {
               const hoursPay = fPersonHours(p) * (rates[p]||150);
               const cleanPay = fPersonCleanPay(p);
               const grand = hoursPay + cleanPay;
               if (grand === 0) return '';
+              const paid = paymentPaid[p] || 0;
+              const remaining = grand - paid;
               return `<tr>
                 <td><strong>${p}</strong></td>
                 <td style="text-align:right;">${hoursPay > 0 ? hoursPay.toLocaleString('cs-CZ') + ' Kč' : '—'}</td>
                 <td style="text-align:right;">${cleanPay > 0 ? cleanPay.toLocaleString('cs-CZ',{maximumFractionDigits:0}) + ' Kč' : '—'}</td>
                 <td class="pay-amount" style="text-align:right;">${grand.toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
+                <td style="text-align:right;">
+                  <input class="rate-input" type="number" min="0" step="10"
+                    value="${paid || ''}"
+                    placeholder="0"
+                    style="width:100px;text-align:right;"
+                    onchange="paymentPaid['${p.replace(/'/g,"\\'")}'] = parseFloat(this.value)||0; savePaymentPaid(); renderVyplaty();">
+                </td>
+                <td style="text-align:right;font-weight:700;color:${remaining > 0 ? 'var(--red)' : 'var(--green)'};">
+                  ${remaining !== 0 ? remaining.toLocaleString('cs-CZ',{maximumFractionDigits:0}) + ' Kč' : '✓ uhrazeno'}
+                </td>
               </tr>`;
             }).join('')}
           </tbody>
@@ -2068,6 +2105,8 @@ function renderVyplaty() {
               <td style="text-align:right;">${people.reduce((s,p)=>s+fPersonHours(p)*(rates[p]||150),0).toLocaleString('cs-CZ')} Kč</td>
               <td style="text-align:right;">${people.reduce((s,p)=>s+fPersonCleanPay(p),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
               <td class="pay-amount" style="text-align:right;">${people.reduce((s,p)=>s+fPersonHours(p)*(rates[p]||150)+fPersonCleanPay(p),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
+              <td style="text-align:right;">${people.reduce((s,p)=>s+(paymentPaid[p]||0),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
+              <td style="text-align:right;">${people.reduce((s,p)=>s+(fPersonHours(p)*(rates[p]||150)+fPersonCleanPay(p))-(paymentPaid[p]||0),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
             </tr>
           </tfoot>
         </table>
