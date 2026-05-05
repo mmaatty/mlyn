@@ -726,7 +726,9 @@ let expenses = []; // jednorázové náklady
 let paymentPaid = {}; // { 'person': number } — kolik bylo uhrazeno
 let weddingFeedback = {}; // { 'YYYY-MM-DD': 'text...' }
 let weddingRating = {};   // { 'YYYY-MM-DD': 'green'|'orange'|'red'|null }
-let weddingContact = {};      // { 'YYYY-MM-DD': 'jméno a kontakt' }
+let weddingContact = {};      // { 'YYYY-MM-DD': 'jméno' }
+let weddingPhone = {};        // { 'YYYY-MM-DD': 'telefon' }
+let weddingEmail = {};        // { 'YYYY-MM-DD': 'email' }
 let weddingRentDeposit = {};  // { 'YYYY-MM-DD': number } záloha v CZK
 let weddingRentBalance = {};  // { 'YYYY-MM-DD': number } doplatek v CZK
 let weddingCoordOverride = {}; // { 'YYYY-MM-DD': 'coord' } přepsání koordinátora
@@ -778,6 +780,8 @@ async function loadState() {
   weddingFeedback = data.weddingFeedback || {};
   weddingRating = data.weddingRating || {};
   weddingContact = data.weddingContact || {};
+  weddingPhone = data.weddingPhone || {};
+  weddingEmail = data.weddingEmail || {};
   weddingRentDeposit = data.weddingRentDeposit || {};
   weddingRentBalance = data.weddingRentBalance || {};
   weddingCoordOverride = data.weddingCoordOverride || {};
@@ -851,15 +855,40 @@ function updateCoord(date, val) {
   if (row) row.cells[2].innerHTML = coordTag(val);
 }
 function saveContact() { db.ref('weddingContact').set(weddingContact); }
+function savePhone()   { db.ref('weddingPhone').set(weddingPhone); }
+function saveEmail()   { db.ref('weddingEmail').set(weddingEmail); }
 function saveRentDeposit() { db.ref('weddingRentDeposit').set(weddingRentDeposit); }
 function saveRentBalance() { db.ref('weddingRentBalance').set(weddingRentBalance); }
+function contactCellHtml(date) {
+  const name  = weddingContact[date] || '';
+  const phone = weddingPhone[date]   || '';
+  const email = weddingEmail[date]   || '';
+  if (!name && !phone && !email) return '<span style="color:var(--muted);font-size:0.8rem;">—</span>';
+  const phoneLink = phone
+    ? `<a href="tel:${phone.replace(/\s/g,'')}" onclick="event.stopPropagation()" style="display:block;font-size:0.8rem;color:var(--accent);text-decoration:none;margin-top:2px;">📞 ${phone}</a>`
+    : '';
+  const emailLink = email
+    ? `<a href="mailto:${email}" onclick="event.stopPropagation()" style="display:block;font-size:0.8rem;color:var(--accent);text-decoration:none;margin-top:2px;">✉ ${email}</a>`
+    : '';
+  return `<span style="font-size:0.85rem;display:block;">${name}</span>${phoneLink}${emailLink}`;
+}
 function updateContact(date, val) {
   weddingContact[date] = val;
   saveContact();
   const row = document.querySelector(`#terminy-body tr[onclick="openWeddingModal('${date}')"]`);
-  if (row) row.cells[0].innerHTML = val
-    ? `<span style="font-size:0.85rem;">${val}</span>`
-    : '<span style="color:var(--muted);font-size:0.8rem;">—</span>';
+  if (row) row.cells[0].innerHTML = contactCellHtml(date);
+}
+function updatePhone(date, val) {
+  weddingPhone[date] = val;
+  savePhone();
+  const row = document.querySelector(`#terminy-body tr[onclick="openWeddingModal('${date}')"]`);
+  if (row) row.cells[0].innerHTML = contactCellHtml(date);
+}
+function updateEmail(date, val) {
+  weddingEmail[date] = val;
+  saveEmail();
+  const row = document.querySelector(`#terminy-body tr[onclick="openWeddingModal('${date}')"]`);
+  if (row) row.cells[0].innerHTML = contactCellHtml(date);
 }
 function updateRentDeposit(date, val) { weddingRentDeposit[date] = val === '' ? null : Number(val); saveRentDeposit(); renderTerminy(); }
 function updateRentBalance(date, val) { weddingRentBalance[date] = val === '' ? null : Number(val); saveRentBalance(); renderTerminy(); }
@@ -1325,7 +1354,7 @@ function renderTerminy() {
     const balance = weddingRentBalance[w.date];
 
     return `<tr class="${past?'past-event':''}" style="cursor:pointer;" onclick="openWeddingModal('${w.date}')">
-      <td style="max-width:160px;word-break:break-word;">${contact ? `<span style="font-size:0.85rem;">${contact}</span>` : '<span style="color:var(--muted);font-size:0.8rem;">—</span>'}</td>
+      <td style="max-width:160px;word-break:break-word;">${contactCellHtml(w.date)}</td>
       <td><strong>${fmtDate(w.date)}</strong>${ratingDot}<br><span style="font-size:0.75rem;color:var(--muted)">${w.day}</span></td>
       <td>${coordTag(getCoord(w.date))}</td>
       <td>${guestBar}</td>
@@ -1430,10 +1459,20 @@ function openWeddingModal(date) {
   document.getElementById('modal-content').innerHTML = `
     <button class="modal-close" onclick="closeModal()">×</button>
     <div class="modal-title">${fmtDate(w.date)} — ${w.day}</div>
-    <div class="detail-row"><div class="detail-label">Jméno a kontakt</div><div class="detail-val">
-      <input type="text" value="${(weddingContact[w.date]||'').replace(/"/g,'&quot;')}" placeholder="Jméno, tel. nebo email..."
+    <div class="detail-row"><div class="detail-label">Jméno</div><div class="detail-val">
+      <input type="text" value="${(weddingContact[w.date]||'').replace(/"/g,'&quot;')}" placeholder="Jméno páru..."
         style="width:100%;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
         oninput="updateContact('${w.date}', this.value)">
+    </div></div>
+    <div class="detail-row"><div class="detail-label">📞 Telefon</div><div class="detail-val">
+      <input type="tel" value="${(weddingPhone[w.date]||'').replace(/"/g,'&quot;')}" placeholder="+420 ..."
+        style="width:100%;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
+        oninput="updatePhone('${w.date}', this.value)">
+    </div></div>
+    <div class="detail-row"><div class="detail-label">✉ Email</div><div class="detail-val">
+      <input type="email" value="${(weddingEmail[w.date]||'').replace(/"/g,'&quot;')}" placeholder="email@..."
+        style="width:100%;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
+        oninput="updateEmail('${w.date}', this.value)">
     </div></div>
     <div class="detail-row"><div class="detail-label">Koordinátor</div><div class="detail-val">
       <select style="padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;" onchange="updateCoord('${w.date}', this.value)">
