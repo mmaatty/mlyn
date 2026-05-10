@@ -326,7 +326,7 @@
   <div class="tab" onclick="showTab('hodinovka')">⏱ Hodinovka</div>
   <div class="tab" onclick="showTab('vyplaty')">💰 Výplaty 🔒</div>
   <div class="tab" onclick="showTab('crm')" style="display:none;">🤝 CRM 🔒</div>
-  <div class="tab" onclick="showTab('todo')">✅ To-Do</div>
+  <div class="tab" onclick="showTab('todo')">✅ To-Do 🔒</div>
 </div>
 
 <!-- ===================== PAGE: PŘEHLED ===================== -->
@@ -597,8 +597,11 @@
 
 <!-- ===================== PAGE: TO-DO ===================== -->
 <div class="page" id="page-todo">
+  <div id="todo-lock-screen"></div>
+  <div id="todo-unlocked-content" style="display:none;">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
     <h2 style="font-size:1.2rem;font-weight:700;">✅ To-Do Tracker</h2>
+    <button class="unlock-badge" onclick="lockTodo()" title="Zamknout sekci">🔒 Zamknout</button>
   </div>
 
   <!-- Stats -->
@@ -658,6 +661,7 @@
 
   <!-- List -->
   <div class="todo-list" id="todo-list"></div>
+  </div><!-- /todo-unlocked-content -->
 </div>
 
 <!-- CRM ADD MODAL -->
@@ -2754,6 +2758,55 @@ function submitCrmForm() {
 }
 
 // ============================================================
+// TO-DO LOCK
+// ============================================================
+const TODO_PASSWORD = 'Vojta';
+let todoUnlocked = false;
+
+function renderTodoLock(errorMsg) {
+  document.getElementById('todo-unlocked-content').style.display = 'none';
+  document.getElementById('todo-lock-screen').innerHTML = `
+    <div class="lock-screen">
+      <div class="lock-icon">🔐</div>
+      <div class="lock-title">Sekce To-Do je chráněna heslem</div>
+      <div class="lock-sub">Zadejte heslo pro zobrazení úkolů</div>
+      <div class="lock-form">
+        <input class="lock-input" type="password" id="todo-pwd-input" placeholder="Heslo"
+          onkeydown="if(event.key==='Enter') checkTodoPassword()">
+        <button class="btn" onclick="checkTodoPassword()">Odemknout</button>
+      </div>
+      ${errorMsg ? `<div class="lock-error">❌ ${errorMsg}</div>` : ''}
+    </div>
+  `;
+  setTimeout(() => document.getElementById('todo-pwd-input')?.focus(), 50);
+}
+
+function checkTodoPassword() {
+  const val = document.getElementById('todo-pwd-input')?.value || '';
+  if (val === TODO_PASSWORD) {
+    todoUnlocked = true;
+    document.getElementById('todo-lock-screen').innerHTML = '';
+    document.getElementById('todo-unlocked-content').style.display = 'block';
+    renderTodos();
+    document.querySelectorAll('.tab').forEach(t => {
+      if (t.textContent.includes('To-Do')) t.innerHTML = '✅ To-Do 🔓';
+    });
+  } else {
+    todoUnlocked = false;
+    renderTodoLock('Nesprávné heslo. Zkuste znovu.');
+  }
+}
+
+function lockTodo() {
+  todoUnlocked = false;
+  document.getElementById('todo-unlocked-content').style.display = 'none';
+  renderTodoLock();
+  document.querySelectorAll('.tab').forEach(t => {
+    if (t.textContent.includes('To-Do')) t.innerHTML = '✅ To-Do 🔒';
+  });
+}
+
+// ============================================================
 // TO-DO TRACKER
 // ============================================================
 let todos = [];
@@ -2938,7 +2991,10 @@ function showTab(name) {
     if (crmUnlocked) renderCrm();
     else renderCrmLock();
   }
-  if (name === 'todo') renderTodos();
+  if (name === 'todo') {
+    if (todoUnlocked) renderTodos();
+    else renderTodoLock();
+  }
 }
 
 // ============================================================
