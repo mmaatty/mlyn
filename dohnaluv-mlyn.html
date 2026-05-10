@@ -242,6 +242,45 @@
   .lock-error { color: var(--red); font-size: 0.85rem; margin-top: 10px; font-weight: 500; }
   .lock-badge { display: flex; align-items: center; gap: 6px; background: var(--red-light); border: 1px solid #d8a0a0; color: var(--red); padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; }
   .unlock-badge { display: flex; align-items: center; gap: 6px; background: var(--green-light); border: 1px solid #90c8a0; color: var(--green); padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; cursor: pointer; }
+
+  /* TODO TRACKER */
+  .todo-form-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; margin-bottom: 24px; box-shadow: var(--shadow); }
+  .todo-form-grid { display: grid; grid-template-columns: 1fr 160px 160px auto; gap: 12px; align-items: end; }
+  @media (max-width: 900px) { .todo-form-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 500px) { .todo-form-grid { grid-template-columns: 1fr; } }
+  .todo-filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+  .todo-filters select, .todo-filters input { padding: 7px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.85rem; background: #fff; color: var(--text); outline: none; }
+  .todo-filters select:focus, .todo-filters input:focus { border-color: var(--accent); }
+  .todo-list { display: flex; flex-direction: column; gap: 10px; }
+  .todo-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: start; transition: opacity 0.2s; }
+  .todo-item.done-item { opacity: 0.55; background: #f8f6f2; }
+  .todo-item.done-item .todo-task-text { text-decoration: line-through; color: var(--muted); }
+  .todo-check { width: 22px; height: 22px; cursor: pointer; accent-color: var(--accent); margin-top: 2px; flex-shrink: 0; }
+  .todo-body { display: flex; flex-direction: column; gap: 6px; }
+  .todo-task-text { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+  .todo-meta { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .todo-deadline { font-size: 0.8rem; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+  .todo-deadline.overdue { color: var(--red); font-weight: 600; }
+  .todo-deadline.soon { color: var(--yellow); font-weight: 600; }
+  .todo-comment { font-size: 0.82rem; color: var(--muted); font-style: italic; background: var(--bg); border-radius: 6px; padding: 6px 10px; border-left: 3px solid var(--border); }
+  .todo-actions { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+  .todo-edit-btn { background: none; border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 0.78rem; cursor: pointer; color: var(--muted); white-space: nowrap; }
+  .todo-edit-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .todo-del-btn { background: none; border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 0.78rem; cursor: pointer; color: var(--muted); white-space: nowrap; }
+  .todo-del-btn:hover { border-color: var(--red); color: var(--red); background: var(--red-light); }
+  .prio-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.3px; }
+  .prio-high { background: var(--red-light); color: var(--red); }
+  .prio-medium { background: var(--yellow-light); color: var(--yellow); }
+  .prio-low { background: var(--green-light); color: var(--green); }
+  .todo-stats { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+  .todo-stat { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 18px; text-align: center; min-width: 100px; }
+  .todo-stat-num { font-size: 1.6rem; font-weight: 700; }
+  .todo-stat-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; }
+  /* Edit inline form */
+  .todo-inline-form { background: var(--accent-light); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-top: 8px; display: flex; flex-direction: column; gap: 10px; }
+  .todo-inline-form .form-row { flex-wrap: wrap; gap: 10px; }
+  .todo-inline-form input, .todo-inline-form select, .todo-inline-form textarea { padding: 7px 10px; border: 1px solid var(--border); border-radius: 7px; font-size: 0.85rem; background: #fff; font-family: inherit; }
+  .todo-inline-form textarea { resize: vertical; min-height: 56px; width: 100%; }
 </style>
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -287,6 +326,7 @@
   <div class="tab" onclick="showTab('hodinovka')">⏱ Hodinovka</div>
   <div class="tab" onclick="showTab('vyplaty')">💰 Výplaty 🔒</div>
   <div class="tab" onclick="showTab('crm')" style="display:none;">🤝 CRM 🔒</div>
+  <div class="tab" onclick="showTab('todo')">✅ To-Do</div>
 </div>
 
 <!-- ===================== PAGE: PŘEHLED ===================== -->
@@ -555,6 +595,71 @@
   </div>
 </div>
 
+<!-- ===================== PAGE: TO-DO ===================== -->
+<div class="page" id="page-todo">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+    <h2 style="font-size:1.2rem;font-weight:700;">✅ To-Do Tracker</h2>
+  </div>
+
+  <!-- Stats -->
+  <div class="todo-stats" id="todo-stats"></div>
+
+  <!-- Add form -->
+  <div class="todo-form-card">
+    <div style="font-size:0.8rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">Přidat nový úkol</div>
+    <div class="todo-form-grid">
+      <div class="form-group">
+        <label>Úkol *</label>
+        <input type="text" id="todo-new-task" placeholder="Popis úkolu..." style="padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;" onkeydown="if(event.key==='Enter')addTodo()">
+      </div>
+      <div class="form-group">
+        <label>Deadline</label>
+        <input type="date" id="todo-new-deadline" style="padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;">
+      </div>
+      <div class="form-group">
+        <label>Priorita</label>
+        <select id="todo-new-priority" style="padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;">
+          <option value="medium">Střední</option>
+          <option value="high">Vysoká</option>
+          <option value="low">Nízká</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>&nbsp;</label>
+        <button class="btn" onclick="addTodo()">＋ Přidat</button>
+      </div>
+    </div>
+    <div class="form-group" style="margin-top:12px;">
+      <label>Komentář</label>
+      <input type="text" id="todo-new-comment" placeholder="Volitelný komentář / poznámka..." style="padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;width:100%;">
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="todo-filters">
+    <input type="text" id="todo-filter-text" placeholder="Hledat v úkolech..." oninput="renderTodos()" style="min-width:200px;">
+    <select id="todo-filter-priority" onchange="renderTodos()">
+      <option value="">Všechny priority</option>
+      <option value="high">Vysoká</option>
+      <option value="medium">Střední</option>
+      <option value="low">Nízká</option>
+    </select>
+    <select id="todo-filter-status" onchange="renderTodos()">
+      <option value="active">Aktivní</option>
+      <option value="all">Všechny</option>
+      <option value="done">Splněné</option>
+    </select>
+    <select id="todo-sort" onchange="renderTodos()">
+      <option value="deadline">Řadit: deadline</option>
+      <option value="priority">Řadit: priorita</option>
+      <option value="created">Řadit: datum přidání</option>
+    </select>
+  </div>
+
+  <!-- List -->
+  <div class="todo-list" id="todo-list"></div>
+</div>
+
 <!-- CRM ADD MODAL -->
 <div class="modal-overlay" id="crm-modal-overlay" onclick="closeCrmForm(event)" style="display:none;">
   <div class="modal" style="max-width:480px;" onclick="event.stopPropagation()">
@@ -785,6 +890,13 @@ async function loadState() {
   weddingRentDeposit = data.weddingRentDeposit || {};
   weddingRentBalance = data.weddingRentBalance || {};
   weddingCoordOverride = data.weddingCoordOverride || {};
+
+  // Todos
+  if (data.todos) {
+    todos = toArr(data.todos).filter(Boolean);
+  } else {
+    todos = [];
+  }
 
   // Custom weddings
   if (data.customWeddings) {
@@ -2642,6 +2754,171 @@ function submitCrmForm() {
 }
 
 // ============================================================
+// TO-DO TRACKER
+// ============================================================
+let todos = [];
+
+function saveTodos() { db.ref('todos').set(todos); }
+
+function addTodo() {
+  const task = document.getElementById('todo-new-task').value.trim();
+  if (!task) { document.getElementById('todo-new-task').focus(); return; }
+  const todo = {
+    id: 'todo_' + Date.now(),
+    task,
+    deadline: document.getElementById('todo-new-deadline').value,
+    priority: document.getElementById('todo-new-priority').value,
+    comment: document.getElementById('todo-new-comment').value.trim(),
+    done: false,
+    createdAt: new Date().toISOString()
+  };
+  todos.unshift(todo);
+  saveTodos();
+  document.getElementById('todo-new-task').value = '';
+  document.getElementById('todo-new-comment').value = '';
+  document.getElementById('todo-new-deadline').value = '';
+  document.getElementById('todo-new-priority').value = 'medium';
+  renderTodos();
+}
+
+function toggleTodoDone(id) {
+  const t = todos.find(x => x.id === id);
+  if (t) { t.done = !t.done; saveTodos(); renderTodos(); }
+}
+
+function deleteTodo(id) {
+  todos = todos.filter(x => x.id !== id);
+  saveTodos();
+  renderTodos();
+}
+
+function openTodoEdit(id) {
+  const existing = document.getElementById('todo-edit-' + id);
+  if (existing) { existing.remove(); return; }
+  const t = todos.find(x => x.id === id);
+  if (!t) return;
+  const item = document.getElementById('todo-item-' + id);
+  const form = document.createElement('div');
+  form.className = 'todo-inline-form';
+  form.id = 'todo-edit-' + id;
+  form.innerHTML = `
+    <div class="form-row">
+      <div class="form-group" style="flex:1;min-width:200px;">
+        <label>Úkol</label>
+        <input type="text" id="te-task-${id}" value="${t.task.replace(/"/g,'&quot;')}" style="width:100%;">
+      </div>
+      <div class="form-group">
+        <label>Deadline</label>
+        <input type="date" id="te-deadline-${id}" value="${t.deadline||''}">
+      </div>
+      <div class="form-group">
+        <label>Priorita</label>
+        <select id="te-priority-${id}">
+          <option value="high" ${t.priority==='high'?'selected':''}>Vysoká</option>
+          <option value="medium" ${t.priority==='medium'?'selected':''}>Střední</option>
+          <option value="low" ${t.priority==='low'?'selected':''}>Nízká</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Komentář</label>
+      <textarea id="te-comment-${id}">${t.comment||''}</textarea>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-sm" onclick="saveTodoEdit('${id}')">Uložit</button>
+      <button class="btn btn-sm btn-outline" onclick="document.getElementById('todo-edit-${id}').remove()">Zrušit</button>
+    </div>`;
+  item.after(form);
+}
+
+function saveTodoEdit(id) {
+  const t = todos.find(x => x.id === id);
+  if (!t) return;
+  t.task     = document.getElementById('te-task-' + id).value.trim() || t.task;
+  t.deadline = document.getElementById('te-deadline-' + id).value;
+  t.priority = document.getElementById('te-priority-' + id).value;
+  t.comment  = document.getElementById('te-comment-' + id).value.trim();
+  saveTodos();
+  renderTodos();
+}
+
+function renderTodos() {
+  const filterText     = (document.getElementById('todo-filter-text')?.value || '').toLowerCase();
+  const filterPriority = document.getElementById('todo-filter-priority')?.value || '';
+  const filterStatus   = document.getElementById('todo-filter-status')?.value || 'active';
+  const sortBy         = document.getElementById('todo-sort')?.value || 'deadline';
+  const today          = new Date().toISOString().slice(0, 10);
+
+  let list = todos.filter(t => {
+    if (filterStatus === 'active' && t.done) return false;
+    if (filterStatus === 'done'   && !t.done) return false;
+    if (filterPriority && t.priority !== filterPriority) return false;
+    if (filterText && !t.task.toLowerCase().includes(filterText) && !(t.comment||'').toLowerCase().includes(filterText)) return false;
+    return true;
+  });
+
+  const prioOrder = { high: 0, medium: 1, low: 2 };
+  list.sort((a, b) => {
+    if (sortBy === 'priority') return (prioOrder[a.priority]||1) - (prioOrder[b.priority]||1);
+    if (sortBy === 'created')  return b.createdAt?.localeCompare(a.createdAt||'') || 0;
+    // deadline: no deadline goes last
+    const da = a.deadline || '9999';
+    const db2 = b.deadline || '9999';
+    return da.localeCompare(db2);
+  });
+
+  // Stats
+  const total  = todos.length;
+  const done   = todos.filter(t => t.done).length;
+  const active = total - done;
+  const overdue = todos.filter(t => !t.done && t.deadline && t.deadline < today).length;
+  document.getElementById('todo-stats').innerHTML = `
+    <div class="todo-stat"><div class="todo-stat-num">${total}</div><div class="todo-stat-label">Celkem</div></div>
+    <div class="todo-stat"><div class="todo-stat-num" style="color:var(--accent)">${active}</div><div class="todo-stat-label">Aktivní</div></div>
+    <div class="todo-stat"><div class="todo-stat-num" style="color:var(--green)">${done}</div><div class="todo-stat-label">Splněno</div></div>
+    <div class="todo-stat"><div class="todo-stat-num" style="color:var(--red)">${overdue}</div><div class="todo-stat-label">Po deadline</div></div>`;
+
+  const container = document.getElementById('todo-list');
+  if (!list.length) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">✅</div><div>Žádné úkoly k zobrazení</div></div>';
+    return;
+  }
+
+  const prioLabel = { high: 'Vysoká', medium: 'Střední', low: 'Nízká' };
+  const prioClass = { high: 'prio-high', medium: 'prio-medium', low: 'prio-low' };
+
+  container.innerHTML = list.map(t => {
+    let deadlineHtml = '';
+    if (t.deadline) {
+      const daysLeft = Math.ceil((new Date(t.deadline) - new Date(today)) / 86400000);
+      let cls = 'todo-deadline';
+      let label = '';
+      if (daysLeft < 0) { cls += ' overdue'; label = ` (po deadline o ${-daysLeft} dní)`; }
+      else if (daysLeft === 0) { cls += ' overdue'; label = ' (dnes!)'; }
+      else if (daysLeft <= 7) { cls += ' soon'; label = ` (za ${daysLeft} dní)`; }
+      deadlineHtml = `<span class="${cls}">📅 ${t.deadline}${label}</span>`;
+    }
+    const commentHtml = t.comment ? `<div class="todo-comment">💬 ${t.comment}</div>` : '';
+    return `
+      <div class="todo-item ${t.done ? 'done-item' : ''}" id="todo-item-${t.id}">
+        <input type="checkbox" class="todo-check" ${t.done ? 'checked' : ''} onchange="toggleTodoDone('${t.id}')">
+        <div class="todo-body">
+          <div class="todo-task-text">${t.task}</div>
+          <div class="todo-meta">
+            <span class="prio-badge ${prioClass[t.priority]||'prio-medium'}">${prioLabel[t.priority]||t.priority}</span>
+            ${deadlineHtml}
+          </div>
+          ${commentHtml}
+        </div>
+        <div class="todo-actions">
+          <button class="todo-edit-btn" onclick="openTodoEdit('${t.id}')">✏️ Upravit</button>
+          <button class="todo-del-btn" onclick="if(confirm('Smazat úkol?'))deleteTodo('${t.id}')">🗑 Smazat</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ============================================================
 // TAB NAVIGATION
 // ============================================================
 function showTab(name) {
@@ -2661,6 +2938,7 @@ function showTab(name) {
     if (crmUnlocked) renderCrm();
     else renderCrmLock();
   }
+  if (name === 'todo') renderTodos();
 }
 
 // ============================================================
