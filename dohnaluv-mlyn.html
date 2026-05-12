@@ -338,8 +338,8 @@
       <div id="upcoming-list"></div>
     </div>
     <div>
-      <div class="section-title">Vytížení zaměstnanců (přiřazení k svatbám)</div>
-      <div id="workload-chart"></div>
+      <div class="section-title">Zpětná vazba ze svateb</div>
+      <div id="feedback-summary"></div>
     </div>
   </div>
 </div>
@@ -1234,35 +1234,47 @@ function renderPrehled() {
     }).join('');
   }
 
-  // Workload — split service vs cleaning
-  const svcCounts = {}, clnCounts = {};
-  ALL_PEOPLE.forEach(p => { svcCounts[p] = 0; clnCounts[p] = 0; });
-  WEDDINGS.forEach(w => {
-    getService(w.date).forEach(p => { if (svcCounts[p] !== undefined) svcCounts[p]++; });
-    getCleaning(w.date).forEach(p => { if (clnCounts[p] !== undefined) clnCounts[p]++; });
-  });
-  const sortedWorkload = ALL_PEOPLE
-    .map(p => ({ name: p, svc: svcCounts[p]||0, cln: clnCounts[p]||0, total: (svcCounts[p]||0)+(clnCounts[p]||0) }))
-    .filter(r => r.total > 0)
-    .sort((a, b) => b.total - a.total);
-  const maxTotal = sortedWorkload[0]?.total || 1;
-  document.getElementById('workload-chart').innerHTML = `
-    <div class="workload-legend">
-      <span><span class="workload-legend-dot" style="background:var(--blue)"></span>Obsluha</span>
-      <span><span class="workload-legend-dot" style="background:var(--green)"></span>Úklid</span>
-    </div>
-    ${sortedWorkload.map(r => `
-    <div class="workload-row">
-      <div class="workload-name" title="${r.name}">${r.name.split(' ')[0]}</div>
-      <div class="workload-bar-track">
-        <div class="workload-bar-service" style="width:${(r.svc/maxTotal)*100}%"></div>
-        <div class="workload-bar-clean" style="width:${(r.cln/maxTotal)*100}%"></div>
+  // Feedback summary — past weddings with feedback or rating, newest first, paginated
+  const pastWithFeedback = WEDDINGS
+    .filter(w => w.date < now && (weddingFeedback[w.date] || weddingRating[w.date]))
+    .sort((a, b) => b.date.localeCompare(a.date));
+
+  const ratingColor = { green: '#4a7c59', orange: '#c98b2e', red: '#b94040' };
+  const ratingLabel = { green: 'Pozitivní', orange: 'Střední', red: 'Negativní' };
+
+  const FB_PAGE_SIZE = 5;
+  const fbTotalPages = Math.max(1, Math.ceil(pastWithFeedback.length / FB_PAGE_SIZE));
+  feedbackPage = Math.min(feedbackPage, fbTotalPages - 1);
+  const fbSlice = pastWithFeedback.slice(feedbackPage * FB_PAGE_SIZE, (feedbackPage + 1) * FB_PAGE_SIZE);
+
+  const fbRows = fbSlice.map(w => {
+    const rating = weddingRating[w.date];
+    const text = weddingFeedback[w.date] || '';
+    const dotColor = rating ? ratingColor[rating] : '#ccc';
+    const dotTitle = rating ? ratingLabel[rating] : 'Bez hodnocení';
+    return `
+    <div style="display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border);">
+      <div title="${dotTitle}" style="margin-top:3px;flex-shrink:0;width:10px;height:10px;border-radius:50%;background:${dotColor};"></div>
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;">
+          <span style="font-weight:600;font-size:0.85rem;">${fmtDate(w.date)}</span>
+          ${coordTag(w.coord)}
+        </div>
+        ${text ? `<div style="margin-top:4px;font-size:0.82rem;color:#444;line-height:1.45;">${text}</div>` : ''}
       </div>
-      <div class="workload-count" title="Obsluha: ${r.svc}×, Úklid: ${r.cln}×">
-        <span style="color:var(--blue)">${r.svc}×</span> + <span style="color:var(--green)">${r.cln}×</span>
-      </div>
-    </div>`).join('')}
-  `;
+    </div>`;
+  }).join('');
+
+  const fbPager = fbTotalPages > 1 ? `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+      <button class="btn btn-outline btn-sm" onclick="setFeedbackPage(${feedbackPage - 1})" ${feedbackPage === 0 ? 'disabled' : ''}>← Novější</button>
+      <span style="font-size:0.8rem;color:var(--muted);">Strana ${feedbackPage + 1} / ${fbTotalPages}</span>
+      <button class="btn btn-outline btn-sm" onclick="setFeedbackPage(${feedbackPage + 1})" ${feedbackPage >= fbTotalPages - 1 ? 'disabled' : ''}>Starší →</button>
+    </div>` : '';
+
+  document.getElementById('feedback-summary').innerHTML = pastWithFeedback.length === 0
+    ? '<div class="empty-state"><div>Zatím žádná zpětná vazba</div></div>'
+    : fbRows + fbPager;
 
 }
 
@@ -1272,6 +1284,8 @@ function renderPrehled() {
 // ---- CALENDAR VIEW ----
 let terminyView = 'list';
 let calYear = 2026, calMonth = 4; // start at April 2026
+let feedbackPage = 0;
+function setFeedbackPage(n) { feedbackPage = n; renderPrehled(); }
 
 function openNewWeddingForm() {
   document.getElementById('new-wedding-form').style.display = 'block';
