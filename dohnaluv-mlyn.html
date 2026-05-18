@@ -372,6 +372,11 @@
       <option>Grochy</option>
       <option>Eliška a Vojta</option>
     </select>
+    <select id="filter-year" onchange="renderTerminy()">
+      <option value="">Všechny roky</option>
+      <option value="2026">2026</option>
+      <option value="2027">2027</option>
+    </select>
     <select id="filter-month" onchange="renderTerminy()">
       <option value="">Všechny měsíce</option>
       <option value="04">Duben</option>
@@ -385,7 +390,7 @@
     <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;cursor:pointer;">
       <input type="checkbox" id="filter-future" onchange="renderTerminy()"> Jen nadcházející
     </label>
-    <button class="btn btn-outline btn-sm" onclick="document.getElementById('filter-search').value='';document.getElementById('filter-coord').value='';document.getElementById('filter-month').value='';document.getElementById('filter-future').checked=false;renderTerminy()">Resetovat</button>
+    <button class="btn btn-outline btn-sm" onclick="document.getElementById('filter-search').value='';document.getElementById('filter-coord').value='';document.getElementById('filter-year').value='';document.getElementById('filter-month').value='';document.getElementById('filter-future').checked=false;renderTerminy()">Resetovat</button>
     <button class="btn btn-sm" onclick="openNewWeddingForm()" style="margin-left:auto;">+ Přidat svatbu</button>
   </div>
 
@@ -781,7 +786,65 @@ const SEED_WEDDINGS = [
   {date:'2026-10-01',day:'Čtvrtek',coord:'Grochy',staff:null,guests:70,service:['Tomáš Grochal'],cleaning:[]},
   {date:'2026-10-03',day:'Sobota',coord:'Grochy',staff:null,guests:80,service:['Tomáš Grochal','Jan Kenša','Monika Kenša'],cleaning:[]},
   {date:'2026-10-10',day:'Sobota',coord:'Eliška a Vojta',staff:null,guests:50,service:[],cleaning:[]},
+  // 2027
+  {date:'2027-05-15',day:'Sobota',coord:null,staff:null,guests:90,service:[],cleaning:[]},
+  {date:'2027-05-29',day:'Sobota',coord:null,staff:null,guests:50,service:[],cleaning:[]},
+  {date:'2027-06-05',day:'Sobota',coord:null,staff:null,guests:60,service:[],cleaning:[]},
+  {date:'2027-06-19',day:'Sobota',coord:null,staff:null,guests:80,service:[],cleaning:[]},
+  {date:'2027-06-26',day:'Sobota',coord:null,staff:null,guests:60,service:[],cleaning:[]},
+  {date:'2027-07-03',day:'Sobota',coord:null,staff:null,guests:80,service:[],cleaning:[]},
+  {date:'2027-07-08',day:'Čtvrtek',coord:null,staff:null,guests:70,service:[],cleaning:[]},
+  {date:'2027-07-10',day:'Sobota',coord:null,staff:null,guests:75,service:[],cleaning:[]},
+  {date:'2027-07-17',day:'Sobota',coord:null,staff:null,guests:100,service:[],cleaning:[]},
+  {date:'2027-07-24',day:'Sobota',coord:null,staff:null,guests:50,service:[],cleaning:[]},
+  {date:'2027-07-31',day:'Sobota',coord:null,staff:null,guests:70,service:[],cleaning:[]},
+  {date:'2027-08-12',day:'Čtvrtek',coord:null,staff:null,guests:90,service:[],cleaning:[]},
+  {date:'2027-08-21',day:'Sobota',coord:null,staff:null,guests:60,service:[],cleaning:[]},
+  {date:'2027-09-04',day:'Sobota',coord:null,staff:null,guests:90,service:[],cleaning:[]},
+  {date:'2027-09-11',day:'Sobota',coord:null,staff:null,guests:50,service:[],cleaning:[]},
+  {date:'2027-09-18',day:'Sobota',coord:null,staff:null,guests:105,service:[],cleaning:[]},
 ];
+
+const SEED_NAMES = {
+  '2027-05-15': 'Vojtěch Dohnal',
+  '2027-05-29': 'Michaela Čížková',
+  '2027-06-05': 'Jiří Pařízek',
+  '2027-06-19': 'Monika Dočkalová & Ondřej Smoček',
+  '2027-06-26': 'Michaela Jehlíková',
+  '2027-07-03': 'Marie Zdráhalová',
+  '2027-07-08': 'Aneta Nejedlíková',
+  '2027-07-10': 'Lenka Němečková',
+  '2027-07-17': 'Jakub Zálešák',
+  '2027-07-24': 'Justýna Brázdilová',
+  '2027-07-31': 'Sára Plucnarová',
+  '2027-08-12': 'Johana Fabíková',
+  '2027-08-21': 'Monika Peluňková',
+  '2027-09-04': 'Nadan Pojer',
+  '2027-09-11': 'Sára Konečná',
+  '2027-09-18': 'Ellen Palmeová',
+};
+const SEED_EMAILS = {
+  '2027-05-15': 'dohnalv@proton.me',
+  '2027-05-29': 'michaela.c@email.cz',
+  '2027-06-05': 'parizek.jiri@gmail.com',
+  '2027-06-19': 'xdockalova@seznam.cz',
+  '2027-06-26': 'michaelajehlikova@gmail.com',
+  '2027-07-03': 'miazdrahalova@gmail.com',
+  '2027-07-08': 'anetanejedlikova@gmail.com',
+  '2027-07-10': 'lenusnemeckova@seznam.cz',
+  '2027-07-17': 'jakub.zalesak@gmail.com',
+  '2027-07-24': 'justynabrazdilova@seznam.cz',
+  '2027-07-31': 'sara.plucnarova1306@seznam.cz',
+  '2027-08-12': 'Johanafab2000@seznam.cz',
+  '2027-08-21': 'm.pelunkova@seznam.cz',
+  '2027-09-04': 'n.pojer@gmail.com',
+  '2027-09-11': 'konecna.s@seznam.cz',
+  '2027-09-18': 'ellenpalme@seznam.cz',
+};
+const SEED_PHONES = {
+  '2027-07-03': '+420 777 323 833',
+  '2027-09-04': '+420 723 923 350',
+};
 
 let WEDDINGS = [...SEED_WEDDINGS]; // merged with custom weddings from Firebase
 
@@ -892,8 +955,12 @@ async function loadState() {
   weddingFeedback = data.weddingFeedback || {};
   weddingRating = data.weddingRating || {};
   weddingContact = data.weddingContact || {};
-  weddingPhone = data.weddingPhone || {};
-  weddingEmail = data.weddingEmail || {};
+  weddingPhone   = data.weddingPhone   || {};
+  weddingEmail   = data.weddingEmail   || {};
+  // Pre-fill from seed data for dates not yet in Firebase
+  Object.entries(SEED_NAMES).forEach(([d, v])  => { if (!weddingContact[d]) weddingContact[d] = v; });
+  Object.entries(SEED_EMAILS).forEach(([d, v]) => { if (!weddingEmail[d])   weddingEmail[d]   = v; });
+  Object.entries(SEED_PHONES).forEach(([d, v]) => { if (!weddingPhone[d])   weddingPhone[d]   = v; });
   weddingRentDeposit = data.weddingRentDeposit || {};
   weddingRentBalance = data.weddingRentBalance || {};
   weddingCoordOverride = data.weddingCoordOverride || {};
@@ -1480,12 +1547,14 @@ function renderCalendar() {
 function renderTerminy() {
   const search = document.getElementById('filter-search').value.toLowerCase();
   const coord = document.getElementById('filter-coord').value;
+  const year  = document.getElementById('filter-year').value;
   const month = document.getElementById('filter-month').value;
   const futureOnly = document.getElementById('filter-future').checked;
 
   let data = WEDDINGS.filter(w => {
     if (coord && getCoord(w.date) !== coord) return false;
-    if (month && !w.date.startsWith('2026-'+month)) return false;
+    if (year  && !w.date.startsWith(year + '-')) return false;
+    if (month && w.date.slice(5, 7) !== month) return false;
     if (futureOnly && isPast(w.date)) return false;
     if (search) {
       const hay = [w.date, getCoord(w.date), ...getService(w.date), ...getCleaning(w.date)].join(' ').toLowerCase();
@@ -1548,7 +1617,6 @@ function renderTerminy() {
     const rating = weddingRating[w.date];
     const ratingDot = rating ? `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${{green:'#4a7c59',orange:'#c98b2e',red:'#b94040'}[rating]};margin-left:6px;vertical-align:middle;" title="${{green:'Pozitivní',orange:'Střední',red:'Negativní'}[rating]}"></span>` : '';
 
-    const contact = weddingContact[w.date] || '';
     const deposit = weddingRentDeposit[w.date];
     const balance = weddingRentBalance[w.date];
 
