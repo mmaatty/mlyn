@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dohnalův Mlýn — Přihlášení</title>
+<style>
+  :root {
+    --bg: #f7f4ef;
+    --card: #ffffff;
+    --border: #e0d8cc;
+    --text: #2c2416;
+    --muted: #7a6e5f;
+    --accent: #8b5e3c;
+    --accent-light: #f0e6da;
+    --red: #b94040;
+    --red-light: #fae8e8;
+    --radius: 10px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    background: var(--accent);
+    color: #fff;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: 0.3px; }
+  .header-badge {
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 0.8rem;
+    opacity: 0.9;
+  }
+  .login-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 16px;
+  }
+  .login-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 40px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: var(--shadow);
+  }
+  .login-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .login-sub {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  input[type="email"],
+  input[type="password"] {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.92rem;
+    background: #fff;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    margin-bottom: 16px;
+  }
+  input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(139,94,60,0.12);
+  }
+  .btn-login {
+    width: 100%;
+    padding: 11px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-top: 4px;
+  }
+  .btn-login:hover { background: #7a5030; }
+  .btn-login:disabled { background: #c4a88a; cursor: not-allowed; }
+  .error-msg {
+    background: var(--red-light);
+    border: 1px solid #d8a0a0;
+    color: var(--red);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🌾 Dohnalův Mlýn</h1>
+  </div>
+  <span class="header-badge">Plánování 2026</span>
+</header>
+
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="login-title">Přihlášení</div>
+    <div class="login-sub">Zadejte své přihlašovací údaje</div>
+
+    <div id="error-msg" class="error-msg"></div>
+
+    <label for="email">E-mail</label>
+    <input type="email" id="email" placeholder="vas@email.cz" autocomplete="email">
+
+    <label for="password">Heslo</label>
+    <input type="password" id="password" placeholder="••••••••" autocomplete="current-password"
+      onkeydown="if(event.key==='Enter') login()">
+
+    <button class="btn-login" id="login-btn" onclick="login()">Přihlásit se</button>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script>
+  firebase.initializeApp({
+    apiKey: "AIzaSyD65aSlc71YlikBsIo6vumKqmggI6NbbGM",
+    authDomain: "dohnaluv-mlyn.firebaseapp.com",
+    projectId: "dohnaluv-mlyn",
+    appId: "1:804865428309:web:0ad57459d89f7d18b63ddc"
+  });
+
+  const auth = firebase.auth();
+
+  // Pokud je uživatel už přihlášen, přesměruj rovnou
+  auth.onAuthStateChanged(user => {
+    if (user) window.location.href = 'dohnaluv-mlyn.html';
+  });
+
+  function login() {
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const btn = document.getElementById('login-btn');
+    const err = document.getElementById('error-msg');
+
+    err.style.display = 'none';
+    btn.disabled = true;
+    btn.textContent = 'Přihlašuji…';
+
+    auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        window.location.href = 'dohnaluv-mlyn.html';
+      })
+      .catch(e => {
+        const msgs = {
+          'auth/user-not-found': 'Účet s tímto e-mailem neexistuje.',
+          'auth/wrong-password': 'Špatné heslo.',
+          'auth/invalid-email': 'Neplatný formát e-mailu.',
+          'auth/too-many-requests': 'Příliš mnoho pokusů. Zkuste to za chvíli.',
+          'auth/invalid-credential': 'Nesprávný e-mail nebo heslo.',
+        };
+        err.textContent = msgs[e.code] || 'Přihlášení se nezdařilo. Zkuste to znovu.';
+        err.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Přihlásit se';
+      });
+  }
+</script>
+</body>
+</html>
