@@ -351,7 +351,7 @@
       <div id="upcoming-list"></div>
     </div>
     <div>
-      <div class="section-title">Zpětná vazba ze svateb</div>
+      <div class="section-title">Průběh sezóny 2026</div>
       <div id="feedback-summary"></div>
     </div>
   </div>
@@ -390,37 +390,27 @@
   </div>
 
   <!-- NEW WEDDING FORM -->
-  <div id="new-wedding-form" style="display:none;" class="card" style="margin-bottom:20px;">
-    <div class="section-title" style="margin-bottom:16px;">Nová svatba</div>
-    <div class="form-row" style="flex-wrap:wrap;gap:16px;">
-      <div class="form-group">
-        <label>Datum *</label>
-        <input type="date" id="nw-date">
-      </div>
-      <div class="form-group">
-        <label>Koordinátor *</label>
-        <select id="nw-coord">
-          <option value="">— Vyberte —</option>
-          <option>Honza + Verča</option>
-          <option>Matěj</option>
-          <option>Grochy</option>
-          <option>Eliška a Vojta</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Hosté</label>
-        <input type="number" id="nw-guests" min="0" max="1000" placeholder="—" style="width:90px;">
-      </div>
-      <div class="form-group">
-        <label>Požadovaná obsluha</label>
-        <input type="number" id="nw-staff" min="0" max="20" placeholder="—" style="width:90px;">
-      </div>
-      <div class="form-group" style="justify-content:flex-end;align-items:flex-end;gap:8px;display:flex;">
-        <button class="btn btn-outline btn-sm" onclick="closeNewWeddingForm()">Zrušit</button>
-        <button class="btn btn-sm" onclick="addNewWedding()">Uložit</button>
-      </div>
+  <div id="new-wedding-form" style="display:none;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;margin-bottom:14px;">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+      <input type="date" id="nw-date" title="Datum *" style="padding:5px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;">
+      <input type="text" id="nw-name" placeholder="Jméno páru" style="width:130px;padding:5px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;">
+      <input type="tel" id="nw-phone" placeholder="📞 Telefon" style="width:115px;padding:5px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;">
+      <input type="email" id="nw-email" placeholder="✉ Email" style="width:145px;padding:5px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;">
+      <select id="nw-coord" title="Koordinátor *" style="padding:5px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;">
+        <option value="">— Koordinátor —</option>
+        <option>Honza + Verča</option>
+        <option>Matěj</option>
+        <option>Grochy</option>
+        <option>Eliška a Vojta</option>
+      </select>
+      <input type="number" id="nw-guests" min="0" max="1000" placeholder="Hosté" style="width:70px;padding:5px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;">
+      <input type="number" id="nw-staff" min="0" max="20" placeholder="Obsluha" style="width:75px;padding:5px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;">
+      <input type="number" id="nw-deposit" min="0" placeholder="Záloha CZK" style="width:95px;padding:5px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;">
+      <input type="number" id="nw-balance" min="0" placeholder="Doplatek CZK" style="width:105px;padding:5px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;">
+      <button class="btn btn-sm" onclick="addNewWedding()" style="padding:5px 14px;">Uložit</button>
+      <button class="btn btn-outline btn-sm" onclick="closeNewWeddingForm()" style="padding:5px 10px;">✕</button>
     </div>
-    <div id="nw-msg" style="margin-top:10px;font-size:0.85rem;"></div>
+    <div id="nw-msg" style="margin-top:6px;font-size:0.82rem;"></div>
   </div>
   <div id="terminy-list-view">
     <div class="table-wrap">
@@ -1247,47 +1237,87 @@ function renderPrehled() {
     }).join('');
   }
 
-  // Feedback summary — past weddings with feedback or rating, newest first, paginated
-  const pastWithFeedback = WEDDINGS
-    .filter(w => w.date < now && (weddingFeedback[w.date] || weddingRating[w.date]))
-    .sort((a, b) => b.date.localeCompare(a.date));
+  // === SEASON PROGRESS VISUALIZATION ===
+  const COORD_COLORS = {
+    'Honza + Verča': '#2d5e99',
+    'Matěj':         '#2a6645',
+    'Grochy':        '#a05c1a',
+    'Eliška a Vojta':'#7a3d8f'
+  };
+  const MONTHS = [
+    {num:'04',label:'Dub'},{num:'05',label:'Kvě'},{num:'06',label:'Čer'},
+    {num:'07',label:'Čvc'},{num:'08',label:'Srp'},{num:'09',label:'Zář'},
+    {num:'10',label:'Říj'}
+  ];
+  const currentMonth = now.slice(5,7);
+  const pct = total > 0 ? done / total : 0;
+  const R = 36, C = +(2 * Math.PI * R).toFixed(1);
 
-  const ratingColor = { green: '#4a7c59', orange: '#c98b2e', red: '#b94040' };
-  const ratingLabel = { green: 'Pozitivní', orange: 'Střední', red: 'Negativní' };
+  const ringHtml = `
+    <svg width="90" height="90" viewBox="0 0 90 90" style="flex-shrink:0;">
+      <circle cx="45" cy="45" r="${R}" fill="none" stroke="#eee" stroke-width="9"/>
+      <circle cx="45" cy="45" r="${R}" fill="none" stroke="var(--accent)" stroke-width="9"
+        stroke-dasharray="${C}" stroke-dashoffset="${(C*(1-pct)).toFixed(1)}"
+        stroke-linecap="round" transform="rotate(-90 45 45)"/>
+      <text x="45" y="42" text-anchor="middle" font-size="15" font-weight="700" fill="var(--text)">${done}</text>
+      <text x="45" y="57" text-anchor="middle" font-size="10" fill="var(--muted)">/ ${total}</text>
+    </svg>`;
 
-  const FB_PAGE_SIZE = 5;
-  const fbTotalPages = Math.max(1, Math.ceil(pastWithFeedback.length / FB_PAGE_SIZE));
-  feedbackPage = Math.min(feedbackPage, fbTotalPages - 1);
-  const fbSlice = pastWithFeedback.slice(feedbackPage * FB_PAGE_SIZE, (feedbackPage + 1) * FB_PAGE_SIZE);
-
-  const fbRows = fbSlice.map(w => {
-    const rating = weddingRating[w.date];
-    const text = weddingFeedback[w.date] || '';
-    const dotColor = rating ? ratingColor[rating] : '#ccc';
-    const dotTitle = rating ? ratingLabel[rating] : 'Bez hodnocení';
-    return `
-    <div style="display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border);">
-      <div title="${dotTitle}" style="margin-top:3px;flex-shrink:0;width:10px;height:10px;border-radius:50%;background:${dotColor};"></div>
-      <div style="flex:1;min-width:0;">
-        <div style="display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;">
-          <span style="font-weight:600;font-size:0.85rem;">${fmtDate(w.date)}</span>
-          ${coordTag(w.coord)}
-        </div>
-        ${text ? `<div style="margin-top:4px;font-size:0.82rem;color:#444;line-height:1.45;">${text}</div>` : ''}
+  const coordBars = Object.entries(COORD_COLORS).map(([coord, col]) => {
+    const all = WEDDINGS.filter(w => getCoord(w.date) === coord);
+    const d = all.filter(w => w.date < now).length;
+    const t = all.length;
+    const p = t > 0 ? Math.round(d / t * 100) : 0;
+    return `<div style="margin-bottom:5px;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:2px;">
+        <span style="font-size:0.75rem;font-weight:600;color:${col};">${coord}</span>
+        <span style="font-size:0.7rem;color:var(--muted);">${d}/${t} · zbývá ${t-d}</span>
+      </div>
+      <div style="height:5px;background:#eee;border-radius:3px;overflow:hidden;">
+        <div style="height:100%;width:${p}%;background:${col};border-radius:3px;transition:width .5s;"></div>
       </div>
     </div>`;
   }).join('');
 
-  const fbPager = fbTotalPages > 1 ? `
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
-      <button class="btn btn-outline btn-sm" onclick="setFeedbackPage(${feedbackPage - 1})" ${feedbackPage === 0 ? 'disabled' : ''}>← Novější</button>
-      <span style="font-size:0.8rem;color:var(--muted);">Strana ${feedbackPage + 1} / ${fbTotalPages}</span>
-      <button class="btn btn-outline btn-sm" onclick="setFeedbackPage(${feedbackPage + 1})" ${feedbackPage >= fbTotalPages - 1 ? 'disabled' : ''}>Starší →</button>
-    </div>` : '';
+  const dotsHtml = MONTHS.map(m => {
+    const mW = WEDDINGS.filter(w => w.date.startsWith('2026-' + m.num));
+    const mDone = mW.filter(w => w.date < now).length;
+    const isCur = m.num === currentMonth;
+    const dots = mW.map(w => {
+      const past = w.date < now;
+      const col = past ? '#d0d0d0' : (COORD_COLORS[getCoord(w.date)] || '#aaa');
+      const contact = weddingContact[w.date] ? ` · ${weddingContact[w.date]}` : '';
+      return `<span title="${fmtDate(w.date)}${contact}\n${getCoord(w.date)||'?'}"
+        style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${col};margin:1px;cursor:pointer;flex-shrink:0;"
+        onclick="event.stopPropagation();jumpToMonth('${m.num}')"></span>`;
+    }).join('');
+    return `<div onclick="jumpToMonth('${m.num}')" title="Přejít na ${m.label}"
+      style="flex:1;min-width:0;cursor:pointer;padding:6px 3px;border-radius:6px;text-align:center;
+             background:${isCur?'rgba(162,108,60,0.07)':'transparent'};
+             border:1px solid ${isCur?'var(--accent)':'transparent'};transition:background .15s;"
+      onmouseover="this.style.background='rgba(0,0,0,0.04)'" onmouseout="this.style.background='${isCur?'rgba(162,108,60,0.07)':'transparent'}'">
+      <div style="font-size:0.65rem;font-weight:700;color:${isCur?'var(--accent)':'var(--muted)'};text-transform:uppercase;margin-bottom:1px;">${m.label}</div>
+      <div style="font-size:0.82rem;font-weight:700;color:var(--text);">${mW.length}</div>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:2px;margin:4px 0;min-height:22px;">${dots}</div>
+      <div style="font-size:0.62rem;color:var(--muted);">${mDone > 0 ? mDone+'✓' : ''}</div>
+    </div>`;
+  }).join('');
 
-  document.getElementById('feedback-summary').innerHTML = pastWithFeedback.length === 0
-    ? '<div class="empty-state"><div>Zatím žádná zpětná vazba</div></div>'
-    : fbRows + fbPager;
+  const legend = Object.entries(COORD_COLORS).map(([name, col]) =>
+    `<span style="color:${col};font-size:0.7rem;">● ${name}</span>`
+  ).join('');
+
+  document.getElementById('feedback-summary').innerHTML = `
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+      ${ringHtml}
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:2px;">${done} proběhlo · ${remaining} zbývá</div>
+        <div style="font-size:0.75rem;color:var(--muted);margin-bottom:8px;">celkem ${total} svateb · sezóna 2026</div>
+        ${coordBars}
+      </div>
+    </div>
+    <div style="display:flex;gap:3px;border-top:1px solid var(--border);padding-top:10px;">${dotsHtml}</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;">${legend}<span style="color:#d0d0d0;font-size:0.7rem;">● Proběhlé</span></div>`;
 
 }
 
@@ -1295,6 +1325,17 @@ function renderPrehled() {
 // TERMÍNY
 // ============================================================
 // ---- CALENDAR VIEW ----
+function jumpToMonth(monthNum) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-terminy').classList.add('active');
+  document.querySelectorAll('.tab').forEach(t => {
+    t.classList.toggle('active', t.getAttribute('onclick') === "showTab('terminy')");
+  });
+  document.getElementById('filter-month').value = monthNum;
+  setTerminyView('list');
+  renderTerminy();
+}
+
 let terminyView = 'list';
 let calYear = 2026, calMonth = 4; // start at April 2026
 let feedbackPage = 0;
@@ -1303,9 +1344,14 @@ function setFeedbackPage(n) { feedbackPage = n; renderPrehled(); }
 function openNewWeddingForm() {
   document.getElementById('new-wedding-form').style.display = 'block';
   document.getElementById('nw-date').value = '';
+  document.getElementById('nw-name').value = '';
+  document.getElementById('nw-phone').value = '';
+  document.getElementById('nw-email').value = '';
   document.getElementById('nw-coord').value = '';
   document.getElementById('nw-guests').value = '';
   document.getElementById('nw-staff').value = '';
+  document.getElementById('nw-deposit').value = '';
+  document.getElementById('nw-balance').value = '';
   document.getElementById('nw-msg').textContent = '';
 }
 function closeNewWeddingForm() {
@@ -1314,9 +1360,14 @@ function closeNewWeddingForm() {
 
 function addNewWedding() {
   const date = document.getElementById('nw-date').value;
+  const name = document.getElementById('nw-name').value.trim();
+  const phone = document.getElementById('nw-phone').value.trim();
+  const email = document.getElementById('nw-email').value.trim();
   const coord = document.getElementById('nw-coord').value;
   const guests = parseInt(document.getElementById('nw-guests').value) || null;
   const staff = parseInt(document.getElementById('nw-staff').value) || null;
+  const deposit = parseInt(document.getElementById('nw-deposit').value) || null;
+  const balance = parseInt(document.getElementById('nw-balance').value) || null;
   const msg = document.getElementById('nw-msg');
 
   if (!date) { msg.style.color='var(--red)'; msg.textContent = 'Datum je povinné.'; return; }
@@ -1332,6 +1383,11 @@ function addNewWedding() {
 
   // Initialize assignment slot
   weddingAssignments[date] = { service: [], cleaning: [] };
+  if (name)    { weddingContact[date] = name;    saveContact(); }
+  if (phone)   { weddingPhone[date]   = phone;   savePhone(); }
+  if (email)   { weddingEmail[date]   = email;   saveEmail(); }
+  if (deposit) { weddingRentDeposit[date] = deposit; saveRentDeposit(); }
+  if (balance) { weddingRentBalance[date] = balance; saveRentBalance(); }
   saveCustomWeddings();
   saveAssignments();
 
