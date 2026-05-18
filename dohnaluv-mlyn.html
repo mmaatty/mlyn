@@ -1260,9 +1260,10 @@ function totalHours(person, month) {
 // ============================================================
 function renderPrehled() {
   const now = today();
-  const upcoming = WEDDINGS.filter(w => w.date >= now).slice(0, 3);
-  const total = WEDDINGS.length;
-  const done = WEDDINGS.filter(w => w.date < now).length;
+  const W26 = WEDDINGS.filter(w => w.date.startsWith('2026-'));
+  const upcoming = W26.filter(w => w.date >= now).slice(0, 3);
+  const total = W26.length;
+  const done = W26.filter(w => w.date < now).length;
   const remaining = total - done;
   const totalHoursAll = hoursLog.reduce((s,e) => s+e.hours, 0);
 
@@ -1331,7 +1332,7 @@ function renderPrehled() {
     </svg>`;
 
   const coordBars = Object.entries(COORD_COLORS).map(([coord, col]) => {
-    const all = WEDDINGS.filter(w => getCoord(w.date) === coord);
+    const all = W26.filter(w => getCoord(w.date) === coord);
     const d = all.filter(w => w.date < now).length;
     const t = all.length;
     const p = t > 0 ? Math.round(d / t * 100) : 0;
@@ -1347,7 +1348,7 @@ function renderPrehled() {
   }).join('');
 
   const dotsHtml = MONTHS.map(m => {
-    const mW = WEDDINGS.filter(w => w.date.startsWith('2026-' + m.num));
+    const mW = W26.filter(w => w.date.startsWith('2026-' + m.num));
     const mDone = mW.filter(w => w.date < now).length;
     const isCur = m.num === currentMonth;
     const dots = mW.map(w => {
