@@ -912,7 +912,8 @@ let weddingAssignments = {}; // { 'YYYY-MM-DD': { service: [...], cleaning: [...
 let customWeddings = []; // user-created weddings, persisted in Firebase
 let expenses = []; // jednorázové náklady
 let paymentPaid = {}; // { 'person': number } — kolik bylo uhrazeno
-let bankAccounts = {}; // { 'person': 'CZ...' } — IBAN pro QR platbu
+let bankAccounts = {}; // { 'person': 'CZ...' } — IBAN
+let personQR = {};    // { 'person': 'data:image/...' } — vlastní QR obrázek
 let weddingFeedback = {}; // { 'YYYY-MM-DD': 'text...' }
 let weddingRating = {};   // { 'YYYY-MM-DD': 'green'|'orange'|'red'|null }
 let weddingContact = {};      // { 'YYYY-MM-DD': 'jméno' }
@@ -965,6 +966,7 @@ async function loadState() {
   // Payment paid (výplaty)
   paymentPaid = data.paymentPaid || {};
   bankAccounts = data.bankAccounts || {};
+  personQR = data.personQR || {};
 
   // Feedback
   weddingFeedback = data.weddingFeedback || {};
@@ -1032,23 +1034,71 @@ function saveCustomWeddings() { db.ref('customWeddings').set(customWeddings); }
 function saveExpenses() { db.ref('expenses').set(expenses); }
 function savePaymentPaid() { db.ref('paymentPaid').set(paymentPaid); }
 function saveBankAccounts() { db.ref('bankAccounts').set(bankAccounts); }
-function saveIBAN(person, iban) { bankAccounts[person] = iban.trim().replace(/\s/g,'').toUpperCase(); saveBankAccounts(); }
+function savePersonQR() { db.ref('personQR').set(personQR); }
+function saveIBAN(person, iban) {
+  bankAccounts[person] = iban.trim().replace(/\s/g,'').toUpperCase();
+  saveBankAccounts();
+}
 
-function showQR(person, amount) {
+let _qrModalPerson = null, _qrModalRemaining = 0;
+
+function openPaymentModal(person, remaining) {
+  _qrModalPerson = person;
+  _qrModalRemaining = remaining;
   const iban = bankAccounts[person] || '';
-  if (!iban) return;
-  const amountFmt = amount.toFixed(2);
-  const spd = `SPD*1.0*ACC:${iban}*AM:${amountFmt}*CC:CZK*MSG:Vyplata`;
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&ecc=M&data=${encodeURIComponent(spd)}`;
+  const qr   = personQR[person] || '';
+  const pKey  = person.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+
+  const qrSection = qr
+    ? `<img src="${qr}" alt="QR" style="width:220px;height:220px;object-fit:contain;border-radius:8px;margin:8px 0;">
+       <div style="margin-top:4px;">
+         <button class="btn btn-outline btn-sm" style="color:var(--red);border-color:var(--red);"
+           onclick="deleteQR('${pKey}')">Odstranit QR</button>
+       </div>`
+    : `<div style="width:220px;height:220px;border:2px dashed var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.85rem;margin:8px auto;">
+         žádný QR
+       </div>`;
+
   document.getElementById('qr-modal-title').textContent = person;
   document.getElementById('qr-modal-body').innerHTML = `
-    <img src="${qrUrl}" alt="QR platba" style="width:220px;height:220px;border-radius:8px;margin:12px 0;">
-    <div style="font-size:0.82rem;color:var(--muted);font-family:monospace;margin-bottom:4px;">${iban}</div>
-    <div style="font-size:1.1rem;font-weight:700;color:var(--green);margin-bottom:16px;">${amount.toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</div>
-    <div style="font-size:0.75rem;color:var(--muted);">Částku upravte dle potřeby před odesláním</div>`;
+    <div style="font-size:1.15rem;font-weight:700;color:${remaining>0?'var(--red)':'var(--green)'};margin-bottom:16px;">
+      ${remaining>0 ? remaining.toLocaleString('cs-CZ',{maximumFractionDigits:0})+' Kč zbývá proplatit' : '✓ uhrazeno'}
+    </div>
+
+    <div style="text-align:center;">${qrSection}</div>
+
+    <label style="display:block;font-size:0.78rem;font-weight:600;color:var(--muted);margin:14px 0 4px;">Nahrát QR obrázek</label>
+    <input type="file" accept="image/*" style="font-size:0.83rem;"
+      onchange="uploadQR('${pKey}', this)">
+
+    <label style="display:block;font-size:0.78rem;font-weight:600;color:var(--muted);margin:14px 0 4px;">IBAN</label>
+    <input type="text" value="${iban}" placeholder="CZ00 0000 0000 0000 0000 0000"
+      style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:0.85rem;font-family:monospace;"
+      onchange="saveIBAN('${pKey}', this.value)">
+  `;
+
   const overlay = document.getElementById('qr-modal-overlay');
   overlay.style.display = 'flex';
 }
+
+function uploadQR(person, input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    personQR[person] = e.target.result;
+    savePersonQR();
+    openPaymentModal(_qrModalPerson, _qrModalRemaining);
+  };
+  reader.readAsDataURL(file);
+}
+
+function deleteQR(person) {
+  delete personQR[person];
+  savePersonQR();
+  openPaymentModal(_qrModalPerson, _qrModalRemaining);
+}
+
 function closeQRModal(e) {
   if (e && e.target !== document.getElementById('qr-modal-overlay')) return;
   document.getElementById('qr-modal-overlay').style.display = 'none';
@@ -2421,7 +2471,7 @@ function renderVyplaty() {
     <div class="table-container">
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Zaměstnanec</th><th style="text-align:right">Hodinovka (Kč)</th><th style="text-align:right">Úklidy (Kč)</th><th style="text-align:right">CELKEM (Kč)</th><th style="text-align:right">Proplaceno (Kč)</th><th style="text-align:right">Zbývá proplatit (Kč)</th><th>IBAN</th><th></th></tr></thead>
+          <thead><tr><th>Zaměstnanec</th><th style="text-align:right">Hodinovka (Kč)</th><th style="text-align:right">Úklidy (Kč)</th><th style="text-align:right">CELKEM (Kč)</th><th style="text-align:right">Proplaceno (Kč)</th><th style="text-align:right">Zbývá proplatit (Kč)</th><th></th></tr></thead>
           <tbody>
             ${people.map(p => {
               const hoursPay = fPersonHours(p) * (rates[p]||150);
@@ -2437,18 +2487,12 @@ function renderVyplaty() {
                     style="width:100px;text-align:right;"
                     onchange="if(!paymentPaid['${payrollMonth}'])paymentPaid['${payrollMonth}']={};paymentPaid['${payrollMonth}']['${p.replace(/'/g,"\\'")}'] = parseFloat(this.value)||0; savePaymentPaid(); renderVyplaty();">`
                 : `<span style="font-weight:600;">${paid > 0 ? paid.toLocaleString('cs-CZ',{maximumFractionDigits:0})+' Kč' : '—'}</span>`;
-              const iban = bankAccounts[p] || '';
               const pKey = p.replace(/'/g,"\\'");
-              const ibanCell = `<input type="text" value="${iban}"
-                placeholder="CZ00 0000 …"
-                style="width:170px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.78rem;font-family:monospace;"
-                onchange="saveIBAN('${pKey}', this.value)">`;
-              const qrBtn = (remaining > 0 && iban)
-                ? `<button class="btn btn-sm" style="background:var(--green);white-space:nowrap;"
-                    onclick="showQR('${pKey}', ${remaining})">📱 QR</button>`
-                : (remaining > 0
-                    ? `<span style="font-size:0.72rem;color:var(--muted);">doplňte IBAN</span>`
-                    : '');
+              const hasQR = !!personQR[p];
+              const btnLabel = hasQR ? '📱 QR platba' : '⚙ Nastavit';
+              const btnStyle = hasQR
+                ? 'background:var(--green);'
+                : 'background:transparent;border:1px solid var(--border);color:var(--muted);';
               return `<tr>
                 <td><strong>${p}</strong></td>
                 <td style="text-align:right;">${hoursPay > 0 ? hoursPay.toLocaleString('cs-CZ') + ' Kč' : '—'}</td>
@@ -2458,8 +2502,10 @@ function renderVyplaty() {
                 <td style="text-align:right;font-weight:700;color:${remaining > 0 ? 'var(--red)' : 'var(--green)'};">
                   ${remaining > 0 ? remaining.toLocaleString('cs-CZ',{maximumFractionDigits:0}) + ' Kč' : '✓ uhrazeno'}
                 </td>
-                <td>${ibanCell}</td>
-                <td style="text-align:center;">${qrBtn}</td>
+                <td style="text-align:center;">
+                  <button class="btn btn-sm" style="${btnStyle}white-space:nowrap;"
+                    onclick="openPaymentModal('${pKey}', ${remaining})">${btnLabel}</button>
+                </td>
               </tr>`;
             }).join('')}
           </tbody>
@@ -2471,7 +2517,7 @@ function renderVyplaty() {
               <td class="pay-amount" style="text-align:right;">${people.reduce((s,p)=>s+fPersonHours(p)*(rates[p]||150)+fPersonCleanPay(p),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
               <td style="text-align:right;">${people.reduce((s,p)=>s+getPaid(p,payrollMonth),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
               <td style="text-align:right;">${people.reduce((s,p)=>s+(fPersonHours(p)*(rates[p]||150)+fPersonCleanPay(p))-getPaid(p,payrollMonth),0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
-              <td colspan="2"></td>
+              <td></td>
             </tr>
           </tfoot>
         </table>
