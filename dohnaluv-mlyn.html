@@ -2489,10 +2489,14 @@ function renderVyplaty() {
                 : `<span style="font-weight:600;">${paid > 0 ? paid.toLocaleString('cs-CZ',{maximumFractionDigits:0})+' Kč' : '—'}</span>`;
               const pKey = p.replace(/'/g,"\\'");
               const hasQR = !!personQR[p];
-              const btnLabel = hasQR ? '📱 QR platba' : '⚙ Nastavit';
-              const btnStyle = hasQR
-                ? 'background:var(--green);'
-                : 'background:transparent;border:1px solid var(--border);color:var(--muted);';
+              const actionCell = (hasQR && remaining > 0)
+                ? `<img src="${personQR[p]}" alt="QR"
+                    title="Klikněte pro zobrazení QR platby"
+                    onclick="openPaymentModal('${pKey}', ${remaining})"
+                    style="width:72px;height:72px;object-fit:contain;border-radius:6px;cursor:pointer;
+                           border:2px solid var(--green);padding:2px;display:block;margin:0 auto;">`
+                : `<button class="btn btn-sm" style="background:transparent;border:1px solid var(--border);color:var(--muted);white-space:nowrap;"
+                    onclick="openPaymentModal('${pKey}', ${remaining})">⚙ Nastavit</button>`;
               return `<tr>
                 <td><strong>${p}</strong></td>
                 <td style="text-align:right;">${hoursPay > 0 ? hoursPay.toLocaleString('cs-CZ') + ' Kč' : '—'}</td>
@@ -2502,10 +2506,7 @@ function renderVyplaty() {
                 <td style="text-align:right;font-weight:700;color:${remaining > 0 ? 'var(--red)' : 'var(--green)'};">
                   ${remaining > 0 ? remaining.toLocaleString('cs-CZ',{maximumFractionDigits:0}) + ' Kč' : '✓ uhrazeno'}
                 </td>
-                <td style="text-align:center;">
-                  <button class="btn btn-sm" style="${btnStyle}white-space:nowrap;"
-                    onclick="openPaymentModal('${pKey}', ${remaining})">${btnLabel}</button>
-                </td>
+                <td style="text-align:center;padding:6px 12px;">${actionCell}</td>
               </tr>`;
             }).join('')}
           </tbody>
