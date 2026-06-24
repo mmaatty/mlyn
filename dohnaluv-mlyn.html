@@ -2489,12 +2489,9 @@ function renderVyplaty() {
                 : `<span style="font-weight:600;">${paid > 0 ? paid.toLocaleString('cs-CZ',{maximumFractionDigits:0})+' Kč' : '—'}</span>`;
               const pKey = p.replace(/'/g,"\\'");
               const hasQR = !!personQR[p];
-              const actionCell = (hasQR && remaining > 0)
-                ? `<img src="${personQR[p]}" alt="QR"
-                    title="Klikněte pro zobrazení QR platby"
-                    onclick="openPaymentModal('${pKey}', ${remaining})"
-                    style="width:72px;height:72px;object-fit:contain;border-radius:6px;cursor:pointer;
-                           border:2px solid var(--green);padding:2px;display:block;margin:0 auto;">`
+              const actionCell = hasQR
+                ? `<button class="btn btn-sm" style="background:var(--green);white-space:nowrap;"
+                    onclick="openPaymentModal('${pKey}', ${remaining})">📱 Zobraz QR</button>`
                 : `<button class="btn btn-sm" style="background:transparent;border:1px solid var(--border);color:var(--muted);white-space:nowrap;"
                     onclick="openPaymentModal('${pKey}', ${remaining})">⚙ Nastavit</button>`;
               return `<tr>
