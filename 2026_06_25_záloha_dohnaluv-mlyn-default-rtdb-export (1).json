@@ -1,0 +1,2971 @@
+{
+  "bankAccounts": {
+    "Tomáš Grochal": ""
+  },
+  "crmEvents": [
+    {
+      "cateringValkovi": "ANO",
+      "datum": "25. 4. 2026 — sobota",
+      "jmeno": "Pospěch",
+      "kava": "ANO",
+      "konskBar": "NE",
+      "kontakt": "lukpospech@gmail.com\n737 354 083",
+      "koordinator": "Matěj",
+      "maringotka": "ANO",
+      "pocetObsluhy": "3",
+      "pocetOsob": "60",
+      "poznamka": "test",
+      "vyzdoba": "NE"
+    },
+    {
+      "cateringValkovi": "",
+      "datum": "14. 5. 2026 — čtvrtek",
+      "jmeno": "Větříčková",
+      "kava": "",
+      "konskBar": "",
+      "kontakt": "tereza.vetrickova@gmail.com\n776 744 616",
+      "koordinator": "Matěj",
+      "maringotka": "",
+      "poznamka": "",
+      "vyzdoba": ""
+    },
+    {
+      "cateringValkovi": "",
+      "datum": "16. 5. 2026 — sobota",
+      "jmeno": "Vojáčková",
+      "kava": "",
+      "konskBar": "",
+      "kontakt": "vojackovamichaela@gmail.com\n605 321 073",
+      "koordinator": "Matěj",
+      "maringotka": "",
+      "poznamka": "",
+      "vyzdoba": ""
+    },
+    {
+      "cateringValkovi": "",
+      "datum": "13. 6. 2026 — sobota",
+      "jmeno": "Felt",
+      "kava": "",
+      "konskBar": "",
+      "kontakt": "tomasfelt@icloud.com\n720 440 344",
+      "koordinator": "Matěj",
+      "maringotka": "",
+      "poznamka": "",
+      "vyzdoba": ""
+    },
+    {
+      "cateringValkovi": "",
+      "datum": "23. 7. 2026 — čtvrtek",
+      "jmeno": "Zbrožková",
+      "kava": "",
+      "konskBar": "",
+      "kontakt": "z.valerie@seznam.cz\n724 001 636",
+      "koordinator": "Matěj",
+      "maringotka": "",
+      "poznamka": "",
+      "vyzdoba": ""
+    },
+    {
+      "cateringValkovi": "",
+      "datum": "25. 7. 2026 — sobota",
+      "jmeno": "Galuščiaková",
+      "kava": "",
+      "konskBar": "",
+      "kontakt": "galusciakova.z@gmail.com\n602 844 570",
+      "koordinator": "Matěj",
+      "maringotka": "",
+      "poznamka": "",
+      "vyzdoba": ""
+    },
+    {
+      "cateringValkovi": "",
+      "datum": "13. 8. 2026 — čtvrtek",
+      "jmeno": "Kolísková",
+      "kava": "",
+      "konskBar": "",
+      "kontakt": "koliskova.andrea@gmail.com\n776 768 067",
+      "koordinator": "Matěj",
+      "maringotka": "",
+      "poznamka": "",
+      "vyzdoba": ""
+    },
+    {
+      "cateringValkovi": "",
+      "datum": "15. 8. 2026 — sobota",
+      "jmeno": "Schoffer",
+      "kava": "",
+      "konskBar": "",
+      "kontakt": "david.schoffer@cz-bosh.com\n730 846 600",
+      "koordinator": "Matěj",
+      "maringotka": "",
+      "poznamka": "",
+      "vyzdoba": ""
+    },
+    {
+      "cateringValkovi": "",
+      "datum": "20. 8. 2026 — čtvrtek",
+      "jmeno": "Kremr",
+      "kava": "",
+      "konskBar": "",
+      "kontakt": "matejkremr@gmail.com\n608 945 536",
+      "koordinator": "Matěj",
+      "maringotka": "",
+      "poznamka": "",
+      "vyzdoba": ""
+    },
+    {
+      "cateringValkovi": "",
+      "datum": "22. 8. 2026 — sobota",
+      "jmeno": "Alinče",
+      "kava": "",
+      "konskBar": "",
+      "kontakt": "antoninalince1@gmail.com\n773 213 489",
+      "koordinator": "Matěj",
+      "maringotka": "",
+      "poznamka": "",
+      "vyzdoba": ""
+    },
+    {
+      "cateringValkovi": "",
+      "datum": "10. 9. 2026 — čtvrtek",
+      "jmeno": "Pomykalová",
+      "kava": "",
+      "konskBar": "",
+      "kontakt": "kacka.pomykalova@gmail.com\n722 636 351",
+      "koordinator": "Matěj",
+      "maringotka": "",
+      "poznamka": "",
+      "vyzdoba": ""
+    },
+    {
+      "cateringValkovi": "",
+      "datum": "12. 9. 2026 — sobota",
+      "jmeno": "Valová",
+      "kava": "",
+      "konskBar": "",
+      "kontakt": "unka.valova@gmail.com\n732 809 840",
+      "koordinator": "Matěj",
+      "maringotka": "",
+      "poznamka": "",
+      "vyzdoba": ""
+    }
+  ],
+  "customWeddings": [
+    {
+      "coord": "Eliška a Vojta",
+      "date": "2026-09-07",
+      "day": "Pondělí",
+      "guests": 75,
+      "staff": 6
+    },
+    {
+      "coord": "Honza + Verča",
+      "date": "2026-07-06",
+      "day": "Pondělí",
+      "guests": 80
+    },
+    {
+      "coord": "Eliška a Vojta",
+      "date": "2026-08-10",
+      "day": "Pondělí"
+    }
+  ],
+  "expenses": [
+    {
+      "amount": 3500,
+      "approvalNote": "Proplaceno",
+      "approved": 3500,
+      "date": "2026-04-15",
+      "id": "exp_1776786740253",
+      "note": "Gauč a doprava",
+      "person": "Vojta Dohnal",
+      "type": "Ostatní"
+    },
+    {
+      "amount": 2520,
+      "approved": 2530,
+      "date": "2026-04-21",
+      "id": "exp_1776801796252",
+      "note": "Zástěry,3x nákup úklidových potřeb action,žlučové mýdlo Rossmann, další zástěry, hadry z Temu",
+      "person": "Veronika Šimčíková",
+      "type": "Materiál"
+    },
+    {
+      "amount": 5857,
+      "approvalNote": "uhrazeno",
+      "approved": 5857,
+      "date": "2026-04-15",
+      "id": "exp_1776846494399",
+      "note": "Badminton pálky 4x a míčky (998 Kč), 899 Kč světýlka řetěz, 200 Kč mléko na DOD, 85 Kč Cif, 195 Kč Tedi (2x rámečky a šanon na svatby 2027), 3480 Kč nové žárovky kusovky pod pergolu",
+      "person": "Eliška Dohnalová",
+      "type": "Ostatní"
+    },
+    {
+      "amount": 400,
+      "approvalNote": "uhrazeno",
+      "approved": 400,
+      "date": "2026-04-24",
+      "id": "exp_1777053406305",
+      "note": "2x rámeček A4, 2x popelník a dóza na kapsle Nespresso",
+      "person": "Eliška Dohnalová",
+      "type": "Ostatní"
+    },
+    {
+      "amount": 80,
+      "approved": 80,
+      "date": "2026-04-29",
+      "id": "exp_1777465820305",
+      "note": "Tedi - rámeček na označení kuřáckého koutku",
+      "person": "Veronika Šimčíková",
+      "type": "Materiál"
+    },
+    {
+      "amount": 355,
+      "approvalNote": "Proplaceno",
+      "date": "2026-05-12",
+      "id": "exp_1778674863159",
+      "note": "Tedi: žufánky, šanon, krabička na peníze z kaucí, složky",
+      "person": "Eliška Dohnalová",
+      "type": "Ostatní"
+    },
+    {
+      "amount": 324,
+      "date": "2026-05-19",
+      "id": "exp_1779184637150",
+      "note": "4x kapsle do kavovaru",
+      "person": "Veronika Šimčíková",
+      "type": "Občerstvení"
+    },
+    {
+      "amount": 76,
+      "date": "2026-05-19",
+      "id": "exp_1779184694162",
+      "note": "Sidolux a 2x lopatka+ smetáček",
+      "person": "Veronika Šimčíková",
+      "type": "Materiál"
+    },
+    {
+      "amount": 260,
+      "date": "2026-05-21",
+      "id": "exp_1779467619817",
+      "note": "Sprej na sršně",
+      "person": "Tomáš Grochal",
+      "type": "Ostatní"
+    },
+    {
+      "amount": 2960,
+      "approvalNote": "Proplaceno",
+      "date": "2026-05-25",
+      "id": "exp_1779724949281",
+      "note": "4x skládací matrace Lidl do stanu",
+      "person": "Eliška Dohnalová",
+      "type": "Ostatní"
+    },
+    {
+      "amount": 365,
+      "approvalNote": "Proplaceno",
+      "date": "2026-05-25",
+      "id": "exp_1779725008881",
+      "note": "3x obraz Tedi, cedník a nůž do kuchyně",
+      "person": "Eliška Dohnalová",
+      "type": "Ostatní"
+    },
+    {
+      "amount": 85,
+      "approvalNote": "Proplaceno",
+      "date": "2026-05-25",
+      "id": "exp_1779725055382",
+      "note": "Smetáček a lopatka na zametání rozbitých talířků",
+      "person": "Eliška Dohnalová",
+      "type": "Ostatní"
+    },
+    {
+      "amount": 740,
+      "approvalNote": "Proplaceno",
+      "date": "2026-05-25",
+      "id": "exp_1779725080898",
+      "note": "Skříňka Pepco na ručníky",
+      "person": "Eliška Dohnalová",
+      "type": "Ostatní"
+    },
+    {
+      "amount": 1700,
+      "approvalNote": "Proplaceno",
+      "date": "2026-05-28",
+      "id": "exp_1779972224214",
+      "note": "Stinici plachty pod velkou plachtou",
+      "person": "Vojta Dohnal",
+      "type": "Materiál"
+    },
+    {
+      "amount": 4000,
+      "approvalNote": "Proplaceno",
+      "date": "2026-05-28",
+      "id": "exp_1779972259129",
+      "note": "Pujceni Dumper (stroj)",
+      "person": "Vojta Dohnal",
+      "type": "Ostatní"
+    },
+    {
+      "amount": 72,
+      "date": "2026-06-03",
+      "id": "exp_1781101752782",
+      "note": "Čističe DM",
+      "person": "Veronika Šimčíková",
+      "type": "Materiál"
+    },
+    {
+      "amount": 882,
+      "date": "2026-06-10",
+      "id": "exp_1781101792022",
+      "note": "Action- úklidové potřeby, sušák, koš",
+      "person": "Veronika Šimčíková",
+      "type": "Materiál"
+    },
+    {
+      "amount": 489,
+      "date": "2026-06-15",
+      "id": "exp_1781539003188",
+      "note": "Zástěry Temu",
+      "person": "Veronika Šimčíková",
+      "type": "Materiál"
+    },
+    {
+      "amount": 1230,
+      "date": "2026-06-22",
+      "id": "exp_1782130798476",
+      "note": "Misky na ovoce, dénka, podnos na krájení dortu a rámečky",
+      "person": "Eliška Dohnalová",
+      "type": "Ostatní"
+    }
+  ],
+  "hoursLog": [
+    {
+      "date": "2026-03-10",
+      "hours": 6.5,
+      "id": "seed_0",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-03-11",
+      "hours": 7,
+      "id": "seed_1",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-03-12",
+      "hours": 7,
+      "id": "seed_2",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-03-16",
+      "hours": 7,
+      "id": "seed_3",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-03-17",
+      "hours": 7,
+      "id": "seed_4",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-03-18",
+      "hours": 7,
+      "id": "seed_5",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-03-19",
+      "hours": 7,
+      "id": "seed_6",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-03-20",
+      "hours": 3,
+      "id": "seed_7",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-03-23",
+      "hours": 7,
+      "id": "seed_8",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-03-24",
+      "hours": 7,
+      "id": "seed_9",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-03-25",
+      "hours": 7,
+      "id": "seed_10",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-03-26",
+      "hours": 5,
+      "id": "seed_11",
+      "note": "",
+      "person": "Lucka Dohnalová"
+    },
+    {
+      "date": "2026-03-26",
+      "hours": 5.5,
+      "id": "seed_12",
+      "note": "",
+      "person": "Monika Kenša"
+    },
+    {
+      "date": "2026-03-26",
+      "hours": 7,
+      "id": "seed_13",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-03-30",
+      "hours": 5,
+      "id": "seed_14",
+      "note": "",
+      "person": "Lucka Dohnalová"
+    },
+    {
+      "date": "2026-03-30",
+      "hours": 5,
+      "id": "seed_15",
+      "note": "",
+      "person": "Monika Kenša"
+    },
+    {
+      "date": "2026-03-30",
+      "hours": 7,
+      "id": "seed_16",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-03-31",
+      "hours": 7,
+      "id": "seed_17",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-04-01",
+      "hours": 7,
+      "id": "seed_18",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-04-07",
+      "hours": 7,
+      "id": "seed_19",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-04-07",
+      "hours": 6,
+      "id": "seed_20",
+      "note": "",
+      "person": "Monika Kenša"
+    },
+    {
+      "date": "2026-04-08",
+      "hours": 7,
+      "id": "seed_21",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-04-09",
+      "hours": 6.5,
+      "id": "seed_22",
+      "note": "",
+      "person": "Monika Kenša"
+    },
+    {
+      "date": "2026-04-09",
+      "hours": 7,
+      "id": "seed_23",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-04-10",
+      "hours": 7,
+      "id": "seed_24",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-04-13",
+      "hours": 6,
+      "id": "seed_25",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-04-14",
+      "hours": 7,
+      "id": "seed_26",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-04-14",
+      "hours": 6,
+      "id": "seed_27",
+      "note": "",
+      "person": "Monika Kenša"
+    },
+    {
+      "date": "2026-04-16",
+      "hours": 6,
+      "id": "1776421727026",
+      "note": "úklid",
+      "person": "Lucka Dohnalová"
+    },
+    {
+      "date": "2026-04-09",
+      "hours": 7,
+      "id": "1776455012055",
+      "note": "Příprava a úklid na DOD",
+      "person": "Eliška Dohnalová"
+    },
+    {
+      "date": "2026-04-10",
+      "hours": 6,
+      "id": "1776455026546",
+      "note": "Příprava a úklid na DOD",
+      "person": "Eliška Dohnalová"
+    },
+    {
+      "date": "2026-04-16",
+      "hours": 6,
+      "id": "1776455072257",
+      "note": "Úklid před první svatbou, chystání matrací, úklid chill zóny, zametání atd.",
+      "person": "Eliška Dohnalová"
+    },
+    {
+      "date": "2026-02-18",
+      "hours": 3,
+      "id": "1776455428214",
+      "note": "Úklid",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-03-23",
+      "hours": 3,
+      "id": "1776455649282",
+      "note": "",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-03-25",
+      "hours": 3,
+      "id": "1776455818688",
+      "note": "",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-03-26",
+      "hours": 3,
+      "id": "1776455867196",
+      "note": "",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-03-30",
+      "hours": 3,
+      "id": "1776455887233",
+      "note": "",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-03-31",
+      "hours": 4,
+      "id": "1776455905852",
+      "note": "",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-04-01",
+      "hours": 3,
+      "id": "1776455934623",
+      "note": "",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-04-02",
+      "hours": 3,
+      "id": "1776455945305",
+      "note": "",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-04-07",
+      "hours": 4,
+      "id": "1776455957352",
+      "note": "",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-04-08",
+      "hours": 3,
+      "id": "1776455976205",
+      "note": "",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-04-09",
+      "hours": 8,
+      "id": "1776455990201",
+      "note": "",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-04-11",
+      "hours": 1,
+      "id": "1776456019523",
+      "note": "",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-04-12",
+      "hours": 1,
+      "id": "1776456026729",
+      "note": "",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-04-14",
+      "hours": 3,
+      "id": "1776456050740",
+      "note": "",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-04-16",
+      "hours": 4,
+      "id": "1776456070159",
+      "note": "",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-04-17",
+      "hours": 7,
+      "id": "1776456082306",
+      "note": "",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-04-15",
+      "hours": 7,
+      "id": "1776490731463",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-04-16",
+      "hours": 7,
+      "id": "1776490761761",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-04-20",
+      "hours": 10,
+      "id": "1776712063725",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-04-08",
+      "hours": 8,
+      "id": "1776764953360",
+      "note": "zaplaceno",
+      "person": "Viktorie Habartová"
+    },
+    {
+      "date": "2026-04-09",
+      "hours": 12,
+      "id": "1776764967421",
+      "note": "zaplaceno",
+      "person": "Viktorie Habartová"
+    },
+    {
+      "date": "2026-04-10",
+      "hours": 8.5,
+      "id": "1776765016308",
+      "note": "zaplaceno",
+      "person": "Viktorie Habartová"
+    },
+    {
+      "date": "2026-04-10",
+      "hours": 8.5,
+      "id": "1776765094424",
+      "note": "zaplaceno",
+      "person": "Romana Habartová"
+    },
+    {
+      "date": "2026-04-10",
+      "hours": 8.5,
+      "id": "1776765115325",
+      "note": "zaplaceno",
+      "person": "Daniela Habartová"
+    },
+    {
+      "date": "2026-04-22",
+      "hours": 6,
+      "id": "1776884584212",
+      "note": "Povlékání peřin, úklid venkovních prostor",
+      "person": "Eliška Dohnalová"
+    },
+    {
+      "date": "2026-04-13",
+      "hours": 5,
+      "id": "1776943654760",
+      "note": "úklid",
+      "person": "Elena Hluk"
+    },
+    {
+      "date": "2026-04-16",
+      "hours": 6,
+      "id": "1776943676362",
+      "note": "úklid",
+      "person": "Elena Hluk"
+    },
+    {
+      "date": "2026-04-22",
+      "hours": 7,
+      "id": "1777038919205",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-04-24",
+      "hours": 4.5,
+      "id": "1777278925630",
+      "note": "příprava na svatbu",
+      "person": "Elena Hluk"
+    },
+    {
+      "date": "2026-04-27",
+      "hours": 7,
+      "id": "1777308042550",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-04-28",
+      "hours": 7,
+      "id": "1777573613255",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-04-29",
+      "hours": 7,
+      "id": "1777573644696",
+      "note": "",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-04-10",
+      "hours": 3,
+      "id": "1777637060360",
+      "note": "úpravy vrat skleněných",
+      "person": "Martin Dohnal"
+    },
+    {
+      "date": "2026-04-12",
+      "hours": 2,
+      "id": "1777637075393",
+      "note": "příprava na neděli DOD",
+      "person": "Martin Dohnal"
+    },
+    {
+      "date": "2026-04-09",
+      "hours": 4,
+      "id": "1777637100849",
+      "note": "",
+      "person": "Martin Dohnal"
+    },
+    {
+      "date": "2026-05-01",
+      "hours": 2,
+      "id": "1777749325508",
+      "note": "Příprava a úklid",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-04-28",
+      "hours": 3,
+      "id": "1777790162400",
+      "note": "",
+      "person": "Elena Hluk"
+    },
+    {
+      "date": "2026-05-04",
+      "hours": 1,
+      "id": "1777887786832",
+      "note": "Praní hader",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-05-06",
+      "hours": 2.5,
+      "id": "1778077494687",
+      "note": "",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-05-08",
+      "hours": 2,
+      "id": "1778251121585",
+      "note": "Sekání trávy",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-05-08",
+      "hours": 2,
+      "id": "1778256528042",
+      "note": "Pípa",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-05-15",
+      "hours": 1,
+      "id": "1778852323800",
+      "note": "Priprava na predani",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-05-20",
+      "hours": 3,
+      "id": "1779305592842",
+      "note": "Úklid stanu, podlahy ve stodole a na podiu…",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-05-22",
+      "hours": 3.5,
+      "id": "1779467542920",
+      "note": "Sekání",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-05-27",
+      "hours": 2,
+      "id": "1779895804838",
+      "note": "Příprava, laminovaní, montovaní regálu…..",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-05-29",
+      "hours": 1,
+      "id": "1780244823277",
+      "note": "Prohlídka a příprava",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-05-31",
+      "hours": 1,
+      "id": "1780244888708",
+      "note": "Prohlídka, zalévání…",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-06-10",
+      "hours": 4,
+      "id": "1781101687038",
+      "note": "Úklidový sklad",
+      "person": "Veronika Šimčíková"
+    },
+    {
+      "date": "2026-06-12",
+      "hours": 5.5,
+      "id": "1781384467769",
+      "note": "Sečení",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-06-19",
+      "hours": 4,
+      "id": "1781900795317",
+      "note": "Sečení-stany,parkoviště spodní i horní, kolem maringotky",
+      "person": "Tomáš Grochal"
+    },
+    {
+      "date": "2026-06-24",
+      "hours": 1,
+      "id": "1782294006119",
+      "note": "Úklid a priprava",
+      "person": "Veronika Šimčíková"
+    }
+  ],
+  "paymentPaid": {
+    "2026-02": {
+      "Veronika Šimčíková": 900
+    },
+    "2026-03": {
+      "Lucka Dohnalová": 2500,
+      "Monika Kenša": 2625,
+      "Tomáš Grochal": 23375,
+      "Veronika Šimčíková": 4800
+    },
+    "2026-04": {
+      "Daniela Habartová": 1700,
+      "Elena Hluk": 0,
+      "Eliška Dohnalová": 0,
+      "Kamča Zavadilová": 1250,
+      "Lenka Helísková": 1250,
+      "Lucka Dohnalová": 2750,
+      "Martin Dohnal": 0,
+      "Monika Kenša": 7125,
+      "Petra Grochalová": 1250,
+      "Petra Pospíšilová": 2500,
+      "Romana Habartová": 1700,
+      "Tomáš Grochal": 25000,
+      "Veronika Šimčíková": 11100,
+      "Viktorie Habartová": 5700
+    },
+    "2026-05": {
+      "Kamča Zavadilová": 3750,
+      "Lenka Helísková": 4167,
+      "Lucka Dohnalová": 5000,
+      "Monika Kenša": 7917,
+      "Petra Grochalová": 6667,
+      "Petra Pospíšilová": 5000,
+      "Tereza Puršová": 5000,
+      "Tomáš Grochal": 2875
+    },
+    "Lucka Dohnalová": 0,
+    "Monika Kenša": 0,
+    "Tomáš Grochal": 0,
+    "Veronika Šimčíková": 0,
+    "Viktorie Habartová": 0
+  },
+  "people": [
+    "Tomáš Grochal",
+    "Monika Kenša",
+    "Jan Kenša",
+    "Tereza Puršová",
+    "Petra Grochalová",
+    "Lenka Helísková",
+    "Petra Pospíšilová",
+    "Kamča Zavadilová",
+    "Lucka Dohnalová",
+    "Matěj Dohnal",
+    "Anežka Suchánková",
+    "Lenka Matine",
+    "Nikola Škarpová",
+    "Elena Hluk",
+    "Vojta Dohnal",
+    "Veronika Šimčíková",
+    "Sandra Nováková",
+    "Jan Rusňák",
+    "Klára Nováková",
+    "Eva Janováčová",
+    "Eliška Dohnalová",
+    "Viktorie Habartová",
+    "Tereza Jordánová",
+    "Daniela Habartová",
+    "Romana Habartová",
+    "Simona (od Viky)",
+    "Aneta (od Viky)",
+    "Tereza Dostálek",
+    "Martin Dohnal",
+    "Jana Dohnalová",
+    "Jana Vavrušková",
+    "Hana Bystřická",
+    "Jana Taláková"
+  ],
+  "personQR": {
+    "Tomáš Grochal": "data:image/jpeg;base64,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"
+  },
+  "rates": {
+    "Aneta (od Viky)": 150,
+    "Anežka Suchánková": 150,
+    "Daniela Habartová": 200,
+    "Elena Hluk": 230,
+    "Eliška Dohnalová": 250,
+    "Eva Janováčová": 150,
+    "Hana Bystřická": 150,
+    "Jan Kenša": 150,
+    "Jan Rusňák": 150,
+    "Jana Dohnalová": 150,
+    "Jana Taláková": 150,
+    "Jana Vavrušková": 150,
+    "Kamča Zavadilová": 150,
+    "Klára Nováková": 150,
+    "Lenka Helísková": 150,
+    "Lenka Matine": 150,
+    "Lucka Dohnalová": 250,
+    "Martin Dohnal": 250,
+    "Matěj Dohnal": 150,
+    "Monika Kenša": 250,
+    "Nikola Škarpová": 150,
+    "Petra Grochalová": 150,
+    "Petra Pospíšilová": 150,
+    "Romana Habartová": 200,
+    "Sandra Nováková": 150,
+    "Simona (od Viky)": 150,
+    "Tereza Dostálek": 150,
+    "Tereza Jordánová": 150,
+    "Tereza Puršová": 150,
+    "Tomáš Grochal": 250,
+    "Veronika Šimčíková": 300,
+    "Viktorie Habartová": 200,
+    "Vojta Dohnal": 150
+  },
+  "svatebni_sezona": {
+    "weddings": {
+      "mqnlzktz6v1sb": {
+        "cleaningNames": [
+          "Petra Grochalová",
+          "Petra Pospíšilová",
+          "Kamča Zavadilová",
+          "Lenka Helísková",
+          "Monika Kenša"
+        ],
+        "contactEmail": "",
+        "contactPhone": "",
+        "coordinator": "Matěj",
+        "coupleName": "Svatba 25. 4. 2026",
+        "date": "2026-04-25",
+        "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+        "guests": 60,
+        "id": "mqnlzktz6v1sb",
+        "items": {
+          "calculation": {
+            "done": false,
+            "note": ""
+          },
+          "guestbook": {
+            "done": false,
+            "note": ""
+          },
+          "pay_caravan": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cart_bar": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cleaning": {
+            "done": false,
+            "note": ""
+          },
+          "pay_coffee": {
+            "done": false,
+            "note": ""
+          },
+          "pay_final_invoice": {
+            "done": false,
+            "note": ""
+          },
+          "pay_rent": {
+            "done": false,
+            "note": ""
+          },
+          "pay_staff": {
+            "done": false,
+            "note": ""
+          },
+          "tarps": {
+            "done": false,
+            "note": ""
+          },
+          "thank_you": {
+            "done": false,
+            "note": ""
+          }
+        },
+        "serviceNames": [
+          "Matěj Dohnal",
+          "Petra Pospíšilová",
+          "Tereza Puršová",
+          "Lenka Helísková"
+        ],
+        "staffPlanned": 4
+      },
+      "mqnlzku01qmha": {
+        "cleaningNames": [
+          "Tereza Puršová",
+          "Petra Pospíšilová"
+        ],
+        "contactEmail": "",
+        "contactPhone": "",
+        "coordinator": "Matěj",
+        "coupleName": "Svatba 13. 6. 2026",
+        "date": "2026-06-13",
+        "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+        "guests": 90,
+        "id": "mqnlzku01qmha",
+        "items": {
+          "calculation": {
+            "done": false,
+            "note": ""
+          },
+          "guestbook": {
+            "done": false,
+            "note": ""
+          },
+          "pay_caravan": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cart_bar": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cleaning": {
+            "done": false,
+            "note": ""
+          },
+          "pay_coffee": {
+            "done": false,
+            "note": ""
+          },
+          "pay_final_invoice": {
+            "done": false,
+            "note": ""
+          },
+          "pay_rent": {
+            "done": false,
+            "note": ""
+          },
+          "pay_staff": {
+            "done": false,
+            "note": ""
+          },
+          "tarps": {
+            "done": false,
+            "note": ""
+          },
+          "thank_you": {
+            "done": false,
+            "note": ""
+          }
+        },
+        "serviceNames": [
+          "Monika Kenša",
+          "Jan Kenša",
+          "Tomáš Grochal",
+          "Petra Grochalová",
+          "Petra Pospíšilová"
+        ],
+        "staffPlanned": 5
+      },
+      "mqnlzku0590eq": {
+        "cleaningNames": [
+          "Tereza Puršová"
+        ],
+        "contactEmail": "matej.orun@gmail.com",
+        "contactPhone": "",
+        "coordinator": "Matěj",
+        "coupleName": "Zbrožková",
+        "date": "2026-07-23",
+        "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+        "guests": 75,
+        "id": "mqnlzku0590eq",
+        "items": {
+          "calculation": {
+            "done": false,
+            "note": ""
+          },
+          "guestbook": {
+            "done": false,
+            "note": ""
+          },
+          "pay_caravan": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cart_bar": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cleaning": {
+            "done": false,
+            "note": ""
+          },
+          "pay_coffee": {
+            "done": false,
+            "note": ""
+          },
+          "pay_final_invoice": {
+            "done": false,
+            "note": ""
+          },
+          "pay_rent": {
+            "done": false,
+            "note": ""
+          },
+          "pay_staff": {
+            "done": false,
+            "note": ""
+          },
+          "tarps": {
+            "done": false,
+            "note": ""
+          },
+          "thank_you": {
+            "done": false,
+            "note": ""
+          }
+        },
+        "rentBalance": 1000,
+        "rentDeposit": 1000,
+        "serviceNames": [
+          "Tomáš Grochal",
+          "Petra Pospíšilová",
+          "Monika Kenša",
+          "Jan Kenša"
+        ],
+        "staffPlanned": 5
+      },
+      "mqnlzku08tuhy": {
+        "contactEmail": "markova.el78@gmail.com",
+        "contactPhone": "",
+        "coordinator": "Matěj",
+        "coupleName": "Alinče",
+        "date": "2026-08-22",
+        "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+        "guests": 60,
+        "id": "mqnlzku08tuhy",
+        "items": {
+          "calculation": {
+            "done": false,
+            "note": ""
+          },
+          "guestbook": {
+            "done": false,
+            "note": ""
+          },
+          "pay_caravan": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cart_bar": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cleaning": {
+            "done": false,
+            "note": ""
+          },
+          "pay_coffee": {
+            "done": false,
+            "note": ""
+          },
+          "pay_final_invoice": {
+            "done": false,
+            "note": ""
+          },
+          "pay_rent": {
+            "done": false,
+            "note": ""
+          },
+          "pay_staff": {
+            "done": false,
+            "note": ""
+          },
+          "tarps": {
+            "done": false,
+            "note": ""
+          },
+          "thank_you": {
+            "done": false,
+            "note": ""
+          }
+        },
+        "serviceNames": [
+          "Petra Pospíšilová",
+          "Monika Kenša",
+          "Jan Kenša"
+        ],
+        "staffPlanned": 2
+      },
+      "mqnlzku0fmevc": {
+        "contactEmail": "david.schoffer@cz.bosch.com",
+        "contactPhone": "",
+        "coordinator": "Matěj",
+        "coupleName": "Schoffer",
+        "date": "2026-08-15",
+        "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+        "id": "mqnlzku0fmevc",
+        "items": {
+          "calculation": {
+            "done": false,
+            "note": ""
+          },
+          "guestbook": {
+            "done": false,
+            "note": ""
+          },
+          "pay_caravan": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cart_bar": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cleaning": {
+            "done": false,
+            "note": ""
+          },
+          "pay_coffee": {
+            "done": false,
+            "note": ""
+          },
+          "pay_final_invoice": {
+            "done": false,
+            "note": ""
+          },
+          "pay_rent": {
+            "done": false,
+            "note": ""
+          },
+          "pay_staff": {
+            "done": false,
+            "note": ""
+          },
+          "tarps": {
+            "done": false,
+            "note": ""
+          },
+          "thank_you": {
+            "done": false,
+            "note": ""
+          }
+        },
+        "serviceNames": [
+          "Monika Kenša",
+          "Jan Kenša",
+          "Petra Pospíšilová"
+        ]
+      },
+      "mqnlzku0jc94r": {
+        "contactEmail": "unka.valova@gmail.com",
+        "contactPhone": "",
+        "coordinator": "Matěj",
+        "coupleName": "Valová",
+        "date": "2026-09-12",
+        "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+        "id": "mqnlzku0jc94r",
+        "items": {
+          "calculation": {
+            "done": false,
+            "note": ""
+          },
+          "guestbook": {
+            "done": false,
+            "note": ""
+          },
+          "pay_caravan": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cart_bar": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cleaning": {
+            "done": false,
+            "note": ""
+          },
+          "pay_coffee": {
+            "done": false,
+            "note": ""
+          },
+          "pay_final_invoice": {
+            "done": false,
+            "note": ""
+          },
+          "pay_rent": {
+            "done": false,
+            "note": ""
+          },
+          "pay_staff": {
+            "done": false,
+            "note": ""
+          },
+          "tarps": {
+            "done": false,
+            "note": ""
+          },
+          "thank_you": {
+            "done": false,
+            "note": ""
+          }
+        },
+        "serviceNames": [
+          "Monika Kenša",
+          "Jan Kenša",
+          "Tomáš Grochal",
+          "Petra Grochalová"
+        ],
+        "staffPlanned": 3
+      },
+      "mqnlzku0k09cu": {
+        "contactEmail": "koliskova.andrea@gmail.com",
+        "contactPhone": "",
+        "coordinator": "Matěj",
+        "coupleName": "Kolísková",
+        "date": "2026-08-13",
+        "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+        "guests": 30,
+        "id": "mqnlzku0k09cu",
+        "items": {
+          "calculation": {
+            "done": false,
+            "note": ""
+          },
+          "guestbook": {
+            "done": false,
+            "note": ""
+          },
+          "pay_caravan": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cart_bar": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cleaning": {
+            "done": false,
+            "note": ""
+          },
+          "pay_coffee": {
+            "done": false,
+            "note": ""
+          },
+          "pay_final_invoice": {
+            "done": false,
+            "note": ""
+          },
+          "pay_rent": {
+            "done": false,
+            "note": ""
+          },
+          "pay_staff": {
+            "done": false,
+            "note": ""
+          },
+          "tarps": {
+            "done": false,
+            "note": ""
+          },
+          "thank_you": {
+            "done": false,
+            "note": ""
+          }
+        },
+        "serviceNames": [
+          "Monika Kenša",
+          "Jan Kenša",
+          "Tomáš Grochal",
+          "Petra Pospíšilová"
+        ],
+        "staffPlanned": 3
+      },
+      "mqnlzku0mk7yv": {
+        "contactEmail": "kackapomykalova@gmail.com",
+        "contactPhone": "",
+        "coordinator": "Matěj",
+        "coupleName": "Pomykalová",
+        "date": "2026-09-10",
+        "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+        "id": "mqnlzku0mk7yv",
+        "items": {
+          "calculation": {
+            "done": false,
+            "note": ""
+          },
+          "guestbook": {
+            "done": false,
+            "note": ""
+          },
+          "pay_caravan": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cart_bar": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cleaning": {
+            "done": false,
+            "note": ""
+          },
+          "pay_coffee": {
+            "done": false,
+            "note": ""
+          },
+          "pay_final_invoice": {
+            "done": false,
+            "note": ""
+          },
+          "pay_rent": {
+            "done": false,
+            "note": ""
+          },
+          "pay_staff": {
+            "done": false,
+            "note": ""
+          },
+          "tarps": {
+            "done": false,
+            "note": ""
+          },
+          "thank_you": {
+            "done": false,
+            "note": ""
+          }
+        },
+        "serviceNames": [
+          "Tomáš Grochal"
+        ],
+        "staffPlanned": 3
+      },
+      "mqnlzku0oivw2": {
+        "cleaningNames": [
+          "Tereza Puršová"
+        ],
+        "contactEmail": "",
+        "contactPhone": "",
+        "coordinator": "Matěj",
+        "coupleName": "Svatba 11. 6. 2026",
+        "date": "2026-06-11",
+        "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+        "id": "mqnlzku0oivw2",
+        "items": {
+          "calculation": {
+            "done": false,
+            "note": ""
+          },
+          "guestbook": {
+            "done": false,
+            "note": ""
+          },
+          "pay_caravan": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cart_bar": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cleaning": {
+            "done": false,
+            "note": ""
+          },
+          "pay_coffee": {
+            "done": false,
+            "note": ""
+          },
+          "pay_final_invoice": {
+            "done": false,
+            "note": ""
+          },
+          "pay_rent": {
+            "done": false,
+            "note": ""
+          },
+          "pay_staff": {
+            "done": false,
+            "note": ""
+          },
+          "tarps": {
+            "done": false,
+            "note": ""
+          },
+          "thank_you": {
+            "done": false,
+            "note": ""
+          }
+        },
+        "serviceNames": [
+          "Monika Kenša",
+          "Tereza Puršová",
+          "Tomáš Grochal"
+        ]
+      },
+      "mqnlzku0v56kz": {
+        "cleaningNames": [
+          "Petra Pospíšilová"
+        ],
+        "contactEmail": "galusciakova.z@gmail.com",
+        "contactPhone": "",
+        "coordinator": "Matěj",
+        "coupleName": "Galuščiaková",
+        "date": "2026-07-25",
+        "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+        "guests": 50,
+        "id": "mqnlzku0v56kz",
+        "items": {
+          "calculation": {
+            "done": false,
+            "note": ""
+          },
+          "guestbook": {
+            "done": false,
+            "note": ""
+          },
+          "pay_caravan": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cart_bar": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cleaning": {
+            "done": false,
+            "note": ""
+          },
+          "pay_coffee": {
+            "done": false,
+            "note": ""
+          },
+          "pay_final_invoice": {
+            "done": false,
+            "note": ""
+          },
+          "pay_rent": {
+            "done": false,
+            "note": ""
+          },
+          "pay_staff": {
+            "done": false,
+            "note": ""
+          },
+          "tarps": {
+            "done": false,
+            "note": ""
+          },
+          "thank_you": {
+            "done": false,
+            "note": ""
+          }
+        },
+        "serviceNames": [
+          "Monika Kenša",
+          "Jan Kenša",
+          "Tereza Puršová",
+          "Tomáš Grochal",
+          "Petra Pospíšilová"
+        ],
+        "staffPlanned": 3
+      },
+      "mqnlzku0vy5oj": {
+        "cleaningNames": [
+          "Petra Grochalová",
+          "Kamča Zavadilová",
+          "Tereza Puršová"
+        ],
+        "contactEmail": "",
+        "contactPhone": "",
+        "coordinator": "Matěj",
+        "coupleName": "Svatba 14. 5. 2026",
+        "date": "2026-05-14",
+        "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+        "guests": 65,
+        "id": "mqnlzku0vy5oj",
+        "items": {
+          "calculation": {
+            "done": false,
+            "note": ""
+          },
+          "guestbook": {
+            "done": false,
+            "note": ""
+          },
+          "pay_caravan": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cart_bar": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cleaning": {
+            "done": false,
+            "note": ""
+          },
+          "pay_coffee": {
+            "done": false,
+            "note": ""
+          },
+          "pay_final_invoice": {
+            "done": false,
+            "note": ""
+          },
+          "pay_rent": {
+            "done": false,
+            "note": ""
+          },
+          "pay_staff": {
+            "done": false,
+            "note": ""
+          },
+          "tarps": {
+            "done": false,
+            "note": ""
+          },
+          "thank_you": {
+            "done": false,
+            "note": ""
+          }
+        },
+        "serviceNames": [
+          "Monika Kenša",
+          "Tereza Puršová",
+          "Tomáš Grochal",
+          "Petra Pospíšilová"
+        ],
+        "staffPlanned": 4
+      },
+      "mqnlzku0xljpu": {
+        "contactEmail": "",
+        "contactPhone": "",
+        "coordinator": "Matěj",
+        "coupleName": "Kremr",
+        "date": "2026-08-20",
+        "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+        "guests": 70,
+        "id": "mqnlzku0xljpu",
+        "items": {
+          "calculation": {
+            "done": false,
+            "note": ""
+          },
+          "guestbook": {
+            "done": false,
+            "note": ""
+          },
+          "pay_caravan": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cart_bar": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cleaning": {
+            "done": false,
+            "note": ""
+          },
+          "pay_coffee": {
+            "done": false,
+            "note": ""
+          },
+          "pay_final_invoice": {
+            "done": false,
+            "note": ""
+          },
+          "pay_rent": {
+            "done": false,
+            "note": ""
+          },
+          "pay_staff": {
+            "done": false,
+            "note": ""
+          },
+          "tarps": {
+            "done": false,
+            "note": ""
+          },
+          "thank_you": {
+            "done": false,
+            "note": ""
+          }
+        },
+        "serviceNames": [
+          "Monika Kenša",
+          "Jan Kenša",
+          "Petra Pospíšilová"
+        ]
+      },
+      "mqnlzku0xvi08": {
+        "cleaningNames": [
+          "Petra Pospíšilová",
+          "Lucka Dohnalová",
+          "Monika Kenša"
+        ],
+        "contactEmail": "",
+        "contactPhone": "",
+        "coordinator": "Matěj",
+        "coupleName": "Svatba 16. 5. 2026",
+        "date": "2026-05-16",
+        "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+        "guests": 50,
+        "id": "mqnlzku0xvi08",
+        "items": {
+          "calculation": {
+            "done": false,
+            "note": ""
+          },
+          "guestbook": {
+            "done": false,
+            "note": ""
+          },
+          "pay_caravan": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cart_bar": {
+            "done": false,
+            "note": ""
+          },
+          "pay_cleaning": {
+            "done": false,
+            "note": ""
+          },
+          "pay_coffee": {
+            "done": false,
+            "note": ""
+          },
+          "pay_final_invoice": {
+            "done": false,
+            "note": ""
+          },
+          "pay_rent": {
+            "done": false,
+            "note": ""
+          },
+          "pay_staff": {
+            "done": false,
+            "note": ""
+          },
+          "tarps": {
+            "done": false,
+            "note": ""
+          },
+          "thank_you": {
+            "done": false,
+            "note": ""
+          }
+        },
+        "serviceNames": [
+          "Monika Kenša",
+          "Jan Kenša",
+          "Tomáš Grochal",
+          "Petra Grochalová",
+          "Petra Pospíšilová"
+        ],
+        "staffPlanned": 3
+      }
+    }
+  },
+  "todos": [
+    {
+      "comment": "Přítok je na minimu, nutné upravit, klidně technikou, jinak voda začne zelenat a kazit se, protože není průtočná. Vyřešil Honza",
+      "createdAt": "2026-06-01T10:28:06.442Z",
+      "deadline": "2026-06-15",
+      "done": true,
+      "id": "todo_1780309686442",
+      "priority": "high",
+      "task": "Upravit přítok vody do rybníku"
+    },
+    {
+      "comment": "",
+      "createdAt": "2026-05-27T08:37:52.498Z",
+      "deadline": "2026-06-14",
+      "done": true,
+      "id": "todo_1779871072498",
+      "priority": "high",
+      "task": "Do stanů složit věšáky a dát na ně ramínka"
+    },
+    {
+      "comment": "",
+      "createdAt": "2026-05-27T08:37:02.880Z",
+      "deadline": "2026-06-14",
+      "done": true,
+      "id": "todo_1779871022880",
+      "priority": "high",
+      "task": "Do posledního stanu zanést dřevěné postele (místo nafukovaček) + dát matrace LIDL"
+    },
+    {
+      "comment": "",
+      "createdAt": "2026-05-27T08:36:27.447Z",
+      "deadline": "2026-06-26",
+      "done": false,
+      "id": "todo_1779870987447",
+      "priority": "high",
+      "task": "Přidělat do zdi do koupelny v hlavní budově držák na ručníky IKEA"
+    },
+    {
+      "comment": "",
+      "createdAt": "2026-05-27T08:35:22.930Z",
+      "deadline": "2026-06-24",
+      "done": true,
+      "id": "todo_1779870922930",
+      "priority": "high",
+      "task": "Koupit novou lednici"
+    },
+    {
+      "comment": "",
+      "createdAt": "2026-05-27T08:34:48.680Z",
+      "deadline": "2026-06-29",
+      "done": false,
+      "id": "todo_1779870888680",
+      "priority": "medium",
+      "task": "Dofinišovat rámeček na fotky ze sezóny 2026 – Eliška idea (Vojta ví)"
+    },
+    {
+      "comment": "",
+      "createdAt": "2026-05-27T08:34:02.912Z",
+      "deadline": "2026-06-14",
+      "done": true,
+      "id": "todo_1779870842912",
+      "priority": "high",
+      "task": "Vyřešit funkční zastřešení rohu po levé straně při příchodu na mlýn"
+    },
+    {
+      "comment": "",
+      "createdAt": "2026-05-19T20:52:23.772Z",
+      "deadline": "2026-05-31",
+      "done": true,
+      "id": "todo_1779223943772",
+      "priority": "medium",
+      "task": "opravit hadicu u koňobaru (asi vysekat ju z betonu a spojkou to napojit na jinou"
+    },
+    {
+      "comment": "Nepekne prostredi",
+      "createdAt": "2026-05-13T19:37:23.559Z",
+      "deadline": "",
+      "done": true,
+      "id": "todo_1778701043559",
+      "priority": "medium",
+      "task": "Uklidit hromady suti a hliny u potoka"
+    },
+    {
+      "comment": "Ten velky kamen pod nohama je opravdu ostry, dobre boty znicene a zvrtnuta noha velmi lehce. Neni to tam pekne, nedodelane. Za stodolu je videt binec.",
+      "createdAt": "2026-05-13T19:35:31.087Z",
+      "deadline": "",
+      "done": true,
+      "id": "todo_1778700931087",
+      "priority": "high",
+      "task": "Dodelat teren kolem skladu a pod strechu pod sklad se stolama"
+    },
+    {
+      "comment": "opět se to tam hroutí ty kameny, jediné co evidentně funguje je hodit to do klasického betonu, to bych řekl že zvládneš i sám, případně s naším martinem (už to dělal)",
+      "createdAt": "2026-05-12T07:49:53.263Z",
+      "deadline": "2026-05-20",
+      "done": true,
+      "id": "todo_1778572193263",
+      "priority": "high",
+      "task": "zabetonovat kameny kolem baru a terasy pod panoramaticku pergolu"
+    },
+    {
+      "comment": "Objednat dřevo (to předpokládám už je) a následně s Pilkou obouchat, ať to máme hezké Honza objednal desky. Za 14 dni by se to mohlo delat pokud to dojde",
+      "createdAt": "2026-05-12T07:47:59.151Z",
+      "deadline": "2026-05-29",
+      "done": true,
+      "id": "todo_1778572079151",
+      "priority": "medium",
+      "task": "obložit buňku a sklad"
+    },
+    {
+      "comment": "Vypadly cihly a zvetrala omitka kolem tech der sa sype, vypada to strasidelne.",
+      "createdAt": "2026-05-11T19:04:51.629Z",
+      "deadline": "",
+      "done": true,
+      "id": "todo_1778526291629",
+      "priority": "high",
+      "task": "Zazdit vypadane cihly u wc"
+    },
+    {
+      "comment": "Neni dost mista  pro dustojne ulozeni uklidoveho  nacini. S vyvozem dreva rada s Vercu a ukrajinku pomozem, hlavne at je to brzo. dreva",
+      "createdAt": "2026-05-11T18:58:03.455Z",
+      "deadline": "2026-06-30",
+      "done": false,
+      "id": "todo_1778525883455",
+      "priority": "medium",
+      "task": "Vytvorit u ohniste zasobnik na drevo a zacat vyvazet drevo z drevarky"
+    },
+    {
+      "comment": "Nova klika + zamykani",
+      "createdAt": "2026-05-11T18:52:46.231Z",
+      "deadline": "",
+      "done": true,
+      "id": "todo_1778525566231",
+      "priority": "medium",
+      "task": "Vyresit kliku do skladku u wc"
+    },
+    {
+      "comment": "",
+      "createdAt": "2026-05-11T16:49:18.349Z",
+      "deadline": "2026-06-29",
+      "done": false,
+      "id": "todo_1778518158349",
+      "priority": "medium",
+      "task": "Začít uklízet dřevárku a udělat v ní pořádek"
+    },
+    {
+      "comment": "Výhledově budeme chtít v mlýnici udělat další společenský prostor. Minulý rok jsme ji komplet vyklidili, stálo to hoodně peněz, teď už je to zase stav, jako bysme tam nic nedělali. Začít dělat pořádky, v červenci uděláme kontrolní den",
+      "createdAt": "2026-05-11T16:48:33.192Z",
+      "deadline": "2026-07-31",
+      "done": false,
+      "id": "todo_1778518113191",
+      "priority": "low",
+      "task": "Uklidit mlýnicu"
+    },
+    {
+      "comment": "dle pana Helíska úterý",
+      "createdAt": "2026-05-10T20:36:48.556Z",
+      "deadline": "2026-05-15",
+      "done": true,
+      "id": "todo_1778445408556",
+      "priority": "high",
+      "task": "Hasičské přístroje"
+    },
+    {
+      "comment": "",
+      "createdAt": "2026-05-10T20:35:53.423Z",
+      "deadline": "2026-05-15",
+      "done": true,
+      "id": "todo_1778445353423",
+      "priority": "medium",
+      "task": "Koupit časovou zásuvku na aerátor"
+    }
+  ],
+  "weddingAssignments": {
+    "2026-04-18": {
+      "cleaning": [
+        "Monika Kenša",
+        "Petra Pospíšilová",
+        "Lenka Helísková",
+        "Lucka Dohnalová"
+      ],
+      "service": [
+        "Lenka Helísková",
+        "Jan Kenša",
+        "Monika Kenša",
+        "Petra Pospíšilová",
+        "Veronika Šimčíková"
+      ]
+    },
+    "2026-04-25": {
+      "cleaning": [
+        "Petra Grochalová",
+        "Petra Pospíšilová",
+        "Kamča Zavadilová",
+        "Monika Kenša"
+      ],
+      "service": [
+        "Matěj Dohnal",
+        "Petra Pospíšilová",
+        "Tereza Puršová",
+        "Lenka Helísková"
+      ]
+    },
+    "2026-05-02": {
+      "cleaning": [
+        "Monika Kenša",
+        "Lenka Helísková",
+        "Petra Grochalová"
+      ],
+      "service": [
+        "Veronika Šimčíková",
+        "Sandra Nováková",
+        "Klára Nováková",
+        "Jan Rusňák"
+      ]
+    },
+    "2026-05-07": {
+      "cleaning": [
+        "Monika Kenša",
+        "Kamča Zavadilová",
+        "Lenka Helísková",
+        "Lucka Dohnalová"
+      ],
+      "service": [
+        "Tomáš Grochal",
+        "Monika Kenša",
+        "Lenka Helísková"
+      ]
+    },
+    "2026-05-09": {
+      "cleaning": [
+        "Petra Pospíšilová",
+        "Lenka Helísková",
+        "Lucka Dohnalová",
+        "Petra Grochalová"
+      ],
+      "service": [
+        "Jan Kenša",
+        "Tomáš Grochal"
+      ]
+    },
+    "2026-05-14": {
+      "cleaning": [
+        "Petra Grochalová",
+        "Kamča Zavadilová",
+        "Tereza Puršová",
+        "Elena Hluk"
+      ],
+      "service": [
+        "Monika Kenša",
+        "Tereza Puršová",
+        "Tomáš Grochal",
+        "Petra Pospíšilová"
+      ]
+    },
+    "2026-05-16": {
+      "cleaning": [
+        "Petra Pospíšilová",
+        "Lucka Dohnalová",
+        "Monika Kenša",
+        "Veronika Šimčíková"
+      ],
+      "service": [
+        "Monika Kenša",
+        "Jan Kenša",
+        "Petra Pospíšilová"
+      ]
+    },
+    "2026-05-21": {
+      "cleaning": [
+        "Monika Kenša",
+        "Tereza Puršová",
+        "Tomáš Grochal",
+        "Jana Dohnalová"
+      ],
+      "service": [
+        "Viktorie Habartová",
+        "Tomáš Grochal",
+        "Eliška Dohnalová",
+        "Daniela Habartová"
+      ]
+    },
+    "2026-05-23": {
+      "cleaning": [
+        "Petra Pospíšilová",
+        "Tereza Puršová",
+        "Petra Grochalová",
+        "Kamča Zavadilová"
+      ],
+      "service": [
+        "Tereza Puršová",
+        "Eliška Dohnalová",
+        "Viktorie Habartová",
+        "Vojta Dohnal",
+        "Tereza Jordánová",
+        "Daniela Habartová"
+      ]
+    },
+    "2026-05-28": {
+      "cleaning": [
+        "Monika Kenša",
+        "Lucka Dohnalová",
+        "Petra Grochalová",
+        "Elena Hluk"
+      ],
+      "service": [
+        "Tomáš Grochal",
+        "Monika Kenša"
+      ]
+    },
+    "2026-05-30": {
+      "cleaning": [
+        "Monika Kenša",
+        "Petra Pospíšilová",
+        "Veronika Šimčíková",
+        "Tereza Puršová"
+      ],
+      "service": [
+        "Eva Janováčová",
+        "Veronika Šimčíková",
+        "Petra Grochalová"
+      ]
+    },
+    "2026-06-04": {
+      "cleaning": [
+        "Petra Grochalová",
+        "Kamča Zavadilová",
+        "Anežka Suchánková"
+      ],
+      "service": [
+        "Tomáš Grochal",
+        "Monika Kenša",
+        "Tereza Puršová",
+        "Viktorie Habartová"
+      ]
+    },
+    "2026-06-06": {
+      "cleaning": [
+        "Monika Kenša",
+        "Tereza Puršová",
+        "Petra Pospíšilová"
+      ],
+      "service": [
+        "Monika Kenša",
+        "Jan Kenša",
+        "Tomáš Grochal",
+        "Petra Grochalová"
+      ]
+    },
+    "2026-06-11": {
+      "cleaning": [
+        "Elena Hluk",
+        "Anežka Suchánková"
+      ],
+      "service": [
+        "Monika Kenša",
+        "Tereza Puršová",
+        "Tomáš Grochal",
+        "Eva Janováčová"
+      ]
+    },
+    "2026-06-13": {
+      "cleaning": [
+        "Tereza Puršová",
+        "Petra Pospíšilová",
+        "Kamča Zavadilová",
+        "Monika Kenša"
+      ],
+      "service": [
+        "Monika Kenša",
+        "Jan Kenša",
+        "Petra Pospíšilová"
+      ]
+    },
+    "2026-06-18": {
+      "cleaning": [
+        "Monika Kenša",
+        "Elena Hluk",
+        "Petra Grochalová",
+        "Anežka Suchánková"
+      ],
+      "service": [
+        "Daniela Habartová",
+        "Eliška Dohnalová",
+        "Vojta Dohnal",
+        "Viktorie Habartová"
+      ]
+    },
+    "2026-06-20": {
+      "cleaning": [
+        "Monika Kenša",
+        "Eliška Dohnalová",
+        "Veronika Šimčíková",
+        "Petra Grochalová"
+      ],
+      "service": [
+        "Eliška Dohnalová",
+        "Viktorie Habartová",
+        "Vojta Dohnal",
+        "Tereza Jordánová"
+      ]
+    },
+    "2026-06-25": {
+      "cleaning": [
+        "Monika Kenša",
+        "Elena Hluk",
+        "Kamča Zavadilová",
+        "Petra Grochalová"
+      ],
+      "service": [
+        "Tomáš Grochal",
+        "Eliška Dohnalová",
+        "Viktorie Habartová",
+        "Daniela Habartová",
+        "Romana Habartová"
+      ]
+    },
+    "2026-06-27": {
+      "cleaning": [
+        "Monika Kenša",
+        "Petra Pospíšilová",
+        "Tereza Puršová",
+        "Petra Grochalová"
+      ],
+      "service": [
+        "Veronika Šimčíková",
+        "Jana Vavrušková",
+        "Hana Bystřická",
+        "Jana Taláková"
+      ]
+    },
+    "2026-07-02": {
+      "cleaning": [
+        "Monika Kenša",
+        "Elena Hluk",
+        "Anežka Suchánková",
+        "Eliška Dohnalová"
+      ],
+      "service": [
+        "Tomáš Grochal",
+        "Veronika Šimčíková",
+        "Eva Janováčová"
+      ]
+    },
+    "2026-07-04": {
+      "cleaning": [
+        "Tereza Puršová",
+        "Petra Pospíšilová",
+        "Lenka Helísková"
+      ],
+      "service": [
+        "Jan Kenša",
+        "Monika Kenša",
+        "Petra Pospíšilová",
+        "Veronika Šimčíková"
+      ]
+    },
+    "2026-07-06": {
+      "cleaning": [
+        "Anežka Suchánková",
+        "Lenka Helísková",
+        "Jana Taláková",
+        "Eliška Dohnalová"
+      ],
+      "service": [
+        "Veronika Šimčíková",
+        "Eva Janováčová",
+        "Jana Taláková"
+      ]
+    },
+    "2026-07-09": {
+      "cleaning": [
+        "Elena Hluk",
+        "Tereza Puršová",
+        "Anežka Suchánková",
+        "Lenka Helísková"
+      ],
+      "service": [
+        "Monika Kenša",
+        "Jan Kenša",
+        "Tomáš Grochal"
+      ]
+    },
+    "2026-07-11": {
+      "cleaning": [
+        "Monika Kenša",
+        "Tereza Puršová",
+        "Petra Grochalová",
+        "Petra Pospíšilová"
+      ],
+      "service": [
+        "Monika Kenša",
+        "Jan Kenša",
+        "Kamča Zavadilová",
+        "Tomáš Grochal"
+      ]
+    },
+    "2026-07-16": {
+      "cleaning": [
+        "Monika Kenša",
+        "Elena Hluk",
+        "Lenka Helísková",
+        "Jana Taláková"
+      ],
+      "service": [
+        "Eliška Dohnalová",
+        "Viktorie Habartová",
+        "Vojta Dohnal",
+        "Tereza Jordánová",
+        "Daniela Habartová",
+        "Romana Habartová"
+      ]
+    },
+    "2026-07-18": {
+      "cleaning": [
+        "Monika Kenša",
+        "Petra Pospíšilová",
+        "Petra Grochalová",
+        "Lenka Helísková"
+      ],
+      "service": [
+        "Viktorie Habartová",
+        "Daniela Habartová"
+      ]
+    },
+    "2026-07-23": {
+      "cleaning": [
+        "Tereza Puršová",
+        "Elena Hluk",
+        "Lenka Helísková",
+        "Jana Taláková"
+      ],
+      "service": [
+        "Tomáš Grochal",
+        "Petra Pospíšilová",
+        "Jan Kenša",
+        "Monika Kenša"
+      ]
+    },
+    "2026-07-25": {
+      "cleaning": [
+        "Petra Pospíšilová",
+        "Tereza Puršová",
+        "Petra Grochalová",
+        "Lenka Helísková"
+      ],
+      "service": [
+        "Monika Kenša",
+        "Jan Kenša",
+        "Tereza Puršová",
+        "Tomáš Grochal",
+        "Petra Pospíšilová"
+      ]
+    },
+    "2026-07-30": {
+      "cleaning": [
+        "Elena Hluk",
+        "Kamča Zavadilová",
+        "Lenka Helísková",
+        "Jana Taláková"
+      ],
+      "service": [
+        "Tomáš Grochal"
+      ]
+    },
+    "2026-08-01": {
+      "cleaning": [
+        "Tereza Puršová",
+        "Lenka Helísková",
+        "Jana Taláková"
+      ],
+      "service": [
+        "Veronika Šimčíková",
+        "Jana Taláková"
+      ]
+    },
+    "2026-08-06": {
+      "cleaning": [
+        "Monika Kenša",
+        "Elena Hluk",
+        "Eliška Dohnalová",
+        "Lenka Helísková"
+      ],
+      "service": [
+        "Eliška Dohnalová",
+        "Viktorie Habartová",
+        "Vojta Dohnal",
+        "Tomáš Grochal"
+      ]
+    },
+    "2026-08-08": {
+      "cleaning": [
+        "Monika Kenša",
+        "Petra Grochalová",
+        "Lenka Helísková"
+      ],
+      "service": [
+        "Viktorie Habartová",
+        "Daniela Habartová",
+        "Veronika Šimčíková",
+        "Simona (od Viky)",
+        "Aneta (od Viky)"
+      ]
+    },
+    "2026-08-10": {
+      "cleaning": [
+        "Lenka Helísková",
+        "Jana Taláková"
+      ]
+    },
+    "2026-08-13": {
+      "cleaning": [
+        "Elena Hluk",
+        "Lenka Helísková",
+        "Jana Taláková",
+        "Eliška Dohnalová"
+      ],
+      "service": [
+        "Monika Kenša",
+        "Jan Kenša",
+        "Tomáš Grochal",
+        "Petra Pospíšilová"
+      ]
+    },
+    "2026-08-15": {
+      "cleaning": [
+        "Petra Pospíšilová",
+        "Tereza Puršová",
+        "Lenka Helísková"
+      ],
+      "service": [
+        "Monika Kenša",
+        "Jan Kenša",
+        "Petra Pospíšilová"
+      ]
+    },
+    "2026-08-20": {
+      "cleaning": [
+        "Elena Hluk",
+        "Lenka Helísková",
+        "Eliška Dohnalová"
+      ],
+      "service": [
+        "Monika Kenša",
+        "Jan Kenša",
+        "Petra Pospíšilová"
+      ]
+    },
+    "2026-08-22": {
+      "cleaning": [
+        "Petra Grochalová",
+        "Lenka Helísková"
+      ],
+      "service": [
+        "Petra Pospíšilová",
+        "Monika Kenša",
+        "Jan Kenša"
+      ]
+    },
+    "2026-08-27": {
+      "cleaning": [
+        "Elena Hluk",
+        "Petra Grochalová",
+        "Kamča Zavadilová",
+        "Lenka Helísková"
+      ],
+      "service": [
+        "Tomáš Grochal"
+      ]
+    },
+    "2026-08-29": {
+      "cleaning": [
+        "Tereza Puršová",
+        "Petra Grochalová",
+        "Petra Pospíšilová",
+        "Lenka Helísková"
+      ],
+      "service": [
+        "Tomáš Grochal",
+        "Monika Kenša",
+        "Jan Kenša",
+        "Petra Pospíšilová"
+      ]
+    },
+    "2026-09-03": {
+      "cleaning": [
+        "Elena Hluk",
+        "Lenka Helísková",
+        "Eliška Dohnalová"
+      ],
+      "service": [
+        "Tomáš Grochal",
+        "Tereza Puršová"
+      ]
+    },
+    "2026-09-07": {
+      "service": [
+        "Eliška Dohnalová",
+        "Vojta Dohnal",
+        "Viktorie Habartová",
+        "Daniela Habartová",
+        "Romana Habartová",
+        "Tereza Dostálek"
+      ]
+    },
+    "2026-09-10": {
+      "cleaning": [
+        "Elena Hluk",
+        "Eliška Dohnalová"
+      ],
+      "service": [
+        "Tomáš Grochal"
+      ]
+    },
+    "2026-09-12": {
+      "cleaning": [
+        "Petra Pospíšilová",
+        "Petra Grochalová"
+      ],
+      "service": [
+        "Monika Kenša",
+        "Jan Kenša",
+        "Tomáš Grochal",
+        "Petra Grochalová"
+      ]
+    },
+    "2026-09-17": {
+      "cleaning": [
+        "Elena Hluk"
+      ],
+      "service": [
+        "Tomáš Grochal"
+      ]
+    },
+    "2026-09-19": {
+      "cleaning": [
+        "Petra Pospíšilová",
+        "Petra Grochalová"
+      ],
+      "service": [
+        "Veronika Šimčíková"
+      ]
+    },
+    "2026-09-24": {
+      "cleaning": [
+        "Elena Hluk",
+        "Eliška Dohnalová"
+      ],
+      "service": [
+        "Tomáš Grochal"
+      ]
+    },
+    "2026-09-26": {
+      "cleaning": [
+        "Petra Pospíšilová",
+        "Petra Grochalová"
+      ],
+      "service": [
+        "Tomáš Grochal",
+        "Monika Kenša",
+        "Jan Kenša",
+        "Petra Pospíšilová"
+      ]
+    },
+    "2026-10-01": {
+      "cleaning": [
+        "Elena Hluk",
+        "Eliška Dohnalová"
+      ],
+      "service": [
+        "Tomáš Grochal"
+      ]
+    },
+    "2026-10-03": {
+      "cleaning": [
+        "Petra Pospíšilová",
+        "Petra Grochalová"
+      ],
+      "service": [
+        "Tomáš Grochal",
+        "Jan Kenša",
+        "Monika Kenša",
+        "Petra Pospíšilová"
+      ]
+    },
+    "2026-10-10": {
+      "cleaning": [
+        "Eliška Dohnalová"
+      ],
+      "service": [
+        "Tereza Jordánová",
+        "Eliška Dohnalová",
+        "Vojta Dohnal",
+        "Viktorie Habartová"
+      ]
+    },
+    "2027-09-04": {
+      "service": [
+        "Veronika Šimčíková"
+      ]
+    }
+  },
+  "weddingContact": {
+    "2026-04-18": "",
+    "2026-04-25": "Pospěch",
+    "2026-05-07": "Vašťák Jakub",
+    "2026-05-09": "Judasová Jana",
+    "2026-05-14": "Větříčková",
+    "2026-05-16": "Vojáčková",
+    "2026-05-21": "Přikrylová",
+    "2026-05-23": "Dopitová",
+    "2026-05-28": "Kubešová ",
+    "2026-05-30": "Pištěková",
+    "2026-06-04": "Šlancarová Radka",
+    "2026-06-06": "Rája Jiří",
+    "2026-06-11": "Ludíková",
+    "2026-06-13": "Felt",
+    "2026-06-18": "Foltýnová",
+    "2026-06-20": "Wachtel",
+    "2026-06-25": "Žajdlíková ",
+    "2026-06-27": "Lacková",
+    "2026-07-02": "Netopilová ",
+    "2026-07-04": "Záruba",
+    "2026-07-06": "Malinová ",
+    "2026-07-09": "Petr Novák a Gabriela Hadrabová",
+    "2026-07-11": "Stehlíková Adéla",
+    "2026-07-16": "Leskovjan, 732 486 255",
+    "2026-07-18": "Dostálek, Juřičková 734 654 647",
+    "2026-07-23": "Zbrožková",
+    "2026-07-25": "Galuščiaková",
+    "2026-07-30": "Rolenc",
+    "2026-08-01": "Kocourkovi",
+    "2026-08-06": "Švábová 730 926 706",
+    "2026-08-08": "Klement, Zlínská 608 775 933",
+    "2026-08-10": "Odložilík Michal a Anna",
+    "2026-08-13": "Kolísková",
+    "2026-08-15": "Schoffer",
+    "2026-08-20": "Kremr",
+    "2026-08-22": "Alinče",
+    "2026-08-27": "Moravčík Pavel, 724747138, Moravcik.Pavel@seznam.cz",
+    "2026-08-29": "Peřestá Štěpánka, 736405634, perestastepanka@gmail.com",
+    "2026-09-03": "Němečková Barbora, 608925840, barus.n6@seznam.cz",
+    "2026-09-05": "Križalkovič",
+    "2026-09-07": "Koláčková, 739 824 506",
+    "2026-09-10": "Pomykalová",
+    "2026-09-12": "Valová",
+    "2026-09-24": "Horák Jan, 720281816, horiki77@seznam.cz",
+    "2026-09-26": "Slivová Markéta, 733742065, slivovamar@gmail.com",
+    "2026-10-01": "Hynek Tomáš, 725770100, tomas.hynekt@gmail.com",
+    "2026-10-03": "Zábojníková Nikola, 732 576 670, zabojnikova.nikola@seznam.cz",
+    "2026-10-10": "Fursová, 774 396 813",
+    "2027-05-15": "Vojtěch Dohnal",
+    "2027-05-29": "Michaela Čížková",
+    "2027-06-05": "Jiří Pařízek",
+    "2027-06-19": "Monika Dočkalová & Ondřej Smoček",
+    "2027-06-26": "Michaela Jehlíková",
+    "2027-07-03": "Marie Zdráhalová",
+    "2027-07-08": "Aneta Nejedlíková",
+    "2027-07-10": "Lenka Němečková",
+    "2027-07-17": "Jakub Zálešák",
+    "2027-07-24": "Justýna Brázdilová",
+    "2027-07-31": "Sára Plucnarová",
+    "2027-08-12": "Johana Fabíková",
+    "2027-08-21": "Monika Peluňková",
+    "2027-09-04": "Nadan Pojer",
+    "2027-09-11": "Sára Konečná",
+    "2027-09-18": "Ellen Palmeová"
+  },
+  "weddingCoordOverride": {
+    "2026-09-05": "Grochy"
+  },
+  "weddingEmail": {
+    "2026-05-07": "jakub.vastak@seznam.cz",
+    "2026-05-09": "j.judasova@seznam.cz",
+    "2026-05-14": "tereza.vetrickova@gmail.com",
+    "2026-05-16": "vojackovamichaela@gmail.com",
+    "2026-06-04": "slancarova@gmail.com",
+    "2026-06-06": "jiri.raja@gmail.com",
+    "2026-06-11": "hanaludikova@gmail.com",
+    "2026-07-09": "p_novak@outlook.com",
+    "2026-07-11": "adelastehlikova@seznam.cz",
+    "2026-07-23": "z.valerie@seznam.cz",
+    "2026-07-25": "galusciakova.z@gmail.com",
+    "2026-08-10": "michal.odlozilik@gmail.com",
+    "2026-08-13": "koliskova.andrea@gmail.com",
+    "2026-08-15": "david.schoffer@cz.bosch.com",
+    "2026-08-20": "",
+    "2026-08-22": "markova.el78@gmail.com",
+    "2026-09-03": "barus.n6@seznam.cz",
+    "2026-09-10": "kackapomykalova@gmail.com",
+    "2026-09-12": "unka.valova@gmail.com",
+    "2027-05-15": "dohnalv@proton.me",
+    "2027-05-29": "michaela.c@email.cz",
+    "2027-06-05": "parizek.jiri@gmail.com",
+    "2027-06-19": "xdockalova@seznam.cz",
+    "2027-06-26": "michaelajehlikova@gmail.com",
+    "2027-07-03": "miazdrahalova@gmail.com",
+    "2027-07-08": "anetanejedlikova@gmail.com",
+    "2027-07-10": "lenusnemeckova@seznam.cz",
+    "2027-07-17": "jakub.zalesak@gmail.com",
+    "2027-07-24": "justynabrazdilova@seznam.cz",
+    "2027-07-31": "sara.plucnarova1306@seznam.cz",
+    "2027-08-12": "Johanafab2000@seznam.cz",
+    "2027-08-21": "m.pelunkova@seznam.cz",
+    "2027-09-04": "n.pojer@gmail.com",
+    "2027-09-11": "konecna.s@seznam.cz",
+    "2027-09-18": "ellenpalme@seznam.cz"
+  },
+  "weddingFeedback": {
+    "2026-04-18": "Víme, že elektřina neutáhne zapojeni chladírenského vozu. Je třeba upevnit dřevěný schod v novém vstupu do stodoly a poladit vypínače u wc v mlýnici ( již nahlášeno ). Jinak ohlasy od svatebčanů byly pozitivní\n\nHonza reakce: 1. Vojta co \"nejblbuvzdorněji\" popíše štítkama zásuvky v kuchyni a baru (např. \"max. příkon XX kWh\"), 2. Honza vyhotoví předávací protokol, kde bude mj.  poučení o zacházení se zásuvkama 3. Vojta zařídí schod + vypínače,\n\nZ kauce strženo 100,- za rozbitou jednu pivní sklenici a jednu sklenici na šampaňské. Stovku jsem si nechala a následně odečetla za nákup hader na Temu.",
+    "2026-04-25": "Zakrýt lednici za barem zhora -> z balkonu ten výhled nic moc.\n\nPodle mě odchází výčep - komunikováno \nna vojtu.",
+    "2026-05-02": "Bylo by super, kdyby se koupila nová varná konvice. Ta stávající je strašně pomalá.\nNa pánském wc nejde Willy na papírovou roli.\nNejdou zavřít nové dveře do stodoly( nahlášeno vojtovi)\nPípa prakticky nefunkční\nRozbité dvě pivní sklenice a jedna sklenice ba šampaňské a jeden dezertní talíř, který nenahlásili.",
+    "2026-05-07": "- zásobník na pánských záchodech nefungoval už jsem to řešil s Vojtou\n- zkusit vymyslet nějakou plachtu mezi posezením nad barem a prvním trámem co je nad barem (zabezpečíme možné padající předměty a taky zastínění proti slunci pro obsluhu)\n\n- Honza feedback: pro Vojtu - na mlýně je posuvna plachta z Temu 1,5 x 5 m, myslím, že pro tyto účely ideální, protože se může sunout dle toho jak zrovna svítí. Mělo by stačit natáhnout ocelová lanka a dát ji tam",
+    "2026-05-09": "- podavač papír. utěrek nefunkční Vojta to už ví\n- jak mě někdo bude říkat že si zajistí obsluhu jako kamarády atd. tak budu říkat už zrovna že to nejde možná by bylo fajn to někde napsat do toho manuálu pro svatebčany že obsluho pouze přes nás \n- rozbitý 1x malej talířek, 3x sklenička šampuska (vybráno 200kč dal jsem Vojtovi)",
+    "2026-05-16": "Myslet na to, aby svatebčani odváželi tříděný odpad a hlavně aby třídili.\n\nNemam dobrou zkušenost, kdyz si svatebčani dělají sami maly úklid. Omezit to, co to jde.",
+    "2026-05-21": "Jsou 4 velké stoly, ale jen 7 velkých ubrusů, takže jsem musela brát v pátek oprat domů jeden velký po čtvrteční svatbě a v sobotu jim ho tam dopoledne nachystat na stoly > třeba došít jeden ubrus někde.\n\nHonza reakce: Eliško, prosím domluv se s mamkou na těch ubrusech (už mi něco o tom říkala, takže o tom asi ví, ale jen ať to nezapadne)\n\nMěla by být v baru nějaká základní lékarnička (minimálně naplást a dezinfekce, ženich se pořezal při rozbíjení taléřku.)\n\nJe mega bordel v úklidových potřebách, kuchyňských potřebách (hledat 20 min pytel do koše, nůž na krájení atd., to je fakt blbé).\n\nCo nejvíc bych omezila dávání podprdelníků, protože jsou polité a zašpiněné od jídla. Na rok 2027 bych je nenabízela upřímně vůbec, ať si prostě případně půjčí někde, pokud to budou chtít.\n\nNarážeče na pivo by za mě měly být v nějakém organizéru hned na baru, ať je v tom pořádek.\n",
+    "2026-05-23": "Velký kiks s ručníky: v 22:30 opravdu nechci řešit, že nejsou k dispozici ručníky. Třeba dořešit.\n\nMěl by se koupit gastro pojizdný vozík na nádobí, protože v tom vedru je to hodně náročné a ještě v takovém vysokém počtu lidí.\n\nV chill zóně je opravdu vedro přes den, ale s tím nic moc asi neuděláme, takže tam lidi moc přes den nebyli. \n\nNapadlo mě koupit 2 slunečníky na prostor vedle mlýnského kola, protože toho stínu je tam přes den opravdu málo. \n\nHučí hodně velká bílá lednice v kuchyni, Vojta řeší.\n\nHonza:\n- vozík koupíme (a v případě potřeby se vymění kolečka) - finální výběr vozíku poslat Kubovi do emailu, mně do kopie\n\n- ručníky - ručníky co nejrychleji doplníme, koupí se skříňky/komody na ručníky, tam se budou dávat v dostatečném počtu (ručníky pro stany, kam nedáváme ani prostěradla ani lůžkoviny, není vhodné řešení) na každou svatbu by tedy mělo být k dispozici 26 ručníků (16 stavení, 10 hlavní mlýnice), pokud by náhodou někdo potřeboval ze stanů, může si vzít samozřejmě taky, všechny ručníky se nikdy nepoužily/nepožijí\n\nslunečníky - já jsem pro, Vojta proti (vidí v tom riziko a prácu), domluvte se s Vojtou (v Hluku máme slunečníky navíc, můžou se tam vzít na zkoušku a uvidí se)\n\nLednice: kupuje se nová",
+    "2026-05-30": "V koupelně v mlýnici nefunguje dávkovač na papírovou roli.\nNa dámském wc bylo utrženo prkýnko, nevěsta už škodu uhradila přes qr. Z kauce strženy 200,- za rozbité sklo. Jinak večer na svatbě dost smrděl septik. Svatebčané si stěžovali na kamennou dlažbu před barem, že na ní dost zakopávali, i ti, kteří byli střízliví 😅 Dnes při úklidu jsem v pravém horním pokoji cítila moč a všimla jsem si fleků na dřevěných oblozkah, tak se bojím, že ve střeše nad tím pokojem si kuna udělala wc. Stan jsme s holkami složily a uklidily do dřevěného skladu. Bylo by fajn, kdyby se pro holky co uklízí,  udělaly klíče od mlýna. \nMimo úraz ženicha a pár situací, které jsme nemohli ovlivnit, bylo vše fajn, svatebčané ve finále spokojení, jen svatební fotky si musí dojet udělat dodatečně, až se ženich zahojí😂",
+    "2026-06-11": "Maximalne nadšení svatebčani a prvně kvalitně poblitý záchod (panský). No muže se stát. Holky ale uklidili skvěle a aplikovaná vůně to zpraví. \n\nPoznámka Eliška: za mě by tohle mělo být zkontrolováno kontaktní osobou dopředu před finálním převzetím areálu a měli by to uklidit oni, ne holky z úklidu..\n\nJinak teda pořád ten kanál u baru dost smrdí. ",
+    "2026-06-13": "Lednice gastro hrozne hlasitá - vyměnit idealne\nPodlaha pred barem - špatný stav\nRozbite dvě panakovky",
+    "2026-06-18": "Supr věc ten vozík na jídlo, ušetřilo nám to hodně. 👍🏻\n\nByl zde požadavek na to, aby byl v pokoji (kde je okno ala \"holubník\") závěs/roleta a síťka na hmyz, že si tam nemohli v noci vyvětrat a ráno tam bylo hodně světla.\n\nNějak se tam přemnožily mega muchy / hovada a je jich hrozně moc i v kuchyni. A pod novým zastřešením je hnízdo vosí. \n\nSlunečník se osvědčil, takže bych klidně za mě přidala. Ty vedra tam teď budou náročné. Možná i malý větrák do baru.\n\nJinak byli moc spokojení. 🤍",
+    "2026-08-08": "\n"
+  },
+  "weddingPhone": {
+    "2026-04-25": "737354083",
+    "2026-05-07": "736229675",
+    "2026-05-09": "777166184",
+    "2026-05-14": "776744616",
+    "2026-05-16": "605321073",
+    "2026-05-21": "721 930 814",
+    "2026-05-23": "733 210 554",
+    "2026-05-28": "777898427",
+    "2026-05-30": "731017927",
+    "2026-06-04": "606725698",
+    "2026-06-06": "744633003",
+    "2026-06-11": "778585913",
+    "2026-06-13": "720440344",
+    "2026-06-18": "606 952 988",
+    "2026-06-20": "774 852 016",
+    "2026-06-25": "604106577",
+    "2026-07-02": "603211414",
+    "2026-07-06": "773617682",
+    "2026-07-09": "773591738",
+    "2026-07-11": "774033286",
+    "2026-09-03": " 608925840",
+    "2027-07-03": "+420 777 323 833",
+    "2027-09-04": "+420 723 923 350"
+  },
+  "weddingRating": {
+    "2026-04-18": "green",
+    "2026-04-25": "green",
+    "2026-05-02": "green",
+    "2026-05-07": "green",
+    "2026-05-09": "green",
+    "2026-05-14": "green",
+    "2026-05-16": "orange",
+    "2026-05-21": "green",
+    "2026-05-23": "orange",
+    "2026-06-04": "green",
+    "2026-06-06": "green",
+    "2026-06-11": "green",
+    "2026-06-13": "green",
+    "2026-06-18": "green",
+    "2026-06-20": "green"
+  },
+  "weddingRentBalance": {
+    "2026-04-18": 30000,
+    "2026-04-25": 30000,
+    "2026-05-02": 30000,
+    "2026-05-07": 10000,
+    "2026-05-09": 30000,
+    "2026-05-14": 10000,
+    "2026-05-16": 30000,
+    "2026-05-21": 10000,
+    "2026-05-23": 30000,
+    "2026-05-28": 10000,
+    "2026-05-30": 30000,
+    "2026-06-04": 10000,
+    "2026-06-06": 30000,
+    "2026-06-11": 10000,
+    "2026-06-13": 30000,
+    "2026-06-18": 10000,
+    "2026-06-20": 30000,
+    "2026-06-25": 10000,
+    "2026-06-27": 20000,
+    "2026-07-02": 10000,
+    "2026-07-04": 30000,
+    "2026-07-06": 15000,
+    "2026-07-09": 10000,
+    "2026-07-11": 30000,
+    "2026-07-16": 10000,
+    "2026-07-18": 25000,
+    "2026-07-23": 10000,
+    "2026-07-25": 30000,
+    "2026-07-30": 10000,
+    "2026-08-01": 30000,
+    "2026-08-06": 10000,
+    "2026-08-08": 75000,
+    "2026-08-10": 20000,
+    "2026-08-13": 10000,
+    "2026-08-15": 30000,
+    "2026-08-20": 10000,
+    "2026-08-22": 30000,
+    "2026-08-27": 10000,
+    "2026-08-29": 30000,
+    "2026-09-03": 10000,
+    "2026-09-05": 20000,
+    "2026-09-07": 15000,
+    "2026-09-10": 10000,
+    "2026-09-12": 30000,
+    "2026-09-17": 10000,
+    "2026-09-19": 30000,
+    "2026-09-24": 30000,
+    "2026-09-26": 30000,
+    "2026-10-01": 10000,
+    "2026-10-03": 30000,
+    "2026-10-10": 30000
+  },
+  "weddingRentDeposit": {
+    "2026-04-18": 45000,
+    "2026-04-25": 45000,
+    "2026-05-02": 45000,
+    "2026-05-07": 45000,
+    "2026-05-09": 45000,
+    "2026-05-14": 45000,
+    "2026-05-16": 45000,
+    "2026-05-21": 45000,
+    "2026-05-23": 45000,
+    "2026-05-28": 45000,
+    "2026-05-30": 45000,
+    "2026-06-04": 45000,
+    "2026-06-06": 45000,
+    "2026-06-11": 35000,
+    "2026-06-13": 45000,
+    "2026-06-18": 45000,
+    "2026-06-20": 45000,
+    "2026-06-25": 45000,
+    "2026-06-27": 0,
+    "2026-07-02": 45000,
+    "2026-07-04": 45000,
+    "2026-07-06": 30000,
+    "2026-07-09": 45000,
+    "2026-07-11": 45000,
+    "2026-07-16": 45000,
+    "2026-07-18": 45000,
+    "2026-07-23": 45000,
+    "2026-07-25": 45000,
+    "2026-07-30": 45000,
+    "2026-08-01": 45000,
+    "2026-08-06": 45000,
+    "2026-08-08": 45000,
+    "2026-08-10": 30000,
+    "2026-08-13": 45000,
+    "2026-08-15": 45000,
+    "2026-08-20": 45000,
+    "2026-08-22": 45000,
+    "2026-08-27": 45000,
+    "2026-08-29": 45000,
+    "2026-09-03": 45000,
+    "2026-09-05": 0,
+    "2026-09-07": 30000,
+    "2026-09-10": 45000,
+    "2026-09-12": 45000,
+    "2026-09-17": 45000,
+    "2026-09-19": 45000,
+    "2026-09-24": 45000,
+    "2026-09-26": 45000,
+    "2026-10-01": 45000,
+    "2026-10-03": 45000,
+    "2026-10-10": 45000,
+    "2027-05-15": 50000,
+    "2027-05-29": 50000,
+    "2027-06-05": 50000,
+    "2027-06-19": 50000,
+    "2027-06-26": 50000,
+    "2027-07-03": 50000,
+    "2027-07-08": 50000,
+    "2027-07-10": 50000,
+    "2027-07-17": 50000,
+    "2027-07-24": 50000,
+    "2027-07-31": 50000,
+    "2027-08-12": 50000,
+    "2027-08-21": 50000,
+    "2027-09-04": 50000,
+    "2027-09-11": 50000,
+    "2027-09-18": 50000
+  }
+}

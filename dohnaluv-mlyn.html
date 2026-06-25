@@ -344,6 +344,7 @@
   <div class="tab" onclick="showTab('vyplaty')">💰 Výplaty 🔒</div>
   <div class="tab" onclick="showTab('crm')" style="display:none;">🤝 CRM 🔒</div>
   <div class="tab" onclick="showTab('todo')">✅ To-Do 🔒</div>
+  <div class="tab" onclick="showTab('svatebni')">⚙️ Admin 🔒</div>
 </div>
 
 <!-- ===================== PAGE: PŘEHLED ===================== -->
@@ -716,6 +717,19 @@
       <div id="crm-form-error" style="color:var(--red);font-size:0.85rem;display:none;"></div>
       <button class="btn" onclick="submitCrmForm()" style="width:100%;padding:11px;font-size:0.95rem;">Uložit svatbu</button>
     </div>
+  </div>
+</div>
+
+<!-- ===================== PAGE: ADMIN ===================== -->
+<div class="page" id="page-svatebni">
+  <div id="svatebni-lock-screen"></div>
+  <div id="svatebni-unlocked-content" style="display:none;">
+    <iframe
+      src="https://mmaatty.github.io/dohnaluv_mlyn_before_after/svatebni_sezona.html"
+      title="Admin"
+      loading="lazy"
+      style="width:100%; height:calc(100vh - 150px); min-height:600px; border:none; display:block;">
+    </iframe>
   </div>
 </div>
 
@@ -2607,6 +2621,45 @@ function checkPayrollPassword() {
   }
 }
 
+// ============================================================
+// SVATEBNÍ SEZÓNA LOCK
+// ============================================================
+const SVATEBNI_PASSWORD = 'matejhonza2026';
+let svatebniUnlocked = false;
+
+function renderSvatebniLock(errorMsg) {
+  document.getElementById('svatebni-unlocked-content').style.display = 'none';
+  document.getElementById('svatebni-lock-screen').innerHTML = `
+    <div class="lock-screen">
+      <div class="lock-icon">🔐</div>
+      <div class="lock-title">Sekce Admin je chráněna heslem</div>
+      <div class="lock-sub">Zadejte heslo pro zobrazení administrace</div>
+      <div class="lock-form">
+        <input class="lock-input" type="password" id="svatebni-pwd-input" placeholder="Heslo"
+          onkeydown="if(event.key==='Enter') checkSvatebniPassword()">
+        <button class="btn" onclick="checkSvatebniPassword()">Odemknout</button>
+      </div>
+      ${errorMsg ? `<div class="lock-error">❌ ${errorMsg}</div>` : ''}
+    </div>
+  `;
+  setTimeout(() => document.getElementById('svatebni-pwd-input')?.focus(), 50);
+}
+
+function checkSvatebniPassword() {
+  const val = document.getElementById('svatebni-pwd-input')?.value || '';
+  if (val === SVATEBNI_PASSWORD) {
+    svatebniUnlocked = true;
+    document.getElementById('svatebni-lock-screen').innerHTML = '';
+    document.getElementById('svatebni-unlocked-content').style.display = 'block';
+    document.querySelectorAll('.tab').forEach(t => {
+      if (t.textContent.includes('Admin')) t.innerHTML = '⚙️ Admin 🔓';
+    });
+  } else {
+    svatebniUnlocked = false;
+    renderSvatebniLock('Nesprávné heslo. Zkuste znovu.');
+  }
+}
+
 function lockPayroll() {
   payrollUnlocked = false;
   document.getElementById('payroll-unlocked-content').style.display = 'none';
@@ -3286,6 +3339,9 @@ function showTab(name) {
   if (name === 'todo') {
     if (todoUnlocked) renderTodos();
     else renderTodoLock();
+  }
+  if (name === 'svatebni') {
+    if (!svatebniUnlocked) renderSvatebniLock();
   }
 }
 

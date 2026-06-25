@@ -1,0 +1,1175 @@
+{
+  "weddings": {
+    "mqp4ukt8454b2": {
+      "cleaning": {
+        "note": "",
+        "startTime": ""
+      },
+      "contactEmail": "david.schoffer@cz.bosch.com",
+      "contactPhone": "",
+      "coordinator": "Matěj",
+      "coupleName": "Schoffer",
+      "date": "2026-08-15",
+      "finance": {
+        "note": ""
+      },
+      "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+      "id": "mqp4ukt8454b2",
+      "items": {
+        "calculation": {
+          "done": false,
+          "note": ""
+        },
+        "guestbook": {
+          "done": true,
+          "doneAt": 1782129138920,
+          "note": ""
+        },
+        "pay_caravan": {
+          "done": false,
+          "note": ""
+        },
+        "pay_cart_bar": {
+          "done": false,
+          "note": ""
+        },
+        "pay_cleaning": {
+          "done": false,
+          "note": ""
+        },
+        "pay_coffee": {
+          "done": false,
+          "note": ""
+        },
+        "pay_final_invoice": {
+          "done": false,
+          "note": ""
+        },
+        "pay_rent": {
+          "done": false,
+          "note": ""
+        },
+        "pay_staff": {
+          "done": false,
+          "note": ""
+        },
+        "thank_you": {
+          "done": false,
+          "note": ""
+        }
+      },
+      "sentAutomations": {
+        "auto_guestbook": "2026-06-22T11:52:18.920Z"
+      },
+      "serviceNames": [
+        "Monika Kenša",
+        "Jan Kenša",
+        "Petra Pospíšilová"
+      ]
+    },
+    "mqp4ukt863vvz": {
+      "cleaning": {
+        "note": "",
+        "startTime": ""
+      },
+      "contactEmail": "kackapomykalova@gmail.com",
+      "contactPhone": "",
+      "coordinator": "Matěj",
+      "coupleName": "Pomykalová",
+      "date": "2026-09-10",
+      "finance": {
+        "note": ""
+      },
+      "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+      "id": "mqp4ukt863vvz",
+      "items": {
+        "calculation": {
+          "done": false,
+          "note": ""
+        },
+        "guestbook": {
+          "done": false,
+          "note": ""
+        },
+        "pay_caravan": {
+          "done": false,
+          "note": ""
+        },
+        "pay_cart_bar": {
+          "done": false,
+          "note": ""
+        },
+        "pay_cleaning": {
+          "done": false,
+          "note": ""
+        },
+        "pay_coffee": {
+          "done": false,
+          "note": ""
+        },
+        "pay_final_invoice": {
+          "done": false,
+          "note": ""
+        },
+        "pay_rent": {
+          "done": false,
+          "note": ""
+        },
+        "pay_staff": {
+          "done": false,
+          "note": ""
+        },
+        "thank_you": {
+          "done": false,
+          "note": ""
+        }
+      },
+      "serviceNames": [
+        "Tomáš Grochal"
+      ],
+      "staffPlanned": 3
+    },
+    "mqp4ukt86zzzv": {
+      "cleaning": {
+        "note": "",
+        "startTime": ""
+      },
+      "contactEmail": "koliskova.andrea@gmail.com",
+      "contactPhone": "",
+      "coordinator": "Matěj",
+      "coupleName": "Kolísková",
+      "date": "2026-08-13",
+      "finance": {
+        "note": ""
+      },
+      "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+      "guests": 30,
+      "id": "mqp4ukt86zzzv",
+      "items": {
+        "calculation": {
+          "done": false,
+          "note": ""
+        },
+        "guestbook": {
+          "done": true,
+          "doneAt": 1782129138437,
+          "note": ""
+        },
+        "pay_caravan": {
+          "done": false,
+          "note": ""
+        },
+        "pay_cart_bar": {
+          "done": false,
+          "note": ""
+        },
+        "pay_cleaning": {
+          "done": false,
+          "note": ""
+        },
+        "pay_coffee": {
+          "done": false,
+          "note": ""
+        },
+        "pay_final_invoice": {
+          "done": false,
+          "note": ""
+        },
+        "pay_rent": {
+          "done": false,
+          "note": ""
+        },
+        "pay_staff": {
+          "done": false,
+          "note": ""
+        },
+        "thank_you": {
+          "done": false,
+          "note": ""
+        }
+      },
+      "sentAutomations": {
+        "auto_guestbook": "2026-06-22T11:52:18.436Z"
+      },
+      "serviceNames": [
+        "Monika Kenša",
+        "Jan Kenša",
+        "Tomáš Grochal",
+        "Petra Pospíšilová"
+      ],
+      "staffPlanned": 3
+    },
+    "mqp4ukt89utjr": {
+      "cleaning": {
+        "note": "",
+        "startTime": ""
+      },
+      "cleaningNames": [
+        "Petra Pospíšilová"
+      ],
+      "contactEmail": "galusciakova.z@gmail.com",
+      "contactPhone": "",
+      "coordinator": "Matěj",
+      "coupleName": "Galuščiaková",
+      "date": "2026-07-25",
+      "finance": {
+        "flatItems": [
+          {
+            "amount": 4000,
+            "label": "Maringotka"
+          }
+        ],
+        "note": "",
+        "shifts": [
+          {
+            "hours": 8,
+            "label": "Obsluha 1",
+            "people": 1,
+            "rate": 250
+          },
+          {
+            "hours": 8,
+            "label": "Obsluha 2",
+            "people": 1,
+            "rate": 250
+          },
+          {
+            "hours": 8,
+            "label": "Obsluha 3",
+            "people": 1,
+            "rate": 250
+          }
+        ]
+      },
+      "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+      "guests": 50,
+      "id": "mqp4ukt89utjr",
+      "items": {
+        "calculation": {
+          "done": false,
+          "note": ""
+        },
+        "guestbook": {
+          "done": true,
+          "doneAt": 1782129137944,
+          "note": ""
+        },
+        "pay_caravan": {
+          "done": false,
+          "note": ""
+        },
+        "pay_cart_bar": {
+          "done": false,
+          "note": ""
+        },
+        "pay_cleaning": {
+          "done": false,
+          "note": ""
+        },
+        "pay_coffee": {
+          "done": false,
+          "note": ""
+        },
+        "pay_final_invoice": {
+          "done": false,
+          "note": ""
+        },
+        "pay_rent": {
+          "done": false,
+          "note": ""
+        },
+        "pay_staff": {
+          "done": false,
+          "note": ""
+        },
+        "thank_you": {
+          "done": false,
+          "note": ""
+        }
+      },
+      "sentAutomations": {
+        "auto_guestbook": "2026-06-22T11:52:17.944Z"
+      },
+      "serviceNames": [
+        "Monika Kenša",
+        "Jan Kenša",
+        "Tereza Puršová",
+        "Tomáš Grochal",
+        "Petra Pospíšilová"
+      ],
+      "staffPlanned": 3
+    },
+    "mqp4ukt8f76qq": {
+      "cleaning": {
+        "note": "",
+        "startTime": ""
+      },
+      "contactEmail": "",
+      "contactPhone": "",
+      "coordinator": "Matěj",
+      "coupleName": "Kremr",
+      "date": "2026-08-20",
+      "finance": {
+        "note": ""
+      },
+      "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+      "guests": 70,
+      "id": "mqp4ukt8f76qq",
+      "items": {
+        "calculation": {
+          "done": false,
+          "note": ""
+        },
+        "guestbook": {
+          "done": true,
+          "doneAt": 1782137147646,
+          "note": ""
+        },
+        "pay_caravan": {
+          "done": false,
+          "note": ""
+        },
+        "pay_cart_bar": {
+          "done": false,
+          "note": ""
+        },
+        "pay_cleaning": {
+          "done": false,
+          "note": ""
+        },
+        "pay_coffee": {
+          "done": false,
+          "note": ""
+        },
+        "pay_final_invoice": {
+          "done": false,
+          "note": ""
+        },
+        "pay_rent": {
+          "done": false,
+          "note": ""
+        },
+        "pay_staff": {
+          "done": false,
+          "note": ""
+        },
+        "thank_you": {
+          "done": false,
+          "note": ""
+        }
+      },
+      "serviceNames": [
+        "Monika Kenša",
+        "Jan Kenša",
+        "Petra Pospíšilová"
+      ]
+    },
+    "mqp4ukt8j9t5a": {
+      "cleaning": {
+        "note": "",
+        "startTime": ""
+      },
+      "cleaningNames": [
+        "Tereza Puršová"
+      ],
+      "contactEmail": "z.valerie@seznam.cz",
+      "contactPhone": "",
+      "coordinator": "Matěj",
+      "coupleName": "Zbrožková",
+      "date": "2026-07-23",
+      "finance": {
+        "flatItems": [
+          {
+            "label": "Alko, nealko"
+          },
+          {
+            "amount": 4000,
+            "label": "Maringotka"
+          },
+          {
+            "amount": 4000,
+            "label": "Maringotka"
+          },
+          {
+            "amount": 1500,
+            "label": "Káva"
+          },
+          {
+            "amount": 10000,
+            "label": "Doplatek nájem"
+          },
+          {
+            "label": "Catering"
+          }
+        ],
+        "note": "",
+        "shifts": [
+          {
+            "hours": 8,
+            "label": "Obsluha 1",
+            "people": 1,
+            "rate": 250
+          },
+          {
+            "hours": 8,
+            "label": "Obsluha 2",
+            "people": 1,
+            "rate": 250
+          },
+          {
+            "hours": 8,
+            "label": "Obsluha 3",
+            "people": 1,
+            "rate": 250
+          },
+          {
+            "hours": 10,
+            "label": "Obsluha 4",
+            "people": 1,
+            "rate": 250
+          },
+          {
+            "hours": 8,
+            "label": "Obsluha 5",
+            "people": 1,
+            "rate": 250
+          }
+        ]
+      },
+      "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+      "guests": 75,
+      "id": "mqp4ukt8j9t5a",
+      "items": {
+        "calculation": {
+          "done": false,
+          "note": ""
+        },
+        "guestbook": {
+          "done": true,
+          "doneAt": 1782129137319,
+          "note": ""
+        },
+        "pay_caravan": {
+          "done": false,
+          "note": ""
+        },
+        "pay_cart_bar": {
+          "done": false,
+          "note": ""
+        },
+        "pay_cleaning": {
+          "done": false,
+          "note": ""
+        },
+        "pay_coffee": {
+          "done": false,
+          "note": ""
+        },
+        "pay_final_invoice": {
+          "done": false,
+          "note": ""
+        },
+        "pay_rent": {
+          "done": false,
+          "note": ""
+        },
+        "pay_staff": {
+          "done": false,
+          "note": ""
+        },
+        "thank_you": {
+          "done": false,
+          "note": ""
+        }
+      },
+      "rentBalance": 10000,
+      "rentDeposit": 45000,
+      "sentAutomations": {
+        "auto_guestbook": "2026-06-22T11:52:17.319Z"
+      },
+      "serviceNames": [
+        "Tomáš Grochal",
+        "Petra Pospíšilová",
+        "Monika Kenša",
+        "Jan Kenša"
+      ],
+      "staffPlanned": 5
+    },
+    "mqp4ukt8jru25": {
+      "cleaning": {
+        "note": "",
+        "startTime": ""
+      },
+      "cleaningNames": [
+        "Petra Pospíšilová",
+        "Lucka Dohnalová",
+        "Monika Kenša"
+      ],
+      "contactEmail": "",
+      "contactPhone": "",
+      "coordinator": "Matěj",
+      "coupleName": "Svatba 16-05-2026",
+      "date": "2026-05-16",
+      "finance": {
+        "note": ""
+      },
+      "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+      "guests": 50,
+      "id": "mqp4ukt8jru25",
+      "items": {
+        "calculation": {
+          "done": true,
+          "doneAt": 1782278422661,
+          "note": ""
+        },
+        "guestbook": {
+          "done": true,
+          "doneAt": 1782278423534,
+          "note": ""
+        },
+        "pay_caravan": {
+          "done": true,
+          "doneAt": 1782278419373,
+          "note": ""
+        },
+        "pay_cart_bar": {
+          "done": true,
+          "doneAt": 1782278419909,
+          "note": ""
+        },
+        "pay_cleaning": {
+          "done": true,
+          "doneAt": 1782278420350,
+          "note": ""
+        },
+        "pay_coffee": {
+          "done": true,
+          "doneAt": 1782278418414,
+          "note": ""
+        },
+        "pay_final_invoice": {
+          "done": true,
+          "doneAt": 1782278422246,
+          "note": ""
+        },
+        "pay_rent": {
+          "done": true,
+          "doneAt": 1782278417861,
+          "note": ""
+        },
+        "pay_staff": {
+          "done": true,
+          "doneAt": 1782278421022,
+          "note": ""
+        },
+        "thank_you": {
+          "done": true,
+          "doneAt": 1782278421848,
+          "note": ""
+        }
+      },
+      "serviceNames": [
+        "Monika Kenša",
+        "Jan Kenša",
+        "Tomáš Grochal",
+        "Petra Grochalová",
+        "Petra Pospíšilová"
+      ],
+      "staffPlanned": 3
+    },
+    "mqp4ukt8ki3lu": {
+      "cleaning": {
+        "note": "",
+        "startTime": ""
+      },
+      "cleaningNames": [
+        "Tereza Puršová"
+      ],
+      "contactEmail": "",
+      "contactPhone": "",
+      "coordinator": "Matěj",
+      "coupleName": "Svatba 11-06-2026",
+      "date": "2026-06-11",
+      "finance": {
+        "note": ""
+      },
+      "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+      "id": "mqp4ukt8ki3lu",
+      "items": {
+        "calculation": {
+          "done": true,
+          "doneAt": 1782278435478,
+          "note": ""
+        },
+        "guestbook": {
+          "done": true,
+          "doneAt": 1782278436085,
+          "note": ""
+        },
+        "pay_caravan": {
+          "done": true,
+          "doneAt": 1782278430254,
+          "note": ""
+        },
+        "pay_cart_bar": {
+          "done": true,
+          "doneAt": 1782278430669,
+          "note": ""
+        },
+        "pay_cleaning": {
+          "done": true,
+          "doneAt": 1782278432670,
+          "note": ""
+        },
+        "pay_coffee": {
+          "done": true,
+          "doneAt": 1782278429653,
+          "note": ""
+        },
+        "pay_final_invoice": {
+          "done": true,
+          "doneAt": 1782278434927,
+          "note": ""
+        },
+        "pay_rent": {
+          "done": true,
+          "doneAt": 1782278429087,
+          "note": ""
+        },
+        "pay_staff": {
+          "done": true,
+          "doneAt": 1782278433343,
+          "note": ""
+        },
+        "thank_you": {
+          "done": true,
+          "doneAt": 1782278434318,
+          "note": ""
+        }
+      },
+      "serviceNames": [
+        "Monika Kenša",
+        "Tereza Puršová",
+        "Tomáš Grochal"
+      ]
+    },
+    "mqp4ukt8pjj6e": {
+      "cleaning": {
+        "note": "",
+        "startTime": ""
+      },
+      "cleaningNames": [
+        "Petra Grochalová",
+        "Kamča Zavadilová",
+        "Tereza Puršová"
+      ],
+      "contactEmail": "",
+      "contactPhone": "",
+      "coordinator": "Matěj",
+      "coupleName": "Svatba 14-05-2026",
+      "date": "2026-05-14",
+      "finance": {
+        "note": ""
+      },
+      "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+      "guests": 65,
+      "id": "mqp4ukt8pjj6e",
+      "items": {
+        "calculation": {
+          "done": true,
+          "doneAt": 1782278411960,
+          "note": ""
+        },
+        "guestbook": {
+          "done": true,
+          "doneAt": 1782278412511,
+          "note": ""
+        },
+        "pay_caravan": {
+          "done": true,
+          "doneAt": 1782278408182,
+          "note": ""
+        },
+        "pay_cart_bar": {
+          "done": true,
+          "doneAt": 1782278408630,
+          "note": ""
+        },
+        "pay_cleaning": {
+          "done": true,
+          "doneAt": 1782278409094,
+          "note": ""
+        },
+        "pay_coffee": {
+          "done": true,
+          "doneAt": 1782278407576,
+          "note": ""
+        },
+        "pay_final_invoice": {
+          "done": true,
+          "doneAt": 1782278411394,
+          "note": ""
+        },
+        "pay_rent": {
+          "done": true,
+          "doneAt": 1782278407039,
+          "note": ""
+        },
+        "pay_staff": {
+          "done": true,
+          "doneAt": 1782278409750,
+          "note": ""
+        },
+        "thank_you": {
+          "done": true,
+          "doneAt": 1782278410983,
+          "note": ""
+        }
+      },
+      "serviceNames": [
+        "Monika Kenša",
+        "Tereza Puršová",
+        "Tomáš Grochal",
+        "Petra Pospíšilová"
+      ],
+      "staffPlanned": 4
+    },
+    "mqp4ukt8q52cb": {
+      "cleaning": {
+        "note": "",
+        "startTime": ""
+      },
+      "cleaningNames": [
+        "Tereza Puršová",
+        "Petra Pospíšilová"
+      ],
+      "contactEmail": "",
+      "contactPhone": "",
+      "coordinator": "Matěj",
+      "coupleName": "Svatba 13-06-2026",
+      "date": "2026-06-13",
+      "finance": {
+        "note": ""
+      },
+      "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+      "guests": 90,
+      "id": "mqp4ukt8q52cb",
+      "items": {
+        "calculation": {
+          "done": true,
+          "doneAt": 1782278447140,
+          "note": ""
+        },
+        "guestbook": {
+          "done": true,
+          "doneAt": 1782278446495,
+          "note": ""
+        },
+        "pay_caravan": {
+          "done": true,
+          "doneAt": 1782278443878,
+          "note": ""
+        },
+        "pay_cart_bar": {
+          "done": true,
+          "doneAt": 1782278444661,
+          "note": ""
+        },
+        "pay_cleaning": {
+          "done": true,
+          "doneAt": 1782278445206,
+          "note": ""
+        },
+        "pay_coffee": {
+          "done": true,
+          "doneAt": 1782278443285,
+          "note": ""
+        },
+        "pay_final_invoice": {
+          "done": true,
+          "doneAt": 1782278447700,
+          "note": ""
+        },
+        "pay_rent": {
+          "done": true,
+          "doneAt": 1782278442053,
+          "note": ""
+        },
+        "pay_staff": {
+          "done": true,
+          "doneAt": 1782278445556,
+          "note": ""
+        },
+        "thank_you": {
+          "done": true,
+          "doneAt": 1782278448316,
+          "note": ""
+        }
+      },
+      "serviceNames": [
+        "Monika Kenša",
+        "Jan Kenša",
+        "Tomáš Grochal",
+        "Petra Grochalová",
+        "Petra Pospíšilová"
+      ],
+      "staffPlanned": 5
+    },
+    "mqp4ukt8t6fax": {
+      "cleaning": {
+        "note": "",
+        "startTime": ""
+      },
+      "contactEmail": "markova.el78@gmail.com",
+      "contactPhone": "",
+      "coordinator": "Matěj",
+      "coupleName": "Alinče",
+      "date": "2026-08-22",
+      "finance": {
+        "note": ""
+      },
+      "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+      "guests": 60,
+      "id": "mqp4ukt8t6fax",
+      "items": {
+        "calculation": {
+          "done": false,
+          "note": ""
+        },
+        "guestbook": {
+          "done": true,
+          "note": ""
+        },
+        "pay_caravan": {
+          "done": false,
+          "note": ""
+        },
+        "pay_cart_bar": {
+          "done": false,
+          "note": ""
+        },
+        "pay_cleaning": {
+          "done": false,
+          "note": ""
+        },
+        "pay_coffee": {
+          "done": false,
+          "note": ""
+        },
+        "pay_final_invoice": {
+          "done": false,
+          "note": ""
+        },
+        "pay_rent": {
+          "done": false,
+          "note": ""
+        },
+        "pay_staff": {
+          "done": false,
+          "note": ""
+        },
+        "thank_you": {
+          "done": false,
+          "note": ""
+        }
+      },
+      "sentAutomations": {
+        "auto_guestbook": "2026-06-24T05:35:43.794Z"
+      },
+      "serviceNames": [
+        "Petra Pospíšilová",
+        "Monika Kenša",
+        "Jan Kenša"
+      ],
+      "staffPlanned": 2
+    },
+    "mqp4ukt8u43ir": {
+      "cleaning": {
+        "note": "",
+        "startTime": ""
+      },
+      "contactEmail": "unka.valova@gmail.com",
+      "contactPhone": "",
+      "coordinator": "Matěj",
+      "coupleName": "Valová",
+      "date": "2026-09-12",
+      "finance": {
+        "note": ""
+      },
+      "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+      "id": "mqp4ukt8u43ir",
+      "items": {
+        "calculation": {
+          "done": false,
+          "note": ""
+        },
+        "guestbook": {
+          "done": false,
+          "note": ""
+        },
+        "pay_caravan": {
+          "done": false,
+          "note": ""
+        },
+        "pay_cart_bar": {
+          "done": false,
+          "note": ""
+        },
+        "pay_cleaning": {
+          "done": false,
+          "note": ""
+        },
+        "pay_coffee": {
+          "done": false,
+          "note": ""
+        },
+        "pay_final_invoice": {
+          "done": false,
+          "note": ""
+        },
+        "pay_rent": {
+          "done": false,
+          "note": ""
+        },
+        "pay_staff": {
+          "done": false,
+          "note": ""
+        },
+        "thank_you": {
+          "done": false,
+          "note": ""
+        }
+      },
+      "serviceNames": [
+        "Monika Kenša",
+        "Jan Kenša",
+        "Tomáš Grochal",
+        "Petra Grochalová"
+      ],
+      "staffPlanned": 3
+    },
+    "mqp4ukt8xsup2": {
+      "cleaning": {
+        "note": "",
+        "startTime": ""
+      },
+      "cleaningNames": [
+        "Petra Grochalová",
+        "Petra Pospíšilová",
+        "Kamča Zavadilová",
+        "Lenka Helísková",
+        "Monika Kenša"
+      ],
+      "contactEmail": "",
+      "contactPhone": "",
+      "coordinator": "Matěj",
+      "coupleName": "Svatba 25-04-2026",
+      "date": "2026-04-25",
+      "finance": {
+        "note": "",
+        "shifts": [
+          {
+            "hours": 8,
+            "label": "Obsluha 1",
+            "people": 1,
+            "rate": 250
+          },
+          {
+            "hours": 8,
+            "label": "Obsluha 2",
+            "people": 1,
+            "rate": 250
+          },
+          {
+            "hours": 8,
+            "label": "Obsluha 3",
+            "people": 1,
+            "rate": 250
+          },
+          {
+            "hours": 8,
+            "label": "Obsluha 4",
+            "people": 1,
+            "rate": 250
+          }
+        ]
+      },
+      "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+      "guests": 60,
+      "id": "mqp4ukt8xsup2",
+      "items": {
+        "calculation": {
+          "done": true,
+          "doneAt": 1782232945621,
+          "note": ""
+        },
+        "guestbook": {
+          "done": true,
+          "doneAt": 1782232944450,
+          "note": ""
+        },
+        "pay_caravan": {
+          "done": true,
+          "doneAt": 1782232953627,
+          "note": ""
+        },
+        "pay_cart_bar": {
+          "done": true,
+          "doneAt": 1782232961616,
+          "note": ""
+        },
+        "pay_cleaning": {
+          "done": true,
+          "doneAt": 1782232963751,
+          "note": ""
+        },
+        "pay_coffee": {
+          "done": true,
+          "doneAt": 1782232952574,
+          "note": ""
+        },
+        "pay_final_invoice": {
+          "done": true,
+          "doneAt": 1782232946605,
+          "note": ""
+        },
+        "pay_rent": {
+          "done": true,
+          "doneAt": 1782232951573,
+          "note": ""
+        },
+        "pay_staff": {
+          "done": true,
+          "doneAt": 1782232959112,
+          "note": ""
+        },
+        "thank_you": {
+          "done": true,
+          "doneAt": 1782232949240,
+          "note": ""
+        }
+      },
+      "serviceNames": [
+        "Matěj Dohnal",
+        "Petra Pospíšilová",
+        "Tereza Puršová",
+        "Lenka Helísková"
+      ],
+      "staffPlanned": 4
+    },
+    "mqp6c20xzalhn": {
+      "cleaning": {
+        "note": "",
+        "staffPlanned": 4,
+        "startTime": "16:00"
+      },
+      "contactEmail": "matej.orun@gmail.com",
+      "contactPhone": "",
+      "coordinator": "Matěj",
+      "coupleName": "TEST",
+      "date": "2026-07-03",
+      "finance": {
+        "flatItems": [
+          {
+            "amount": 2500,
+            "label": "Úklid paušál"
+          },
+          {
+            "amount": 4000,
+            "label": "Maringotka"
+          }
+        ],
+        "note": "test test test",
+        "shifts": [
+          {
+            "hours": 8,
+            "label": "Obsluha 1",
+            "people": 1,
+            "rate": 250
+          },
+          {
+            "hours": 8,
+            "label": "Obsluha 2",
+            "people": 1,
+            "rate": 250
+          },
+          {
+            "hours": 8,
+            "label": "Obsluha 3",
+            "people": 1,
+            "rate": 250
+          },
+          {
+            "hours": 8,
+            "label": "Obsluha 4",
+            "people": 1,
+            "rate": 250
+          },
+          {
+            "hours": 8,
+            "label": "Obsluha 5",
+            "people": 1,
+            "rate": 250
+          },
+          {
+            "hours": 8,
+            "label": "Obsluha 6",
+            "people": 1,
+            "rate": 250
+          }
+        ]
+      },
+      "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+      "guests": 300,
+      "id": "mqp6c20xzalhn",
+      "items": {
+        "calculation": {
+          "done": false,
+          "note": ""
+        },
+        "guestbook": {
+          "done": true,
+          "note": ""
+        },
+        "pay_caravan": {
+          "done": false,
+          "note": ""
+        },
+        "pay_cart_bar": {
+          "done": false,
+          "note": ""
+        },
+        "pay_cleaning": {
+          "done": false,
+          "note": ""
+        },
+        "pay_coffee": {
+          "done": false,
+          "note": ""
+        },
+        "pay_final_invoice": {
+          "done": false,
+          "note": ""
+        },
+        "pay_rent": {
+          "done": false,
+          "note": ""
+        },
+        "pay_staff": {
+          "done": false,
+          "note": ""
+        },
+        "thank_you": {
+          "done": false,
+          "note": ""
+        }
+      },
+      "rentBalance": 10000,
+      "rentDeposit": 35000,
+      "sentAutomations": {
+        "auto_guestbook": "2026-06-23T09:05:31.723Z"
+      },
+      "staffPlanned": 6
+    }
+  }
+}

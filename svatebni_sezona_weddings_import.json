@@ -1,0 +1,4984 @@
+{
+ "w20260418": {
+  "id": "w20260418",
+  "coupleName": "Svatba 18. 4. 2026",
+  "date": "2026-04-18",
+  "coordinator": "Honza + Verča",
+  "guests": 100,
+  "staffPlanned": 5,
+  "serviceNames": [
+   "Lenka Helísková",
+   "Jan Kenša",
+   "Monika Kenša",
+   "Petra Pospíšilová",
+   "Veronika Šimčíková"
+  ],
+  "cleaningNames": [
+   "Monika Kenša",
+   "Petra Pospíšilová",
+   "Lenka Helísková",
+   "Lucka Dohnalová"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260425": {
+  "id": "w20260425",
+  "coupleName": "Pospěch",
+  "date": "2026-04-25",
+  "coordinator": "Matěj",
+  "guests": 60,
+  "staffPlanned": 4,
+  "serviceNames": [
+   "Matěj Dohnal",
+   "Petra Pospíšilová",
+   "Tereza Puršová",
+   "Lenka Helísková"
+  ],
+  "cleaningNames": [
+   "Petra Grochalová",
+   "Petra Pospíšilová",
+   "Kamča Zavadilová",
+   "Monika Kenša"
+  ],
+  "contactPhone": "737354083",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260502": {
+  "id": "w20260502",
+  "coupleName": "Svatba 2. 5. 2026",
+  "date": "2026-05-02",
+  "coordinator": "Honza + Verča",
+  "guests": 60,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Veronika Šimčíková",
+   "Sandra Nováková",
+   "Klára Nováková",
+   "Jan Rusňák"
+  ],
+  "cleaningNames": [
+   "Monika Kenša",
+   "Lenka Helísková",
+   "Petra Grochalová"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260507": {
+  "id": "w20260507",
+  "coupleName": "Vašťák Jakub",
+  "date": "2026-05-07",
+  "coordinator": "Grochy",
+  "guests": 30,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Tomáš Grochal",
+   "Monika Kenša",
+   "Lenka Helísková"
+  ],
+  "cleaningNames": [
+   "Monika Kenša",
+   "Kamča Zavadilová",
+   "Lenka Helísková",
+   "Lucka Dohnalová"
+  ],
+  "contactPhone": "736229675",
+  "contactEmail": "jakub.vastak@seznam.cz",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260509": {
+  "id": "w20260509",
+  "coupleName": "Judasová Jana",
+  "date": "2026-05-09",
+  "coordinator": "Grochy",
+  "guests": 80,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Jan Kenša",
+   "Tomáš Grochal"
+  ],
+  "cleaningNames": [
+   "Petra Pospíšilová",
+   "Lenka Helísková",
+   "Lucka Dohnalová",
+   "Petra Grochalová"
+  ],
+  "contactPhone": "777166184",
+  "contactEmail": "j.judasova@seznam.cz",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260514": {
+  "id": "w20260514",
+  "coupleName": "Větříčková",
+  "date": "2026-05-14",
+  "coordinator": "Matěj",
+  "guests": 65,
+  "staffPlanned": 4,
+  "serviceNames": [
+   "Monika Kenša",
+   "Tereza Puršová",
+   "Tomáš Grochal",
+   "Petra Pospíšilová"
+  ],
+  "cleaningNames": [
+   "Petra Grochalová",
+   "Kamča Zavadilová",
+   "Tereza Puršová",
+   "Elena Hluk"
+  ],
+  "contactPhone": "776744616",
+  "contactEmail": "tereza.vetrickova@gmail.com",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260516": {
+  "id": "w20260516",
+  "coupleName": "Vojáčková",
+  "date": "2026-05-16",
+  "coordinator": "Matěj",
+  "guests": 50,
+  "staffPlanned": 3,
+  "serviceNames": [
+   "Monika Kenša",
+   "Jan Kenša",
+   "Petra Pospíšilová"
+  ],
+  "cleaningNames": [
+   "Petra Pospíšilová",
+   "Lucka Dohnalová",
+   "Monika Kenša",
+   "Veronika Šimčíková"
+  ],
+  "contactPhone": "605321073",
+  "contactEmail": "vojackovamichaela@gmail.com",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260521": {
+  "id": "w20260521",
+  "coupleName": "Přikrylová",
+  "date": "2026-05-21",
+  "coordinator": "Eliška a Vojta",
+  "guests": 70,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Viktorie Habartová",
+   "Tomáš Grochal",
+   "Eliška Dohnalová",
+   "Daniela Habartová"
+  ],
+  "cleaningNames": [
+   "Monika Kenša",
+   "Tereza Puršová",
+   "Tomáš Grochal",
+   "Jana Dohnalová"
+  ],
+  "contactPhone": "721 930 814",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260523": {
+  "id": "w20260523",
+  "coupleName": "Dopitová",
+  "date": "2026-05-23",
+  "coordinator": "Eliška a Vojta",
+  "guests": 90,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Tereza Puršová",
+   "Eliška Dohnalová",
+   "Viktorie Habartová",
+   "Vojta Dohnal",
+   "Tereza Jordánová",
+   "Daniela Habartová"
+  ],
+  "cleaningNames": [
+   "Petra Pospíšilová",
+   "Tereza Puršová",
+   "Petra Grochalová",
+   "Kamča Zavadilová"
+  ],
+  "contactPhone": "733 210 554",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260528": {
+  "id": "w20260528",
+  "coupleName": "Kubešová",
+  "date": "2026-05-28",
+  "coordinator": "Honza + Verča",
+  "guests": 30,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Tomáš Grochal",
+   "Monika Kenša"
+  ],
+  "cleaningNames": [
+   "Monika Kenša",
+   "Lucka Dohnalová",
+   "Petra Grochalová",
+   "Elena Hluk"
+  ],
+  "contactPhone": "777898427",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260530": {
+  "id": "w20260530",
+  "coupleName": "Pištěková",
+  "date": "2026-05-30",
+  "coordinator": "Honza + Verča",
+  "guests": 45,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Eva Janováčová",
+   "Veronika Šimčíková",
+   "Petra Grochalová"
+  ],
+  "cleaningNames": [
+   "Monika Kenša",
+   "Petra Pospíšilová",
+   "Veronika Šimčíková",
+   "Tereza Puršová"
+  ],
+  "contactPhone": "731017927",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260604": {
+  "id": "w20260604",
+  "coupleName": "Šlancarová Radka",
+  "date": "2026-06-04",
+  "coordinator": "Grochy",
+  "guests": 80,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Tomáš Grochal",
+   "Monika Kenša",
+   "Tereza Puršová",
+   "Viktorie Habartová"
+  ],
+  "cleaningNames": [
+   "Petra Grochalová",
+   "Kamča Zavadilová",
+   "Anežka Suchánková"
+  ],
+  "contactPhone": "606725698",
+  "contactEmail": "slancarova@gmail.com",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260606": {
+  "id": "w20260606",
+  "coupleName": "Rája Jiří",
+  "date": "2026-06-06",
+  "coordinator": "Grochy",
+  "guests": 80,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Monika Kenša",
+   "Jan Kenša",
+   "Tomáš Grochal",
+   "Petra Grochalová"
+  ],
+  "cleaningNames": [
+   "Monika Kenša",
+   "Tereza Puršová",
+   "Petra Pospíšilová"
+  ],
+  "contactPhone": "744633003",
+  "contactEmail": "jiri.raja@gmail.com",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260611": {
+  "id": "w20260611",
+  "coupleName": "Ludíková",
+  "date": "2026-06-11",
+  "coordinator": "Matěj",
+  "guests": null,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Monika Kenša",
+   "Tereza Puršová",
+   "Tomáš Grochal",
+   "Eva Janováčová"
+  ],
+  "cleaningNames": [
+   "Elena Hluk",
+   "Anežka Suchánková"
+  ],
+  "contactPhone": "778585913",
+  "contactEmail": "hanaludikova@gmail.com",
+  "rentDeposit": 35000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260613": {
+  "id": "w20260613",
+  "coupleName": "Felt",
+  "date": "2026-06-13",
+  "coordinator": "Matěj",
+  "guests": 90,
+  "staffPlanned": 5,
+  "serviceNames": [
+   "Monika Kenša",
+   "Jan Kenša",
+   "Petra Pospíšilová"
+  ],
+  "cleaningNames": [
+   "Tereza Puršová",
+   "Petra Pospíšilová",
+   "Kamča Zavadilová",
+   "Monika Kenša"
+  ],
+  "contactPhone": "720440344",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260618": {
+  "id": "w20260618",
+  "coupleName": "Foltýnová",
+  "date": "2026-06-18",
+  "coordinator": "Eliška a Vojta",
+  "guests": 60,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Daniela Habartová",
+   "Eliška Dohnalová",
+   "Vojta Dohnal",
+   "Viktorie Habartová"
+  ],
+  "cleaningNames": [
+   "Monika Kenša",
+   "Elena Hluk",
+   "Petra Grochalová",
+   "Anežka Suchánková"
+  ],
+  "contactPhone": "606 952 988",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260620": {
+  "id": "w20260620",
+  "coupleName": "Wachtel",
+  "date": "2026-06-20",
+  "coordinator": "Eliška a Vojta",
+  "guests": 50,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Eliška Dohnalová",
+   "Viktorie Habartová",
+   "Vojta Dohnal",
+   "Tereza Jordánová"
+  ],
+  "cleaningNames": [
+   "Monika Kenša",
+   "Eliška Dohnalová",
+   "Veronika Šimčíková",
+   "Petra Grochalová"
+  ],
+  "contactPhone": "774 852 016",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260625": {
+  "id": "w20260625",
+  "coupleName": "Žajdlíková",
+  "date": "2026-06-25",
+  "coordinator": "Honza + Verča",
+  "guests": 80,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Tomáš Grochal",
+   "Eliška Dohnalová",
+   "Viktorie Habartová",
+   "Daniela Habartová",
+   "Romana Habartová"
+  ],
+  "cleaningNames": [
+   "Monika Kenša",
+   "Elena Hluk",
+   "Kamča Zavadilová",
+   "Petra Grochalová"
+  ],
+  "contactPhone": "604106577",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260627": {
+  "id": "w20260627",
+  "coupleName": "Lacková",
+  "date": "2026-06-27",
+  "coordinator": "Honza + Verča",
+  "guests": null,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Veronika Šimčíková",
+   "Jana Vavrušková",
+   "Hana Bystřická",
+   "Jana Taláková"
+  ],
+  "cleaningNames": [
+   "Monika Kenša",
+   "Petra Pospíšilová",
+   "Tereza Puršová",
+   "Petra Grochalová"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 0,
+  "rentBalance": 20000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260702": {
+  "id": "w20260702",
+  "coupleName": "Netopilová",
+  "date": "2026-07-02",
+  "coordinator": "Honza + Verča",
+  "guests": 80,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Tomáš Grochal",
+   "Veronika Šimčíková",
+   "Eva Janováčová"
+  ],
+  "cleaningNames": [
+   "Monika Kenša",
+   "Elena Hluk",
+   "Anežka Suchánková",
+   "Eliška Dohnalová"
+  ],
+  "contactPhone": "603211414",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260704": {
+  "id": "w20260704",
+  "coupleName": "Záruba",
+  "date": "2026-07-04",
+  "coordinator": "Honza + Verča",
+  "guests": 70,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Jan Kenša",
+   "Monika Kenša",
+   "Petra Pospíšilová",
+   "Veronika Šimčíková"
+  ],
+  "cleaningNames": [
+   "Tereza Puršová",
+   "Petra Pospíšilová",
+   "Lenka Helísková"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260706": {
+  "id": "w20260706",
+  "coupleName": "Malinová",
+  "date": "2026-07-06",
+  "coordinator": "Honza + Verča",
+  "guests": 80,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Veronika Šimčíková",
+   "Eva Janováčová",
+   "Jana Taláková"
+  ],
+  "cleaningNames": [
+   "Anežka Suchánková",
+   "Lenka Helísková",
+   "Jana Taláková",
+   "Eliška Dohnalová"
+  ],
+  "contactPhone": "773617682",
+  "contactEmail": "",
+  "rentDeposit": 30000,
+  "rentBalance": 15000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260709": {
+  "id": "w20260709",
+  "coupleName": "Petr Novák a Gabriela Hadrabová",
+  "date": "2026-07-09",
+  "coordinator": "Grochy",
+  "guests": 45,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Monika Kenša",
+   "Jan Kenša",
+   "Tomáš Grochal"
+  ],
+  "cleaningNames": [
+   "Elena Hluk",
+   "Tereza Puršová",
+   "Anežka Suchánková",
+   "Lenka Helísková"
+  ],
+  "contactPhone": "773591738",
+  "contactEmail": "p_novak@outlook.com",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260711": {
+  "id": "w20260711",
+  "coupleName": "Stehlíková Adéla",
+  "date": "2026-07-11",
+  "coordinator": "Grochy",
+  "guests": 80,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Monika Kenša",
+   "Jan Kenša",
+   "Kamča Zavadilová",
+   "Tomáš Grochal"
+  ],
+  "cleaningNames": [
+   "Monika Kenša",
+   "Tereza Puršová",
+   "Petra Grochalová",
+   "Petra Pospíšilová"
+  ],
+  "contactPhone": "774033286",
+  "contactEmail": "adelastehlikova@seznam.cz",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260716": {
+  "id": "w20260716",
+  "coupleName": "Leskovjan, 732 486 255",
+  "date": "2026-07-16",
+  "coordinator": "Eliška a Vojta",
+  "guests": 85,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Eliška Dohnalová",
+   "Viktorie Habartová",
+   "Vojta Dohnal",
+   "Tereza Jordánová",
+   "Daniela Habartová",
+   "Romana Habartová"
+  ],
+  "cleaningNames": [
+   "Monika Kenša",
+   "Elena Hluk",
+   "Lenka Helísková",
+   "Jana Taláková"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260718": {
+  "id": "w20260718",
+  "coupleName": "Dostálek, Juřičková 734 654 647",
+  "date": "2026-07-18",
+  "coordinator": "Eliška a Vojta",
+  "guests": 60,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Viktorie Habartová",
+   "Daniela Habartová"
+  ],
+  "cleaningNames": [
+   "Monika Kenša",
+   "Petra Pospíšilová",
+   "Petra Grochalová",
+   "Lenka Helísková"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 25000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260723": {
+  "id": "w20260723",
+  "coupleName": "Zbrožková",
+  "date": "2026-07-23",
+  "coordinator": "Matěj",
+  "guests": 75,
+  "staffPlanned": 5,
+  "serviceNames": [
+   "Tomáš Grochal",
+   "Petra Pospíšilová",
+   "Jan Kenša",
+   "Monika Kenša"
+  ],
+  "cleaningNames": [
+   "Tereza Puršová",
+   "Elena Hluk",
+   "Lenka Helísková",
+   "Jana Taláková"
+  ],
+  "contactPhone": "",
+  "contactEmail": "z.valerie@seznam.cz",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260725": {
+  "id": "w20260725",
+  "coupleName": "Galuščiaková",
+  "date": "2026-07-25",
+  "coordinator": "Matěj",
+  "guests": 50,
+  "staffPlanned": 3,
+  "serviceNames": [
+   "Monika Kenša",
+   "Jan Kenša",
+   "Tereza Puršová",
+   "Tomáš Grochal",
+   "Petra Pospíšilová"
+  ],
+  "cleaningNames": [
+   "Petra Pospíšilová",
+   "Tereza Puršová",
+   "Petra Grochalová",
+   "Lenka Helísková"
+  ],
+  "contactPhone": "",
+  "contactEmail": "galusciakova.z@gmail.com",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260730": {
+  "id": "w20260730",
+  "coupleName": "Rolenc",
+  "date": "2026-07-30",
+  "coordinator": "Honza + Verča",
+  "guests": 60,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Tomáš Grochal"
+  ],
+  "cleaningNames": [
+   "Elena Hluk",
+   "Kamča Zavadilová",
+   "Lenka Helísková",
+   "Jana Taláková"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260801": {
+  "id": "w20260801",
+  "coupleName": "Kocourkovi",
+  "date": "2026-08-01",
+  "coordinator": "Honza + Verča",
+  "guests": 80,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Veronika Šimčíková",
+   "Jana Taláková"
+  ],
+  "cleaningNames": [
+   "Tereza Puršová",
+   "Lenka Helísková",
+   "Jana Taláková"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260806": {
+  "id": "w20260806",
+  "coupleName": "Švábová 730 926 706",
+  "date": "2026-08-06",
+  "coordinator": "Eliška a Vojta",
+  "guests": 45,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Eliška Dohnalová",
+   "Viktorie Habartová",
+   "Vojta Dohnal",
+   "Tomáš Grochal"
+  ],
+  "cleaningNames": [
+   "Monika Kenša",
+   "Elena Hluk",
+   "Eliška Dohnalová",
+   "Lenka Helísková"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260808": {
+  "id": "w20260808",
+  "coupleName": "Klement, Zlínská 608 775 933",
+  "date": "2026-08-08",
+  "coordinator": "Eliška a Vojta",
+  "guests": 65,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Viktorie Habartová",
+   "Daniela Habartová",
+   "Veronika Šimčíková",
+   "Simona (od Viky)",
+   "Aneta (od Viky)"
+  ],
+  "cleaningNames": [
+   "Monika Kenša",
+   "Petra Grochalová",
+   "Lenka Helísková"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 75000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260810": {
+  "id": "w20260810",
+  "coupleName": "Odložilík Michal a Anna",
+  "date": "2026-08-10",
+  "coordinator": "Eliška a Vojta",
+  "guests": null,
+  "staffPlanned": null,
+  "serviceNames": [],
+  "cleaningNames": [
+   "Lenka Helísková",
+   "Jana Taláková"
+  ],
+  "contactPhone": "",
+  "contactEmail": "michal.odlozilik@gmail.com",
+  "rentDeposit": 30000,
+  "rentBalance": 20000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260813": {
+  "id": "w20260813",
+  "coupleName": "Kolísková",
+  "date": "2026-08-13",
+  "coordinator": "Matěj",
+  "guests": 30,
+  "staffPlanned": 3,
+  "serviceNames": [
+   "Monika Kenša",
+   "Jan Kenša",
+   "Tomáš Grochal",
+   "Petra Pospíšilová"
+  ],
+  "cleaningNames": [
+   "Elena Hluk",
+   "Lenka Helísková",
+   "Jana Taláková",
+   "Eliška Dohnalová"
+  ],
+  "contactPhone": "",
+  "contactEmail": "koliskova.andrea@gmail.com",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260815": {
+  "id": "w20260815",
+  "coupleName": "Schoffer",
+  "date": "2026-08-15",
+  "coordinator": "Matěj",
+  "guests": null,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Monika Kenša",
+   "Jan Kenša",
+   "Petra Pospíšilová"
+  ],
+  "cleaningNames": [
+   "Petra Pospíšilová",
+   "Tereza Puršová",
+   "Lenka Helísková"
+  ],
+  "contactPhone": "",
+  "contactEmail": "david.schoffer@cz.bosch.com",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260820": {
+  "id": "w20260820",
+  "coupleName": "Kremr",
+  "date": "2026-08-20",
+  "coordinator": "Matěj",
+  "guests": 70,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Monika Kenša",
+   "Jan Kenša",
+   "Petra Pospíšilová"
+  ],
+  "cleaningNames": [
+   "Elena Hluk",
+   "Lenka Helísková",
+   "Eliška Dohnalová"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260822": {
+  "id": "w20260822",
+  "coupleName": "Alinče",
+  "date": "2026-08-22",
+  "coordinator": "Matěj",
+  "guests": 60,
+  "staffPlanned": 2,
+  "serviceNames": [
+   "Petra Pospíšilová",
+   "Monika Kenša",
+   "Jan Kenša"
+  ],
+  "cleaningNames": [
+   "Petra Grochalová",
+   "Lenka Helísková"
+  ],
+  "contactPhone": "",
+  "contactEmail": "markova.el78@gmail.com",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260827": {
+  "id": "w20260827",
+  "coupleName": "Moravčík Pavel, 724747138, Moravcik.Pavel@seznam.cz",
+  "date": "2026-08-27",
+  "coordinator": "Grochy",
+  "guests": 70,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Tomáš Grochal"
+  ],
+  "cleaningNames": [
+   "Elena Hluk",
+   "Petra Grochalová",
+   "Kamča Zavadilová",
+   "Lenka Helísková"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260829": {
+  "id": "w20260829",
+  "coupleName": "Peřestá Štěpánka, 736405634, perestastepanka@gmail.com",
+  "date": "2026-08-29",
+  "coordinator": "Grochy",
+  "guests": 70,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Tomáš Grochal",
+   "Monika Kenša",
+   "Jan Kenša",
+   "Petra Pospíšilová"
+  ],
+  "cleaningNames": [
+   "Tereza Puršová",
+   "Petra Grochalová",
+   "Petra Pospíšilová",
+   "Lenka Helísková"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260903": {
+  "id": "w20260903",
+  "coupleName": "Němečková Barbora, 608925840, barus.n6@seznam.cz",
+  "date": "2026-09-03",
+  "coordinator": "Grochy",
+  "guests": 70,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Tomáš Grochal",
+   "Tereza Puršová"
+  ],
+  "cleaningNames": [
+   "Elena Hluk",
+   "Lenka Helísková",
+   "Eliška Dohnalová"
+  ],
+  "contactPhone": "608925840",
+  "contactEmail": "barus.n6@seznam.cz",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260905": {
+  "id": "w20260905",
+  "coupleName": "Križalkovič",
+  "date": "2026-09-05",
+  "coordinator": "Grochy",
+  "guests": null,
+  "staffPlanned": null,
+  "serviceNames": [],
+  "cleaningNames": [],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 0,
+  "rentBalance": 20000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260907": {
+  "id": "w20260907",
+  "coupleName": "Koláčková, 739 824 506",
+  "date": "2026-09-07",
+  "coordinator": "Eliška a Vojta",
+  "guests": 75,
+  "staffPlanned": 6,
+  "serviceNames": [
+   "Eliška Dohnalová",
+   "Vojta Dohnal",
+   "Viktorie Habartová",
+   "Daniela Habartová",
+   "Romana Habartová",
+   "Tereza Dostálek"
+  ],
+  "cleaningNames": [],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 30000,
+  "rentBalance": 15000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260910": {
+  "id": "w20260910",
+  "coupleName": "Pomykalová",
+  "date": "2026-09-10",
+  "coordinator": "Matěj",
+  "guests": null,
+  "staffPlanned": 3,
+  "serviceNames": [
+   "Tomáš Grochal"
+  ],
+  "cleaningNames": [
+   "Elena Hluk",
+   "Eliška Dohnalová"
+  ],
+  "contactPhone": "",
+  "contactEmail": "kackapomykalova@gmail.com",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260912": {
+  "id": "w20260912",
+  "coupleName": "Valová",
+  "date": "2026-09-12",
+  "coordinator": "Matěj",
+  "guests": null,
+  "staffPlanned": 3,
+  "serviceNames": [
+   "Monika Kenša",
+   "Jan Kenša",
+   "Tomáš Grochal",
+   "Petra Grochalová"
+  ],
+  "cleaningNames": [
+   "Petra Pospíšilová",
+   "Petra Grochalová"
+  ],
+  "contactPhone": "",
+  "contactEmail": "unka.valova@gmail.com",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260917": {
+  "id": "w20260917",
+  "coupleName": "Svatba 17. 9. 2026",
+  "date": "2026-09-17",
+  "coordinator": "Honza + Verča",
+  "guests": 65,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Tomáš Grochal"
+  ],
+  "cleaningNames": [
+   "Elena Hluk"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260919": {
+  "id": "w20260919",
+  "coupleName": "Svatba 19. 9. 2026",
+  "date": "2026-09-19",
+  "coordinator": "Honza + Verča",
+  "guests": 80,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Veronika Šimčíková"
+  ],
+  "cleaningNames": [
+   "Petra Pospíšilová",
+   "Petra Grochalová"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260924": {
+  "id": "w20260924",
+  "coupleName": "Horák Jan, 720281816, horiki77@seznam.cz",
+  "date": "2026-09-24",
+  "coordinator": "Grochy",
+  "guests": 60,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Tomáš Grochal"
+  ],
+  "cleaningNames": [
+   "Elena Hluk",
+   "Eliška Dohnalová"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20260926": {
+  "id": "w20260926",
+  "coupleName": "Slivová Markéta, 733742065, slivovamar@gmail.com",
+  "date": "2026-09-26",
+  "coordinator": "Grochy",
+  "guests": 65,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Tomáš Grochal",
+   "Monika Kenša",
+   "Jan Kenša",
+   "Petra Pospíšilová"
+  ],
+  "cleaningNames": [
+   "Petra Pospíšilová",
+   "Petra Grochalová"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20261001": {
+  "id": "w20261001",
+  "coupleName": "Hynek Tomáš, 725770100, tomas.hynekt@gmail.com",
+  "date": "2026-10-01",
+  "coordinator": "Grochy",
+  "guests": 70,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Tomáš Grochal"
+  ],
+  "cleaningNames": [
+   "Elena Hluk",
+   "Eliška Dohnalová"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 10000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20261003": {
+  "id": "w20261003",
+  "coupleName": "Zábojníková Nikola, 732 576 670, zabojnikova.nikola@seznam.cz",
+  "date": "2026-10-03",
+  "coordinator": "Grochy",
+  "guests": 80,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Tomáš Grochal",
+   "Jan Kenša",
+   "Monika Kenša",
+   "Petra Pospíšilová"
+  ],
+  "cleaningNames": [
+   "Petra Pospíšilová",
+   "Petra Grochalová"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20261010": {
+  "id": "w20261010",
+  "coupleName": "Fursová, 774 396 813",
+  "date": "2026-10-10",
+  "coordinator": "Eliška a Vojta",
+  "guests": 50,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Tereza Jordánová",
+   "Eliška Dohnalová",
+   "Vojta Dohnal",
+   "Viktorie Habartová"
+  ],
+  "cleaningNames": [
+   "Eliška Dohnalová"
+  ],
+  "contactPhone": "",
+  "contactEmail": "",
+  "rentDeposit": 45000,
+  "rentBalance": 30000,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20270515": {
+  "id": "w20270515",
+  "coupleName": "Vojtěch Dohnal",
+  "date": "2027-05-15",
+  "coordinator": "",
+  "guests": 90,
+  "staffPlanned": null,
+  "serviceNames": [],
+  "cleaningNames": [],
+  "contactPhone": "",
+  "contactEmail": "dohnalv@proton.me",
+  "rentDeposit": 50000,
+  "rentBalance": null,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20270529": {
+  "id": "w20270529",
+  "coupleName": "Michaela Čížková",
+  "date": "2027-05-29",
+  "coordinator": "",
+  "guests": 50,
+  "staffPlanned": null,
+  "serviceNames": [],
+  "cleaningNames": [],
+  "contactPhone": "",
+  "contactEmail": "michaela.c@email.cz",
+  "rentDeposit": 50000,
+  "rentBalance": null,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20270605": {
+  "id": "w20270605",
+  "coupleName": "Jiří Pařízek",
+  "date": "2027-06-05",
+  "coordinator": "",
+  "guests": 60,
+  "staffPlanned": null,
+  "serviceNames": [],
+  "cleaningNames": [],
+  "contactPhone": "",
+  "contactEmail": "parizek.jiri@gmail.com",
+  "rentDeposit": 50000,
+  "rentBalance": null,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20270619": {
+  "id": "w20270619",
+  "coupleName": "Monika Dočkalová & Ondřej Smoček",
+  "date": "2027-06-19",
+  "coordinator": "",
+  "guests": 80,
+  "staffPlanned": null,
+  "serviceNames": [],
+  "cleaningNames": [],
+  "contactPhone": "",
+  "contactEmail": "xdockalova@seznam.cz",
+  "rentDeposit": 50000,
+  "rentBalance": null,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20270626": {
+  "id": "w20270626",
+  "coupleName": "Michaela Jehlíková",
+  "date": "2027-06-26",
+  "coordinator": "",
+  "guests": 60,
+  "staffPlanned": null,
+  "serviceNames": [],
+  "cleaningNames": [],
+  "contactPhone": "",
+  "contactEmail": "michaelajehlikova@gmail.com",
+  "rentDeposit": 50000,
+  "rentBalance": null,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20270703": {
+  "id": "w20270703",
+  "coupleName": "Marie Zdráhalová",
+  "date": "2027-07-03",
+  "coordinator": "",
+  "guests": 80,
+  "staffPlanned": null,
+  "serviceNames": [],
+  "cleaningNames": [],
+  "contactPhone": "+420 777 323 833",
+  "contactEmail": "miazdrahalova@gmail.com",
+  "rentDeposit": 50000,
+  "rentBalance": null,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20270708": {
+  "id": "w20270708",
+  "coupleName": "Aneta Nejedlíková",
+  "date": "2027-07-08",
+  "coordinator": "",
+  "guests": 70,
+  "staffPlanned": null,
+  "serviceNames": [],
+  "cleaningNames": [],
+  "contactPhone": "",
+  "contactEmail": "anetanejedlikova@gmail.com",
+  "rentDeposit": 50000,
+  "rentBalance": null,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20270710": {
+  "id": "w20270710",
+  "coupleName": "Lenka Němečková",
+  "date": "2027-07-10",
+  "coordinator": "",
+  "guests": 75,
+  "staffPlanned": null,
+  "serviceNames": [],
+  "cleaningNames": [],
+  "contactPhone": "",
+  "contactEmail": "lenusnemeckova@seznam.cz",
+  "rentDeposit": 50000,
+  "rentBalance": null,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20270717": {
+  "id": "w20270717",
+  "coupleName": "Jakub Zálešák",
+  "date": "2027-07-17",
+  "coordinator": "",
+  "guests": 100,
+  "staffPlanned": null,
+  "serviceNames": [],
+  "cleaningNames": [],
+  "contactPhone": "",
+  "contactEmail": "jakub.zalesak@gmail.com",
+  "rentDeposit": 50000,
+  "rentBalance": null,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20270724": {
+  "id": "w20270724",
+  "coupleName": "Justýna Brázdilová",
+  "date": "2027-07-24",
+  "coordinator": "",
+  "guests": 50,
+  "staffPlanned": null,
+  "serviceNames": [],
+  "cleaningNames": [],
+  "contactPhone": "",
+  "contactEmail": "justynabrazdilova@seznam.cz",
+  "rentDeposit": 50000,
+  "rentBalance": null,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20270731": {
+  "id": "w20270731",
+  "coupleName": "Sára Plucnarová",
+  "date": "2027-07-31",
+  "coordinator": "",
+  "guests": 70,
+  "staffPlanned": null,
+  "serviceNames": [],
+  "cleaningNames": [],
+  "contactPhone": "",
+  "contactEmail": "sara.plucnarova1306@seznam.cz",
+  "rentDeposit": 50000,
+  "rentBalance": null,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20270812": {
+  "id": "w20270812",
+  "coupleName": "Johana Fabíková",
+  "date": "2027-08-12",
+  "coordinator": "",
+  "guests": 90,
+  "staffPlanned": null,
+  "serviceNames": [],
+  "cleaningNames": [],
+  "contactPhone": "",
+  "contactEmail": "Johanafab2000@seznam.cz",
+  "rentDeposit": 50000,
+  "rentBalance": null,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20270821": {
+  "id": "w20270821",
+  "coupleName": "Monika Peluňková",
+  "date": "2027-08-21",
+  "coordinator": "",
+  "guests": 60,
+  "staffPlanned": null,
+  "serviceNames": [],
+  "cleaningNames": [],
+  "contactPhone": "",
+  "contactEmail": "m.pelunkova@seznam.cz",
+  "rentDeposit": 50000,
+  "rentBalance": null,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20270904": {
+  "id": "w20270904",
+  "coupleName": "Nadan Pojer",
+  "date": "2027-09-04",
+  "coordinator": "",
+  "guests": 90,
+  "staffPlanned": null,
+  "serviceNames": [
+   "Veronika Šimčíková"
+  ],
+  "cleaningNames": [],
+  "contactPhone": "+420 723 923 350",
+  "contactEmail": "n.pojer@gmail.com",
+  "rentDeposit": 50000,
+  "rentBalance": null,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20270911": {
+  "id": "w20270911",
+  "coupleName": "Sára Konečná",
+  "date": "2027-09-11",
+  "coordinator": "",
+  "guests": 50,
+  "staffPlanned": null,
+  "serviceNames": [],
+  "cleaningNames": [],
+  "contactPhone": "",
+  "contactEmail": "konecna.s@seznam.cz",
+  "rentDeposit": 50000,
+  "rentBalance": null,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ },
+ "w20270918": {
+  "id": "w20270918",
+  "coupleName": "Ellen Palmeová",
+  "date": "2027-09-18",
+  "coordinator": "",
+  "guests": 105,
+  "staffPlanned": null,
+  "serviceNames": [],
+  "cleaningNames": [],
+  "contactPhone": "",
+  "contactEmail": "ellenpalme@seznam.cz",
+  "rentDeposit": 50000,
+  "rentBalance": null,
+  "guestbookLink": "https://docs.google.com/spreadsheets/d/1Ng7E5D-lPNaWM0huODMUh5BwvNTYbZYCHjyGEUILa74/edit?gid=0#gid=0",
+  "items": {
+   "guestbook": {
+    "done": false,
+    "note": ""
+   },
+   "calculation": {
+    "done": false,
+    "note": ""
+   },
+   "pay_final_invoice": {
+    "done": false,
+    "note": ""
+   },
+   "pay_rent": {
+    "done": false,
+    "note": ""
+   },
+   "pay_coffee": {
+    "done": false,
+    "note": ""
+   },
+   "pay_caravan": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cart_bar": {
+    "done": false,
+    "note": ""
+   },
+   "pay_cleaning": {
+    "done": false,
+    "note": ""
+   },
+   "pay_staff": {
+    "done": false,
+    "note": ""
+   },
+   "thank_you": {
+    "done": false,
+    "note": ""
+   }
+  },
+  "finance": {
+   "shifts": [],
+   "flatItems": [],
+   "note": ""
+  },
+  "cleaning": {
+   "staffPlanned": null,
+   "startTime": "",
+   "note": ""
+  },
+  "sentAutomations": {}
+ }
+}
