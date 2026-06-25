@@ -460,6 +460,7 @@
     <select id="person-select" onchange="renderZamestnanec()" style="min-width:220px; font-size:1rem; padding:10px 14px;">
       <option value="">— Vyberte zaměstnance —</option>
     </select>
+    <button class="btn btn-sm btn-danger" onclick="(function(){ const n=document.getElementById('person-select').value; if(n) removeEmployee(n); })()">Odebrat</button>
     <div id="person-stats" style="display:flex; gap:12px; flex-wrap:wrap;"></div>
   </div>
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
@@ -735,6 +736,17 @@
 <!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal" id="modal-content"></div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="confirm-modal-overlay" style="display:none;align-items:center;justify-content:center;">
+  <div class="modal" style="max-width:360px;text-align:center;" onclick="event.stopPropagation()">
+    <div class="modal-title" style="margin-bottom:12px;" id="confirm-modal-msg"></div>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:8px;">
+      <button class="btn btn-danger" id="confirm-modal-yes">Ano, provést</button>
+      <button class="btn btn-outline" onclick="closeConfirmModal()">Zrušit</button>
+    </div>
+  </div>
 </div>
 
 <!-- QR MODAL -->
@@ -1189,6 +1201,16 @@ function populateSelects() {
   });
 }
 
+function confirmAction(msg, callback) {
+  document.getElementById('confirm-modal-msg').textContent = msg;
+  const btn = document.getElementById('confirm-modal-yes');
+  btn.onclick = () => { closeConfirmModal(); callback(); };
+  document.getElementById('confirm-modal-overlay').style.display = 'flex';
+}
+function closeConfirmModal() {
+  document.getElementById('confirm-modal-overlay').style.display = 'none';
+}
+
 function addEmployee() {
   const input = document.getElementById('new-employee-input');
   const name = input.value.trim();
@@ -1197,13 +1219,25 @@ function addEmployee() {
     document.getElementById('new-employee-msg').textContent = 'Zaměstnanec již existuje.';
     return;
   }
-  ALL_PEOPLE.push(name);
-  if (!rates[name]) { rates[name] = 150; saveRates(); }
-  savePeople();
-  populateSelects();
-  input.value = '';
-  document.getElementById('new-employee-msg').textContent = `✓ ${name} přidán/a do týmu.`;
-  setTimeout(() => { document.getElementById('new-employee-msg').textContent = ''; }, 3000);
+  confirmAction(`Přidat zaměstnance „${name}" do týmu?`, () => {
+    ALL_PEOPLE.push(name);
+    if (!rates[name]) { rates[name] = 150; saveRates(); }
+    savePeople();
+    populateSelects();
+    input.value = '';
+    document.getElementById('new-employee-msg').textContent = `✓ ${name} přidán/a do týmu.`;
+    setTimeout(() => { document.getElementById('new-employee-msg').textContent = ''; }, 3000);
+  });
+}
+
+function removeEmployee(name) {
+  confirmAction(`Odebrat zaměstnance „${name}" z týmu?`, () => {
+    ALL_PEOPLE = ALL_PEOPLE.filter(p => p !== name);
+    savePeople();
+    populateSelects();
+    document.getElementById('person-select').value = '';
+    renderZamestnanec();
+  });
 }
 
 // Assignment helpers — all rendering reads through these
