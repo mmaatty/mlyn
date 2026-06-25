@@ -1251,22 +1251,29 @@ function getCleaning(date) {
 }
 
 function signUp(date, person, role) {
-  if (!weddingAssignments[date]) weddingAssignments[date] = { service: [], cleaning: [] };
-  const arr = role === 'service' ? weddingAssignments[date].service : weddingAssignments[date].cleaning;
-  if (person && !arr.includes(person)) arr.push(person);
-  saveAssignments();
-  refreshAll(date);
+  if (!person) return;
+  const roleLabel = role === 'service' ? 'obsluhu' : 'úklid';
+  confirmAction(`Přihlásit ${person} na ${roleLabel} (${fmtDate(date)})?`, () => {
+    if (!weddingAssignments[date]) weddingAssignments[date] = { service: [], cleaning: [] };
+    const arr = role === 'service' ? weddingAssignments[date].service : weddingAssignments[date].cleaning;
+    if (!arr.includes(person)) arr.push(person);
+    saveAssignments();
+    refreshAll(date);
+  });
 }
 
 function unassign(date, person, role) {
-  if (!weddingAssignments[date]) return;
-  if (role === 'service') {
-    weddingAssignments[date].service = weddingAssignments[date].service.filter(p => p !== person);
-  } else {
-    weddingAssignments[date].cleaning = weddingAssignments[date].cleaning.filter(p => p !== person);
-  }
-  saveAssignments();
-  refreshAll(date);
+  const roleLabel = role === 'service' ? 'obsluhy' : 'úklidu';
+  confirmAction(`Odhlásit ${person} z ${roleLabel} (${fmtDate(date)})?`, () => {
+    if (!weddingAssignments[date]) return;
+    if (role === 'service') {
+      weddingAssignments[date].service = weddingAssignments[date].service.filter(p => p !== person);
+    } else {
+      weddingAssignments[date].cleaning = weddingAssignments[date].cleaning.filter(p => p !== person);
+    }
+    saveAssignments();
+    refreshAll(date);
+  });
 }
 
 function refreshAll(date) {
