@@ -948,6 +948,9 @@ let weddingEmail = {};        // { 'YYYY-MM-DD': 'email' }
 let weddingRentDeposit = {};  // { 'YYYY-MM-DD': number } záloha v CZK
 let weddingRentBalance = {};  // { 'YYYY-MM-DD': number } doplatek v CZK
 let weddingCoordOverride = {}; // { 'YYYY-MM-DD': 'coord' } přepsání koordinátora
+let weddingStaffOverride = {}; // { 'YYYY-MM-DD': number|null } přepsání požadované obsluhy
+let _modalDate = null;         // datum právě otevřeného modálu
+let _modalDirty = false;       // jsou v modálu neuložené změny?
 
 async function loadState() {
   const snapshot = await db.ref('/').once('value');
@@ -1007,6 +1010,7 @@ async function loadState() {
   weddingRentDeposit = data.weddingRentDeposit || {};
   weddingRentBalance = data.weddingRentBalance || {};
   weddingCoordOverride = data.weddingCoordOverride || {};
+  weddingStaffOverride = data.weddingStaffOverride || {};
 
   // Todos
   if (data.todos) {
@@ -1147,6 +1151,35 @@ function toggleRentCols() {
 }
 function getCoord(date) { return weddingCoordOverride[date] || (WEDDINGS.find(w => w.date === date) || {}).coord || ''; }
 function saveCoordOverride() { db.ref('weddingCoordOverride').set(weddingCoordOverride); }
+function getStaff(date) {
+  if (weddingStaffOverride[date] !== undefined) return weddingStaffOverride[date];
+  const w = WEDDINGS.find(x => x.date === date);
+  return w ? w.staff : null;
+}
+function saveStaffOverride() { db.ref('weddingStaffOverride').set(weddingStaffOverride); }
+
+function markModalDirty() {
+  _modalDirty = true;
+  const btn = document.getElementById('modal-save-btn');
+  const bar = document.getElementById('modal-save-status');
+  if (btn) { btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; btn.style.background = 'var(--accent)'; btn.textContent = 'Uložit'; }
+  if (bar) bar.textContent = '';
+}
+
+function saveModalAll() {
+  if (!_modalDate) return;
+  const btn = document.getElementById('modal-save-btn');
+  const status = document.getElementById('modal-save-status');
+  if (btn) { btn.disabled = true; btn.textContent = 'Ukládám…'; }
+  // Persist everything for this date
+  saveContact(); savePhone(); saveEmail(); saveCoordOverride(); saveStaffOverride();
+  saveRentDeposit(); saveRentBalance(); saveFeedback(); saveAssignments();
+  _modalDirty = false;
+  setTimeout(() => {
+    if (btn) { btn.textContent = '✓ Uloženo'; btn.style.background = 'var(--green)'; btn.style.opacity = '0.5'; btn.style.cursor = 'default'; }
+    if (status) status.textContent = '';
+  }, 300);
+}
 function updateCoord(date, val) {
   weddingCoordOverride[date] = val;
   saveCoordOverride();
@@ -1724,7 +1757,7 @@ function renderTerminy() {
       : '<span class="guest-num">—</span>';
 
     // Staff count: required vs actual, highlight red if understaffed
-    const req = w.staff;
+    const req = getStaff(w.date);
     const actual = svc.length;
     let staffBadge = '';
     if (req !== null && req !== undefined) {
@@ -1820,13 +1853,16 @@ function updateGuests(date, val) {
 }
 
 function updateRequiredStaff(date, val) {
+  const n = val === '' ? null : parseInt(val);
+  weddingStaffOverride[date] = isNaN(n) ? null : n;
+  // Also sync onto the live wedding object so getStaff() stays consistent
   const w = WEDDINGS.find(x => x.date === date);
-  if (!w) return;
-  const n = parseInt(val);
-  w.staff = isNaN(n) || val === '' ? null : n;
-  // Re-render status badge without closing modal
+  if (w) w.staff = weddingStaffOverride[date];
+  saveStaffOverride();
+  markModalDirty();
+  // Update status badge in-place without rebuilding the whole modal
   const svc = getService(date);
-  const req = w.staff;
+  const req = weddingStaffOverride[date];
   let statusHtml = '';
   if (req !== null && req !== undefined) {
     const actual = svc.length;
@@ -1836,7 +1872,7 @@ function updateRequiredStaff(date, val) {
   }
   const statusEl = document.querySelector('#modal-content .detail-val span[style*="font-weight:700"]');
   if (statusEl) statusEl.outerHTML = statusHtml;
-  refreshAll(date);
+  renderTerminy();
 }
 
 function openWeddingModal(date) {
@@ -1847,7 +1883,8 @@ function openWeddingModal(date) {
   const svc = getService(date);
   const cln = getCleaning(date);
 
-  const req = w.staff, actual = svc.length;
+  _modalDate = date; _modalDirty = false;
+  const req = getStaff(date), actual = svc.length;
   let staffStatus = '';
   if (req !== null && req !== undefined) {
     if (actual < req) staffStatus = `<span style="color:var(--red);font-weight:600;"> ⚠ ${actual}/${req}</span>`;
@@ -1872,35 +1909,35 @@ function openWeddingModal(date) {
     <div class="detail-row"><div class="detail-label">Jméno</div><div class="detail-val">
       <input type="text" value="${(weddingContact[w.date]||'').replace(/"/g,'&quot;')}" placeholder="Jméno páru..."
         style="width:100%;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
-        oninput="updateContact('${w.date}', this.value)">
+        oninput="updateContact('${w.date}', this.value); markModalDirty()">
     </div></div>
     <div class="detail-row"><div class="detail-label">📞 Telefon</div><div class="detail-val">
       <input type="tel" value="${(weddingPhone[w.date]||'').replace(/"/g,'&quot;')}" placeholder="+420 ..."
         style="width:100%;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
-        oninput="updatePhone('${w.date}', this.value)">
+        oninput="updatePhone('${w.date}', this.value); markModalDirty()">
     </div></div>
     <div class="detail-row"><div class="detail-label">✉ Email</div><div class="detail-val">
       <input type="email" value="${(weddingEmail[w.date]||'').replace(/"/g,'&quot;')}" placeholder="email@..."
         style="width:100%;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
-        oninput="updateEmail('${w.date}', this.value)">
+        oninput="updateEmail('${w.date}', this.value); markModalDirty()">
     </div></div>
     <div class="detail-row"><div class="detail-label">Koordinátor</div><div class="detail-val">
-      <select style="padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;" onchange="updateCoord('${w.date}', this.value)">
+      <select style="padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;" onchange="updateCoord('${w.date}', this.value); markModalDirty()">
         ${['Honza + Verča','Matěj','Grochy','Eliška a Vojta'].map(c => `<option value="${c}" ${getCoord(w.date)===c?'selected':''}>${c}</option>`).join('')}
       </select>
     </div></div>
     <div class="detail-row"><div class="detail-label">Nájem záloha (CZK)</div><div class="detail-val">
       <input type="number" min="0" value="${weddingRentDeposit[w.date] ?? ''}" placeholder="—"
         style="width:120px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
-        onchange="updateRentDeposit('${w.date}', this.value)">
+        onchange="updateRentDeposit('${w.date}', this.value); markModalDirty()">
     </div></div>
     <div class="detail-row"><div class="detail-label">Nájem doplatek (CZK)</div><div class="detail-val">
       <input type="number" min="0" value="${weddingRentBalance[w.date] ?? ''}" placeholder="—"
         style="width:120px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
-        onchange="updateRentBalance('${w.date}', this.value)">
+        onchange="updateRentBalance('${w.date}', this.value); markModalDirty()">
     </div></div>
     <div class="detail-row"><div class="detail-label">Požadovaná obsluha</div><div class="detail-val" style="display:flex;align-items:center;gap:8px;">
-      <input type="number" min="0" max="20" value="${w.staff || ''}" placeholder="—"
+      <input type="number" min="0" max="20" value="${getStaff(date) ?? ''}" placeholder="—"
         style="width:64px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
         onchange="updateRequiredStaff('${date}', this.value)">
       ${staffStatus}
@@ -1955,7 +1992,15 @@ function openWeddingModal(date) {
       <textarea id="feedback-${date}"
         style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:0.85rem;font-family:inherit;resize:vertical;min-height:80px;background:#fafafa;"
         placeholder="Poznámky ke svatbě, co se povedlo, co zlepšit..."
-        oninput="updateFeedback('${date}', this.value)">${weddingFeedback[date] || ''}</textarea>
+        oninput="updateFeedback('${date}', this.value); markModalDirty()">${weddingFeedback[date] || ''}</textarea>
+    </div>
+
+    <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;align-items:center;gap:12px;">
+      <button id="modal-save-btn" onclick="saveModalAll()" disabled
+        style="padding:8px 22px;border:none;border-radius:8px;font-size:0.95rem;font-weight:600;background:var(--muted);opacity:0.35;cursor:default;transition:all 0.2s;">
+        Uložit
+      </button>
+      <span id="modal-save-status" style="font-size:0.82rem;color:var(--muted);"></span>
     </div>
   `;
   document.getElementById('modal-overlay').classList.add('open');
