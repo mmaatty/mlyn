@@ -198,7 +198,9 @@
   /* MODAL */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1000; align-items: center; justify-content: center; }
   .modal-overlay.open { display: flex; }
-  .modal { background: #fff; border-radius: var(--radius); padding: 28px; max-width: 560px; width: 90%; max-height: 85vh; overflow-y: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.2); }
+  .modal { background: #fff; border-radius: var(--radius); max-width: 560px; width: 90%; max-height: 85vh; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,0.2); display: flex; flex-direction: column; }
+  .modal-scroll { overflow-y: auto; flex: 1; padding: 28px; padding-bottom: 12px; }
+  .modal-footer { flex-shrink: 0; padding: 12px 28px; border-top: 1px solid var(--border); background: var(--card, #fff); display: flex; align-items: center; gap: 12px; }
   .modal-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; }
   .modal-close { float: right; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--muted); margin-top: -4px; }
   .detail-row { display: flex; gap: 8px; margin-bottom: 10px; align-items: flex-start; }
@@ -749,7 +751,16 @@
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
-  <div class="modal" id="modal-content"></div>
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-scroll" id="modal-content"></div>
+    <div class="modal-footer" id="modal-footer" style="display:none;">
+      <button id="modal-save-btn" onclick="saveModalAll()" disabled
+        style="padding:8px 22px;border:none;border-radius:8px;font-size:0.95rem;font-weight:600;background:var(--muted);opacity:0.35;cursor:default;transition:all 0.2s;">
+        Uložit
+      </button>
+      <span id="modal-save-status" style="font-size:0.82rem;color:var(--muted);"></span>
+    </div>
+  </div>
 </div>
 
 <!-- CONFIRM MODAL -->
@@ -1884,6 +1895,13 @@ function openWeddingModal(date) {
   const cln = getCleaning(date);
 
   _modalDate = date; _modalDirty = false;
+  // Reset save button
+  const _sbtn = document.getElementById('modal-save-btn');
+  const _sst  = document.getElementById('modal-save-status');
+  if (_sbtn) { _sbtn.disabled = true; _sbtn.textContent = 'Uložit'; _sbtn.style.background = 'var(--muted)'; _sbtn.style.opacity = '0.35'; _sbtn.style.cursor = 'default'; }
+  if (_sst)  _sst.textContent = '';
+  const _footer = document.getElementById('modal-footer');
+  if (_footer) _footer.style.display = 'flex';
   const req = getStaff(date), actual = svc.length;
   let staffStatus = '';
   if (req !== null && req !== undefined) {
@@ -1995,13 +2013,6 @@ function openWeddingModal(date) {
         oninput="updateFeedback('${date}', this.value); markModalDirty()">${weddingFeedback[date] || ''}</textarea>
     </div>
 
-    <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;align-items:center;gap:12px;">
-      <button id="modal-save-btn" onclick="saveModalAll()" disabled
-        style="padding:8px 22px;border:none;border-radius:8px;font-size:0.95rem;font-weight:600;background:var(--muted);opacity:0.35;cursor:default;transition:all 0.2s;">
-        Uložit
-      </button>
-      <span id="modal-save-status" style="font-size:0.82rem;color:var(--muted);"></span>
-    </div>
   `;
   document.getElementById('modal-overlay').classList.add('open');
 }
