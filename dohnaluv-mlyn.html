@@ -1376,7 +1376,7 @@ function renderPhotoGrid(date) {
   if (counter) counter.textContent = list ? `${list.length}/${PHOTO_MAX_COUNT}` : '';
 
   if (!list) { box.innerHTML = `<div style="font-size:0.8rem;color:var(--muted);">Načítám fotky…</div>`; return; }
-  if (list.length === 0) { box.innerHTML = `<div style="font-size:0.8rem;color:var(--muted);">Žádné fotky</div>`; return; }
+  if (list.length === 0) { box.innerHTML = ''; return; }   // prázdno mluví za sebe, hláška je zbytečná
 
   box.innerHTML = `<div class="photo-grid">` + list.map((p, i) => `
     <div class="photo-thumb">
