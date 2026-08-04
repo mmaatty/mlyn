@@ -976,6 +976,7 @@ let personQR = {};    // { 'person': 'data:image/...' } — vlastní QR obrázek
 let weddingFeedback = {}; // { 'YYYY-MM-DD': 'text...' }
 let weddingPhotos = {};   // { 'YYYY-MM-DD': [{id, src, name, added}] } — líná cache, jen navštívená data
 let weddingRating = {};   // { 'YYYY-MM-DD': 'green'|'orange'|'red'|null }
+let weddingChecklist = {}; // { 'YYYY-MM-DD': { maringotka: true, konobar: false, ... } }
 let weddingContact = {};      // { 'YYYY-MM-DD': 'jméno' }
 let weddingPhone = {};        // { 'YYYY-MM-DD': 'telefon' }
 let weddingEmail = {};        // { 'YYYY-MM-DD': 'email' }
@@ -990,7 +991,7 @@ let _modalDirty = false;       // jsou v modálu neuložené změny?
 // — ten je velký (base64 fotky) a načítá se líně teprve při otevření modalu svatby.
 const STATE_KEYS = [
   'people', 'hoursLog', 'rates', 'expenses', 'paymentPaid', 'bankAccounts', 'personQR',
-  'weddingFeedback', 'weddingRating', 'weddingContact', 'weddingPhone', 'weddingEmail',
+  'weddingFeedback', 'weddingRating', 'weddingChecklist', 'weddingContact', 'weddingPhone', 'weddingEmail',
   'weddingRentDeposit', 'weddingRentBalance', 'weddingCoordOverride', 'weddingStaffOverride',
   'todos', 'customWeddings', 'weddingAssignments'
 ];
@@ -1047,6 +1048,7 @@ async function loadState() {
   // Feedback
   weddingFeedback = data.weddingFeedback || {};
   weddingRating = data.weddingRating || {};
+  weddingChecklist = data.weddingChecklist || {};
   weddingContact = data.weddingContact || {};
   weddingPhone   = data.weddingPhone   || {};
   weddingEmail   = data.weddingEmail   || {};
@@ -1190,6 +1192,37 @@ function updateFeedback(date, val) {
   saveFeedback();
 }
 function saveRating() { db.ref('weddingRating').set(weddingRating); }
+
+// ============================================================
+// CHECKLIST SVATBY
+// Pevný seznam položek k odbavení u každé svatby. Ukládá se po datech
+// do uzlu weddingChecklist/<datum>/<klíč> = true|false.
+// Klíče se nikdy nepřejmenovávají — jsou to identifikátory v databázi.
+// ============================================================
+const CHECKLIST_ITEMS = [
+  { key: 'maringotka', label: 'Svatební maringotka' },
+  { key: 'konobar',    label: 'Koňobar' },
+  { key: 'kava',       label: 'Káva' },
+  { key: 'plachty',    label: 'Plachty' },
+  { key: 'uklid',      label: 'Po-svatební úklid' }
+];
+
+function saveChecklist(date) {
+  return db.ref('weddingChecklist/' + date).set(weddingChecklist[date] || {});
+}
+
+function checklistDone(date) {
+  const c = weddingChecklist[date] || {};
+  return CHECKLIST_ITEMS.filter(i => c[i.key]).length;
+}
+
+function toggleChecklist(date, key, checked) {
+  if (!weddingChecklist[date]) weddingChecklist[date] = {};
+  weddingChecklist[date][key] = checked;
+  saveChecklist(date);
+  const counter = document.getElementById('checklist-count-' + date);
+  if (counter) counter.textContent = `${checklistDone(date)}/${CHECKLIST_ITEMS.length}`;
+}
 
 // ============================================================
 // FOTKY VE FEEDBACKU
@@ -2297,6 +2330,22 @@ function openWeddingModal(date) {
           ${ALL_PEOPLE.filter(p => !cln.includes(p)).map(p => `<option value="${p}">${p}</option>`).join('')}
         </select>
         <button class="btn btn-sm" style="background:var(--green);" onclick="signUp('${date}',document.getElementById('cln-pick-${date}').value,'cleaning')">+ Přihlásit</button>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;padding:16px;background:var(--accent-light);border-radius:8px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <div style="font-size:0.8rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.4px;">Checklist</div>
+        <span id="checklist-count-${date}" style="font-size:0.75rem;color:var(--muted);font-weight:600;">${checklistDone(date)}/${CHECKLIST_ITEMS.length}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        ${CHECKLIST_ITEMS.map(item => `
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.88rem;cursor:pointer;">
+            <input type="checkbox" ${(weddingChecklist[date]||{})[item.key] ? 'checked' : ''}
+              style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer;flex:none;"
+              onchange="toggleChecklist('${date}','${item.key}', this.checked)">
+            <span>${item.label}</span>
+          </label>`).join('')}
       </div>
     </div>
 
