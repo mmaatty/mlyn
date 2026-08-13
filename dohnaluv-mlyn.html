@@ -200,7 +200,21 @@
   .modal-overlay.open { display: flex; }
   .modal { background: #fff; border-radius: var(--radius); max-width: 560px; width: 90%; max-height: 85vh; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,0.2); display: flex; flex-direction: column; }
   .modal-scroll { overflow-y: auto; flex: 1; padding: 28px; padding-bottom: 12px; }
-  .modal-footer { flex-shrink: 0; padding: 12px 28px; border-top: 1px solid var(--border); background: var(--card, #fff); display: flex; align-items: center; gap: 12px; }
+  .modal-footer { flex-shrink: 0; padding: 12px 28px; border-top: 1px solid var(--border); background: var(--card, #fff); display: flex; flex-direction: column; align-items: stretch; gap: 8px; }
+  .modal-footer-row { display: flex; align-items: center; gap: 12px; }
+  /* Výsledek zápisu do databáze — banner nad tlačítkem.
+     .saved = zapsáno, .saving = zápis probíhá, .failed = zápis selhal. */
+  .save-banner { display: none; padding: 8px 12px; border-radius: 8px; font-size: 0.86rem; font-weight: 600; line-height: 1.35; }
+  .save-banner.saved  { display: block; background: var(--green-light); color: var(--green); border: 1px solid var(--green); }
+  .save-banner.saving { display: block; background: var(--card, #fff); color: var(--muted); border: 1px solid var(--border); }
+  .save-banner.failed { display: block; background: #fbeaea; color: #b94040; border: 1px solid #b94040; }
+  /* Uložit je aktivní JEN když zápis selhal a je potřeba ho zopakovat —
+     tehdy pulzuje, aby bylo vidět, že akce uživatele je nutná. */
+  #modal-save-btn.needs-press { animation: needsPress 1.1s ease-in-out infinite; }
+  @keyframes needsPress {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(185,64,64,0.55); }
+    50%      { box-shadow: 0 0 0 7px rgba(185,64,64,0); }
+  }
   .modal-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; }
   .modal-close { float: right; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--muted); margin-top: -4px; }
   .detail-row { display: flex; gap: 8px; margin-bottom: 10px; align-items: flex-start; }
@@ -408,7 +422,6 @@
     <select id="filter-year" onchange="renderTerminy()">
       <option value="">Všechny roky</option>
       <option value="2026">2026</option>
-      <option value="2027">2027</option>
     </select>
     <select id="filter-month" onchange="renderTerminy()">
       <option value="">Všechny měsíce</option>
@@ -767,11 +780,14 @@
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-scroll" id="modal-content"></div>
     <div class="modal-footer" id="modal-footer" style="display:none;">
-      <button id="modal-save-btn" onclick="saveModalAll()" disabled
-        style="padding:8px 22px;border:none;border-radius:8px;font-size:0.95rem;font-weight:600;background:var(--muted);opacity:0.35;cursor:default;transition:all 0.2s;">
-        Uložit
-      </button>
-      <span id="modal-save-status" style="font-size:0.82rem;color:var(--muted);"></span>
+      <div class="save-banner" id="modal-save-banner"></div>
+      <div class="modal-footer-row">
+        <button id="modal-save-btn" onclick="saveModalAll()" disabled
+          style="padding:8px 22px;border:none;border-radius:8px;font-size:0.95rem;font-weight:600;background:var(--muted);opacity:0.35;cursor:default;transition:all 0.2s;">
+          Uložit
+        </button>
+        <span id="modal-save-status" style="font-size:0.82rem;color:var(--muted);"></span>
+      </div>
     </div>
   </div>
 </div>
@@ -858,65 +874,13 @@ const SEED_WEDDINGS = [
   {date:'2026-10-01',day:'Čtvrtek',coord:'Grochy',staff:null,guests:70,service:['Tomáš Grochal'],cleaning:[]},
   {date:'2026-10-03',day:'Sobota',coord:'Grochy',staff:null,guests:80,service:['Tomáš Grochal','Jan Kenša','Monika Kenša'],cleaning:[]},
   {date:'2026-10-10',day:'Sobota',coord:'Eliška a Vojta',staff:null,guests:50,service:[],cleaning:[]},
-  // 2027
-  {date:'2027-05-15',day:'Sobota',coord:null,staff:null,guests:90,service:[],cleaning:[]},
-  {date:'2027-05-29',day:'Sobota',coord:null,staff:null,guests:50,service:[],cleaning:[]},
-  {date:'2027-06-05',day:'Sobota',coord:null,staff:null,guests:60,service:[],cleaning:[]},
-  {date:'2027-06-19',day:'Sobota',coord:null,staff:null,guests:80,service:[],cleaning:[]},
-  {date:'2027-06-26',day:'Sobota',coord:null,staff:null,guests:60,service:[],cleaning:[]},
-  {date:'2027-07-03',day:'Sobota',coord:null,staff:null,guests:80,service:[],cleaning:[]},
-  {date:'2027-07-08',day:'Čtvrtek',coord:null,staff:null,guests:70,service:[],cleaning:[]},
-  {date:'2027-07-10',day:'Sobota',coord:null,staff:null,guests:75,service:[],cleaning:[]},
-  {date:'2027-07-17',day:'Sobota',coord:null,staff:null,guests:100,service:[],cleaning:[]},
-  {date:'2027-07-24',day:'Sobota',coord:null,staff:null,guests:50,service:[],cleaning:[]},
-  {date:'2027-07-31',day:'Sobota',coord:null,staff:null,guests:70,service:[],cleaning:[]},
-  {date:'2027-08-12',day:'Čtvrtek',coord:null,staff:null,guests:90,service:[],cleaning:[]},
-  {date:'2027-08-21',day:'Sobota',coord:null,staff:null,guests:60,service:[],cleaning:[]},
-  {date:'2027-09-04',day:'Sobota',coord:null,staff:null,guests:90,service:[],cleaning:[]},
-  {date:'2027-09-11',day:'Sobota',coord:null,staff:null,guests:50,service:[],cleaning:[]},
-  {date:'2027-09-18',day:'Sobota',coord:null,staff:null,guests:105,service:[],cleaning:[]},
 ];
 
-const SEED_NAMES = {
-  '2027-05-15': 'Vojtěch Dohnal',
-  '2027-05-29': 'Michaela Čížková',
-  '2027-06-05': 'Jiří Pařízek',
-  '2027-06-19': 'Monika Dočkalová & Ondřej Smoček',
-  '2027-06-26': 'Michaela Jehlíková',
-  '2027-07-03': 'Marie Zdráhalová',
-  '2027-07-08': 'Aneta Nejedlíková',
-  '2027-07-10': 'Lenka Němečková',
-  '2027-07-17': 'Jakub Zálešák',
-  '2027-07-24': 'Justýna Brázdilová',
-  '2027-07-31': 'Sára Plucnarová',
-  '2027-08-12': 'Johana Fabíková',
-  '2027-08-21': 'Monika Peluňková',
-  '2027-09-04': 'Nadan Pojer',
-  '2027-09-11': 'Sára Konečná',
-  '2027-09-18': 'Ellen Palmeová',
-};
-const SEED_EMAILS = {
-  '2027-05-15': 'dohnalv@proton.me',
-  '2027-05-29': 'michaela.c@email.cz',
-  '2027-06-05': 'parizek.jiri@gmail.com',
-  '2027-06-19': 'xdockalova@seznam.cz',
-  '2027-06-26': 'michaelajehlikova@gmail.com',
-  '2027-07-03': 'miazdrahalova@gmail.com',
-  '2027-07-08': 'anetanejedlikova@gmail.com',
-  '2027-07-10': 'lenusnemeckova@seznam.cz',
-  '2027-07-17': 'jakub.zalesak@gmail.com',
-  '2027-07-24': 'justynabrazdilova@seznam.cz',
-  '2027-07-31': 'sara.plucnarova1306@seznam.cz',
-  '2027-08-12': 'Johanafab2000@seznam.cz',
-  '2027-08-21': 'm.pelunkova@seznam.cz',
-  '2027-09-04': 'n.pojer@gmail.com',
-  '2027-09-11': 'konecna.s@seznam.cz',
-  '2027-09-18': 'ellenpalme@seznam.cz',
-};
-const SEED_PHONES = {
-  '2027-07-03': '+420 777 323 833',
-  '2027-09-04': '+420 723 923 350',
-};
+// Kontaktní seed data (jména / e-maily / telefony) — 2027 termíny odstraněny,
+// mapy zůstávají prázdné pro případné budoucí doplnění.
+const SEED_NAMES = {};
+const SEED_EMAILS = {};
+const SEED_PHONES = {};
 
 let WEDDINGS = [...SEED_WEDDINGS]; // merged with custom weddings from Firebase
 
@@ -1107,7 +1071,7 @@ async function loadState() {
 }
 function saveHours() { db.ref('hoursLog').set(hoursLog); }
 function saveRates() { db.ref('rates').set(rates); }
-function saveAssignments() { db.ref('weddingAssignments').set(weddingAssignments); }
+function saveAssignments() { return db.ref('weddingAssignments').set(weddingAssignments); }
 function savePeople() { db.ref('people').set(ALL_PEOPLE); }
 function saveCustomWeddings() { db.ref('customWeddings').set(customWeddings); }
 function saveExpenses() { db.ref('expenses').set(expenses); }
@@ -1186,7 +1150,7 @@ function updateExpenseField(id, field, value) {
   const exp = expenses.find(e => e.id === id);
   if (exp) { exp[field] = value; saveExpenses(); }
 }
-function saveFeedback() { db.ref('weddingFeedback').set(weddingFeedback); }
+function saveFeedback() { return db.ref('weddingFeedback').set(weddingFeedback); }
 function updateFeedback(date, val) {
   weddingFeedback[date] = val;
   saveFeedback();
@@ -1489,36 +1453,107 @@ function toggleRentCols() {
   if (btn) btn.textContent = table.classList.contains('rent-collapsed') ? '▶' : '◀';
 }
 function getCoord(date) { return weddingCoordOverride[date] || (WEDDINGS.find(w => w.date === date) || {}).coord || ''; }
-function saveCoordOverride() { db.ref('weddingCoordOverride').set(weddingCoordOverride); }
+function saveCoordOverride() { return db.ref('weddingCoordOverride').set(weddingCoordOverride); }
 function getStaff(date) {
   if (weddingStaffOverride[date] !== undefined) return weddingStaffOverride[date];
   const w = WEDDINGS.find(x => x.date === date);
   return w ? w.staff : null;
 }
-function saveStaffOverride() { db.ref('weddingStaffOverride').set(weddingStaffOverride); }
+function saveStaffOverride() { return db.ref('weddingStaffOverride').set(weddingStaffOverride); }
 
-function markModalDirty() {
-  _modalDirty = true;
+// ============================================================
+// STAV UKLÁDÁNÍ V MODALU
+// Všechna pole modalu (jméno, telefon, e-mail, koordinátor, nájem,
+// checklist, feedback) i přihlášení/odhlášení na obsluhu a úklid
+// zapisují do databáze OKAMŽITĚ. Footer proto nehlásí „máte neuložené
+// změny", ale výsledek zápisu:
+//   modalSaved()      → zelený banner „✓ Uloženo…", Uložit zůstává neaktivní
+//   modalSaveFailed() → červený banner + Uložit se rozsvítí a pulzuje,
+//                       protože teprve tehdy je zmáčknutí opravdu potřeba
+// ============================================================
+let _bannerTimer = null;
+let _modalRetry  = null;   // co zopakovat, když zápis selhal
+
+function setSaveBanner(state, msg, autoClearMs) {
+  const b = document.getElementById('modal-save-banner');
+  if (!b) return;
+  clearTimeout(_bannerTimer);
+  b.className = 'save-banner ' + state;
+  b.textContent = msg;
+  if (autoClearMs) {
+    _bannerTimer = setTimeout(() => {
+      // Banner zhasne jen pokud mezitím nepřišla chyba.
+      if (!_modalRetry) { b.className = 'save-banner'; b.textContent = ''; }
+    }, autoClearMs);
+  }
+}
+
+function setSaveButtonIdle() {
   const btn = document.getElementById('modal-save-btn');
-  const bar = document.getElementById('modal-save-status');
-  if (btn) { btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; btn.style.background = 'var(--accent)'; btn.textContent = 'Uložit'; }
-  if (bar) bar.textContent = '';
+  if (!btn) return;
+  btn.disabled = true;
+  btn.classList.remove('needs-press');
+  btn.textContent = 'Uložit';
+  btn.style.background = 'var(--muted)';
+  btn.style.opacity = '0.35';
+  btn.style.cursor = 'default';
+}
+
+// Úspěšný zápis. `msg` popisuje konkrétní změnu, ať uživatel vidí, co se uložilo.
+function modalSaved(msg) {
+  _modalDirty = false;
+  _modalRetry = null;
+  setSaveButtonIdle();
+  setSaveBanner('saved', '✓ ' + (msg || 'Uloženo'), 4000);
+  const st = document.getElementById('modal-save-status');
+  if (st) st.textContent = 'Změny se ukládají automaticky.';
+}
+
+// Zápis selhal — tady a jen tady má smysl, aby uživatel mačkal Uložit.
+function modalSaveFailed(msg, retryFn) {
+  _modalDirty = true;
+  _modalRetry = retryFn || null;
+  setSaveBanner('failed', '⚠ ' + msg + ' Změna NENÍ uložená — zmáčkněte Uložit níže.');
+  const btn = document.getElementById('modal-save-btn');
+  if (btn) {
+    btn.disabled = false;
+    btn.textContent = 'Uložit';
+    btn.style.background = '#b94040';
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+    btn.classList.add('needs-press');
+  }
+  const st = document.getElementById('modal-save-status');
+  if (st) st.textContent = 'Zápis do databáze se nepovedl.';
+}
+
+// Volají pole modalu z oninput/onchange — zápis už proběhl, jen se potvrdí.
+// Neuzavřenou chybu nikdy nepřepisuje, aby červené hlášení nezmizelo dřív,
+// než uživatel zmáčkne Uložit.
+function markModalSaved(msg) {
+  if (_modalRetry) return;
+  modalSaved(msg);
 }
 
 function saveModalAll() {
   if (!_modalDate) return;
   const btn = document.getElementById('modal-save-btn');
-  const status = document.getElementById('modal-save-status');
-  if (btn) { btn.disabled = true; btn.textContent = 'Ukládám…'; }
-  // Persist everything for this date
-  saveContact(); savePhone(); saveEmail(); saveCoordOverride(); saveStaffOverride();
-  saveRentDeposit(); saveRentBalance(); saveFeedback(); saveAssignments();
-  saveChecklist(_modalDate);
-  _modalDirty = false;
-  setTimeout(() => {
-    if (btn) { btn.textContent = '✓ Uloženo'; btn.style.background = 'var(--green)'; btn.style.opacity = '0.5'; btn.style.cursor = 'default'; }
-    if (status) status.textContent = '';
-  }, 300);
+  if (btn) { btn.disabled = true; btn.classList.remove('needs-press'); btn.textContent = 'Ukládám…'; }
+  setSaveBanner('saving', 'Ukládám…');
+  const retry = _modalRetry;
+  _modalRetry = null;
+  // Přednostně zopakovat konkrétní zápis, který selhal; jinak uložit vše pro toto datum.
+  const op = retry
+    ? retry()
+    : Promise.all([
+        saveContact(), savePhone(), saveEmail(), saveCoordOverride(), saveStaffOverride(),
+        saveRentDeposit(), saveRentBalance(), saveFeedback(), saveAssignments(),
+        saveChecklist(_modalDate),
+      ]);
+  Promise.resolve(op).then(
+    () => modalSaved('Uloženo'),
+    () => modalSaveFailed('Uložení se opět nezdařilo.', retry)
+  );
 }
 function updateCoord(date, val) {
   weddingCoordOverride[date] = val;
@@ -1526,11 +1561,11 @@ function updateCoord(date, val) {
   const row = document.querySelector(`#terminy-body tr[onclick="openWeddingModal('${date}')"]`);
   if (row) row.cells[2].innerHTML = coordTag(val);
 }
-function saveContact() { db.ref('weddingContact').set(weddingContact); }
-function savePhone()   { db.ref('weddingPhone').set(weddingPhone); }
-function saveEmail()   { db.ref('weddingEmail').set(weddingEmail); }
-function saveRentDeposit() { db.ref('weddingRentDeposit').set(weddingRentDeposit); }
-function saveRentBalance() { db.ref('weddingRentBalance').set(weddingRentBalance); }
+function saveContact() { return db.ref('weddingContact').set(weddingContact); }
+function savePhone()   { return db.ref('weddingPhone').set(weddingPhone); }
+function saveEmail()   { return db.ref('weddingEmail').set(weddingEmail); }
+function saveRentDeposit() { return db.ref('weddingRentDeposit').set(weddingRentDeposit); }
+function saveRentBalance() { return db.ref('weddingRentBalance').set(weddingRentBalance); }
 function contactCellHtml(date) {
   const name  = weddingContact[date] || '';
   const phone = weddingPhone[date]   || '';
@@ -1641,18 +1676,25 @@ function getCleaning(date) {
 // exact date+role path, instead of overwriting the whole weddingAssignments
 // tree from (possibly stale) local state — avoids one tab's save clobbering
 // another tab's concurrent signup for a different date/role.
-function assignmentTransaction(date, role, updateArr, onDone) {
-  db.ref(`weddingAssignments/${date}/${role}`).transaction(current => {
-    const arr = !current ? [] : Array.isArray(current) ? current : Object.values(current);
-    return updateArr(arr);
-  }, (error, committed, snapshot) => {
-    if (error) {
-      alert('Uložení se nezdařilo, zkuste to prosím znovu.');
-      return;
-    }
-    if (!weddingAssignments[date]) weddingAssignments[date] = { service: [], cleaning: [] };
-    weddingAssignments[date][role] = snapshot.val() || [];
-    onDone();
+// Vrací Promise, aby volající poznal, jestli zápis skutečně prošel —
+// na tom závisí hlášení ve footeru modalu a případné zopakování zápisu.
+function assignmentTransaction(date, role, updateArr, onDone, onFail) {
+  return new Promise((resolve, reject) => {
+    db.ref(`weddingAssignments/${date}/${role}`).transaction(current => {
+      const arr = !current ? [] : Array.isArray(current) ? current : Object.values(current);
+      return updateArr(arr);
+    }, (error, committed, snapshot) => {
+      if (error) {
+        if (onFail) onFail(error);
+        else alert('Uložení se nezdařilo, zkuste to prosím znovu.');
+        reject(error);
+        return;
+      }
+      if (!weddingAssignments[date]) weddingAssignments[date] = { service: [], cleaning: [] };
+      weddingAssignments[date][role] = snapshot.val() || [];
+      onDone();
+      resolve();
+    });
   });
 }
 
@@ -1660,17 +1702,27 @@ function signUp(date, person, role) {
   if (!person) return;
   const roleLabel = role === 'service' ? 'obsluhu' : 'úklid';
   confirmAction(`Přihlásit ${person} na ${roleLabel} (${fmtDate(date)})?`, () => {
-    assignmentTransaction(date, role, arr => {
-      if (!arr.includes(person)) arr.push(person);
-      return arr;
-    }, () => refreshAll(date));
+    const apply = () => assignmentTransaction(
+      date, role,
+      arr => { if (!arr.includes(person)) arr.push(person); return arr; },
+      // refreshAll překreslí modal (a tím i footer), hlášení proto až po něm
+      () => { refreshAll(date); modalSaved(`${person} přidán/a na ${roleLabel} — ${fmtDate(date)}`); },
+      () => modalSaveFailed(`${person} se nepodařilo přidat na ${roleLabel}.`, apply)
+    );
+    apply().catch(() => {});   // chybu už ošetřil onFail
   });
 }
 
 function unassign(date, person, role) {
   const roleLabel = role === 'service' ? 'obsluhy' : 'úklidu';
   confirmAction(`Odhlásit ${person} z ${roleLabel} (${fmtDate(date)})?`, () => {
-    assignmentTransaction(date, role, arr => arr.filter(p => p !== person), () => refreshAll(date));
+    const apply = () => assignmentTransaction(
+      date, role,
+      arr => arr.filter(p => p !== person),
+      () => { refreshAll(date); modalSaved(`${person} odebrán/a z ${roleLabel} — ${fmtDate(date)}`); },
+      () => modalSaveFailed(`${person} se nepodařilo odebrat z ${roleLabel}.`, apply)
+    );
+    apply().catch(() => {});
   });
 }
 
@@ -2210,7 +2262,7 @@ function updateRequiredStaff(date, val) {
   const w = WEDDINGS.find(x => x.date === date);
   if (w) w.staff = weddingStaffOverride[date];
   saveStaffOverride();
-  markModalDirty();
+  markModalSaved('Požadovaná obsluha uložena');
   // Update status badge in-place without rebuilding the whole modal
   const svc = getService(date);
   const req = weddingStaffOverride[date];
@@ -2235,11 +2287,15 @@ function openWeddingModal(date) {
   const cln = getCleaning(date);
 
   _modalDate = date; _modalDirty = false;
-  // Reset save button
-  const _sbtn = document.getElementById('modal-save-btn');
-  const _sst  = document.getElementById('modal-save-status');
-  if (_sbtn) { _sbtn.disabled = true; _sbtn.textContent = 'Uložit'; _sbtn.style.background = 'var(--muted)'; _sbtn.style.opacity = '0.35'; _sbtn.style.cursor = 'default'; }
-  if (_sst)  _sst.textContent = '';
+  // Reset footeru. Neuzavřenou chybu (_modalRetry) ponecháme — jinak by
+  // překreslení modalu smazalo červené hlášení o neuloženém zápisu.
+  if (!_modalRetry) {
+    setSaveButtonIdle();
+    const _b = document.getElementById('modal-save-banner');
+    if (_b) { _b.className = 'save-banner'; _b.textContent = ''; }
+    const _sst = document.getElementById('modal-save-status');
+    if (_sst) _sst.textContent = 'Změny se ukládají automaticky.';
+  }
   const _footer = document.getElementById('modal-footer');
   if (_footer) _footer.style.display = 'flex';
   const req = getStaff(date), actual = svc.length;
@@ -2267,32 +2323,32 @@ function openWeddingModal(date) {
     <div class="detail-row"><div class="detail-label">Jméno</div><div class="detail-val">
       <input type="text" value="${(weddingContact[w.date]||'').replace(/"/g,'&quot;')}" placeholder="Jméno páru..."
         style="width:100%;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
-        oninput="updateContact('${w.date}', this.value); markModalDirty()">
+        oninput="updateContact('${w.date}', this.value); markModalSaved('Jméno uloženo')">
     </div></div>
     <div class="detail-row"><div class="detail-label">📞 Telefon</div><div class="detail-val">
       <input type="tel" value="${(weddingPhone[w.date]||'').replace(/"/g,'&quot;')}" placeholder="+420 ..."
         style="width:100%;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
-        oninput="updatePhone('${w.date}', this.value); markModalDirty()">
+        oninput="updatePhone('${w.date}', this.value); markModalSaved('Telefon uložen')">
     </div></div>
     <div class="detail-row"><div class="detail-label">✉ Email</div><div class="detail-val">
       <input type="email" value="${(weddingEmail[w.date]||'').replace(/"/g,'&quot;')}" placeholder="email@..."
         style="width:100%;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
-        oninput="updateEmail('${w.date}', this.value); markModalDirty()">
+        oninput="updateEmail('${w.date}', this.value); markModalSaved('E-mail uložen')">
     </div></div>
     <div class="detail-row"><div class="detail-label">Koordinátor</div><div class="detail-val">
-      <select style="padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;" onchange="updateCoord('${w.date}', this.value); markModalDirty()">
+      <select style="padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;" onchange="updateCoord('${w.date}', this.value); markModalSaved('Koordinátor uložen')">
         ${['Honza + Verča','Matěj','Grochy','Eliška a Vojta'].map(c => `<option value="${c}" ${getCoord(w.date)===c?'selected':''}>${c}</option>`).join('')}
       </select>
     </div></div>
     <div class="detail-row"><div class="detail-label">Nájem záloha (CZK)</div><div class="detail-val">
       <input type="number" min="0" value="${weddingRentDeposit[w.date] ?? ''}" placeholder="—"
         style="width:120px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
-        onchange="updateRentDeposit('${w.date}', this.value); markModalDirty()">
+        onchange="updateRentDeposit('${w.date}', this.value); markModalSaved('Záloha uložena')">
     </div></div>
     <div class="detail-row"><div class="detail-label">Nájem doplatek (CZK)</div><div class="detail-val">
       <input type="number" min="0" value="${weddingRentBalance[w.date] ?? ''}" placeholder="—"
         style="width:120px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;"
-        onchange="updateRentBalance('${w.date}', this.value); markModalDirty()">
+        onchange="updateRentBalance('${w.date}', this.value); markModalSaved('Doplatek uložen')">
     </div></div>
     <div class="detail-row"><div class="detail-label">Požadovaná obsluha</div><div class="detail-val" style="display:flex;align-items:center;gap:8px;">
       <input type="number" min="0" max="20" value="${getStaff(date) ?? ''}" placeholder="—"
@@ -2344,7 +2400,7 @@ function openWeddingModal(date) {
           <label style="display:flex;align-items:center;gap:8px;font-size:0.88rem;cursor:pointer;">
             <input type="checkbox" ${(weddingChecklist[date]||{})[item.key] ? 'checked' : ''}
               style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer;flex:none;"
-              onchange="toggleChecklist('${date}','${item.key}', this.checked); markModalDirty()">
+              onchange="toggleChecklist('${date}','${item.key}', this.checked); markModalSaved('Checklist uložen')">
             <span>${item.label}</span>
           </label>`).join('')}
       </div>
@@ -2366,7 +2422,7 @@ function openWeddingModal(date) {
       <textarea id="feedback-${date}"
         style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:0.85rem;font-family:inherit;resize:vertical;min-height:80px;background:#fafafa;"
         placeholder="Poznámky ke svatbě, co se povedlo, co zlepšit..."
-        oninput="updateFeedback('${date}', this.value); markModalDirty()">${weddingFeedback[date] || ''}</textarea>
+        oninput="updateFeedback('${date}', this.value); markModalSaved('Feedback uložen')">${weddingFeedback[date] || ''}</textarea>
 
       <div style="margin-top:12px;">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
