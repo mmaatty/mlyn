@@ -2586,33 +2586,40 @@ function renderFreeSlots() {
   document.getElementById('free-slots-switch').innerHTML = years.map(y =>
     `<button class="view-btn ${y === year ? 'active' : ''}" onclick="setFreeSeason('${y}')">${y}</button>`).join('');
 
+  // Dlaždice se roztahují přes celou šířku řádku (flex-grow), takže sekce využije
+  // místo i na širokém monitoru. max-width je pojistka, aby v měsíci s málo sloty
+  // nevznikly nesmyslně široké obdélníky — zbytek pak rozdělí justify-content.
   const tile = s => {
     const isBooked = booked.has(s.date);
     const past = s.date < now;
-    const w = s.sat ? 34 : 26, h = s.sat ? 32 : 26;
     const bg = isBooked ? '#ececec' : 'var(--green-light)';
     const bd = isBooked ? '#dcdcdc' : 'var(--green)';
     const fg = isBooked ? 'var(--muted)' : 'var(--green)';
     const who = isBooked && weddingContact[s.date] ? ' · ' + weddingContact[s.date] : '';
     const title = `${fmtDate(s.date)} — ${isBooked ? 'obsazeno' + who : 'VOLNO'}`;
     const click = isBooked ? `openWeddingModal('${s.date}')` : `openNewWeddingForm('${s.date}')`;
+    const name = isBooked && weddingContact[s.date]
+      ? `<div style="font-size:0.58rem;opacity:0.85;line-height:1.2;max-width:94%;overflow:hidden;
+                     text-overflow:ellipsis;white-space:nowrap;">${escAttr(weddingContact[s.date])}</div>` : '';
     return `<div title="${escAttr(title)}" onclick="${click}"
-      style="width:${w}px;height:${h}px;border-radius:5px;background:${bg};border:1.5px solid ${bd};
+      style="flex:1 1 0;min-width:${s.sat ? 58 : 50}px;max-width:${s.sat ? 132 : 108}px;height:${s.sat ? 58 : 48}px;
+             border-radius:7px;background:${bg};border:${s.sat ? 2 : 1.5}px solid ${bd};
              color:${fg};display:flex;flex-direction:column;align-items:center;justify-content:center;
-             cursor:pointer;flex-shrink:0;opacity:${past ? '0.35' : '1'};transition:transform .1s;"
-      onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='none'">
-      <div style="font-size:${s.sat ? '0.72rem' : '0.6rem'};font-weight:700;line-height:1;">${+s.date.slice(8,10)}</div>
-      <div style="font-size:0.48rem;opacity:0.8;line-height:1.3;">${s.sat ? 'So' : 'Čt'}</div>
+             cursor:pointer;opacity:${past ? '0.35' : '1'};transition:transform .1s;"
+      onmouseover="this.style.transform='scale(1.07)'" onmouseout="this.style.transform='none'">
+      <div style="font-size:${s.sat ? '1.15rem' : '0.92rem'};font-weight:700;line-height:1.05;">${+s.date.slice(8,10)}</div>
+      <div style="font-size:${s.sat ? '0.66rem' : '0.6rem'};opacity:0.8;line-height:1.2;">${s.sat ? 'So' : 'Čt'}</div>
+      ${name}
     </div>`;
   };
 
   const rows = SEASON_MONTHS.map(m => {
     const ms = slots.filter(s => s.date.slice(5,7) === m.num);
     const mFree = ms.filter(s => !booked.has(s.date)).length;
-    return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-      <div style="width:30px;flex-shrink:0;font-size:0.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;">${m.label}</div>
-      <div style="display:flex;gap:4px;flex-wrap:wrap;flex:1;min-width:0;">${ms.map(tile).join('')}</div>
-      <div style="width:56px;flex-shrink:0;text-align:right;font-size:0.68rem;
+    return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <div style="width:42px;flex-shrink:0;font-size:0.8rem;font-weight:700;color:var(--muted);text-transform:uppercase;">${m.label}</div>
+      <div style="display:flex;gap:6px;flex:1;min-width:0;flex-wrap:wrap;justify-content:space-between;align-items:center;">${ms.map(tile).join('')}</div>
+      <div style="width:66px;flex-shrink:0;text-align:right;font-size:0.78rem;
                   color:${mFree ? 'var(--green)' : 'var(--muted)'};font-weight:${mFree ? '700' : '400'};">
         ${mFree ? mFree + ' volno' : 'plno'}
       </div>
@@ -2627,17 +2634,17 @@ function renderFreeSlots() {
     </div>` : '';
 
   host.innerHTML = `
-    <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
-      <div style="font-size:1.5rem;font-weight:700;color:var(--green);line-height:1;">${free.length}</div>
-      <div style="font-size:0.75rem;color:var(--muted);">
+    <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:14px;">
+      <div style="font-size:2rem;font-weight:700;color:var(--green);line-height:1;">${free.length}</div>
+      <div style="font-size:0.85rem;color:var(--muted);">
         volných z ${slots.length} · <strong style="color:var(--text);">${freeSat}</strong> sobot ·
         <strong style="color:var(--text);">${freeThu}</strong> čtvrtků
       </div>
     </div>
     ${rows}
-    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:0.68rem;color:var(--muted);">
-      <span><span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:var(--green-light);border:1.5px solid var(--green);vertical-align:-1px;"></span> volno — klik založí termín</span>
-      <span><span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:#ececec;border:1.5px solid #dcdcdc;vertical-align:-1px;"></span> obsazeno — klik otevře detail</span>
+    <div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:0.72rem;color:var(--muted);">
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--green-light);border:1.5px solid var(--green);vertical-align:-1px;"></span> volno — klik založí termín</span>
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#ececec;border:1.5px solid #dcdcdc;vertical-align:-1px;"></span> obsazeno — klik otevře detail</span>
       <span>velká dlaždice = sobota</span>
     </div>
     ${offGridNote}`;
