@@ -584,6 +584,13 @@
       <div id="feedback-summary"></div>
     </div>
   </div>
+  <div style="margin-top:20px;">
+    <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+      <span id="free-slots-title">Volné termíny</span>
+      <span class="season-switch" id="free-slots-switch"></span>
+    </div>
+    <div id="free-slots"></div>
+  </div>
 </div>
 
 <!-- ===================== PAGE: TERMÍNY ===================== -->
@@ -2521,6 +2528,119 @@ function renderPrehled() {
     <div style="display:flex;gap:3px;border-top:1px solid var(--border);padding-top:10px;">${dotsHtml}</div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;">${legend}<span style="color:#d0d0d0;font-size:0.7rem;">● Proběhlé</span></div>`;
 
+  renderFreeSlots();
+}
+
+// ============================================================
+// VOLNÉ TERMÍNY
+// Prodejné sloty sezóny = každý čtvrtek a sobota od 1.4. do 31.10.
+// Sobota má větší dlaždici (hlavní termín), čtvrtek menší (doplňkový).
+// Obsazeno = jakýkoliv záznam ve WEDDINGS na daném datu (svatba i jiná akce).
+// ============================================================
+const SEASON_FROM_MD = '-04-01';
+const SEASON_TO_MD   = '-10-31';
+const SEASON_MONTHS = [
+  {num:'04',label:'Dub'},{num:'05',label:'Kvě'},{num:'06',label:'Čer'},
+  {num:'07',label:'Čvc'},{num:'08',label:'Srp'},{num:'09',label:'Zář'},
+  {num:'10',label:'Říj'}
+];
+
+// Datum skládáme z místních složek — toISOString() by v CET posunul den zpět
+function ymd(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function seasonSlots(year) {
+  const out = [];
+  const end = new Date(`${year}${SEASON_TO_MD}T00:00:00`);
+  for (let d = new Date(`${year}${SEASON_FROM_MD}T00:00:00`); d <= end; d.setDate(d.getDate() + 1)) {
+    const dow = d.getDay(); // 4 = čtvrtek, 6 = sobota
+    if (dow === 4 || dow === 6) out.push({ date: ymd(d), sat: dow === 6 });
+  }
+  return out;
+}
+
+let freeSeason = null;
+function setFreeSeason(y) { freeSeason = y; renderFreeSlots(); }
+
+function renderFreeSlots() {
+  const host = document.getElementById('free-slots');
+  if (!host) return;
+  const years = seasonYears();
+  const now = today();
+  // Výchozí = nejvzdálenější sezóna v datech, tedy ta, která se právě prodává
+  if (!freeSeason || !years.includes(freeSeason)) freeSeason = years[years.length - 1] || now.slice(0, 4);
+  const year = freeSeason;
+
+  const slots = seasonSlots(year);
+  const slotDates = new Set(slots.map(s => s.date));
+  const booked = new Set(WEDDINGS.filter(w => w.date.startsWith(year + '-')).map(w => w.date));
+  // Termíny, které do mřížky čt/so nespadají — ať se neztratí z přehledu
+  const offGrid = WEDDINGS.filter(w => w.date.startsWith(year + '-') && !slotDates.has(w.date));
+
+  const free = slots.filter(s => !booked.has(s.date));
+  const freeSat = free.filter(s => s.sat).length;
+  const freeThu = free.length - freeSat;
+
+  document.getElementById('free-slots-title').textContent = `Volné termíny ${year}`;
+  document.getElementById('free-slots-switch').innerHTML = years.map(y =>
+    `<button class="view-btn ${y === year ? 'active' : ''}" onclick="setFreeSeason('${y}')">${y}</button>`).join('');
+
+  const tile = s => {
+    const isBooked = booked.has(s.date);
+    const past = s.date < now;
+    const w = s.sat ? 34 : 26, h = s.sat ? 32 : 26;
+    const bg = isBooked ? '#ececec' : 'var(--green-light)';
+    const bd = isBooked ? '#dcdcdc' : 'var(--green)';
+    const fg = isBooked ? 'var(--muted)' : 'var(--green)';
+    const who = isBooked && weddingContact[s.date] ? ' · ' + weddingContact[s.date] : '';
+    const title = `${fmtDate(s.date)} — ${isBooked ? 'obsazeno' + who : 'VOLNO'}`;
+    const click = isBooked ? `openWeddingModal('${s.date}')` : `openNewWeddingForm('${s.date}')`;
+    return `<div title="${escAttr(title)}" onclick="${click}"
+      style="width:${w}px;height:${h}px;border-radius:5px;background:${bg};border:1.5px solid ${bd};
+             color:${fg};display:flex;flex-direction:column;align-items:center;justify-content:center;
+             cursor:pointer;flex-shrink:0;opacity:${past ? '0.35' : '1'};transition:transform .1s;"
+      onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='none'">
+      <div style="font-size:${s.sat ? '0.72rem' : '0.6rem'};font-weight:700;line-height:1;">${+s.date.slice(8,10)}</div>
+      <div style="font-size:0.48rem;opacity:0.8;line-height:1.3;">${s.sat ? 'So' : 'Čt'}</div>
+    </div>`;
+  };
+
+  const rows = SEASON_MONTHS.map(m => {
+    const ms = slots.filter(s => s.date.slice(5,7) === m.num);
+    const mFree = ms.filter(s => !booked.has(s.date)).length;
+    return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+      <div style="width:30px;flex-shrink:0;font-size:0.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;">${m.label}</div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap;flex:1;min-width:0;">${ms.map(tile).join('')}</div>
+      <div style="width:56px;flex-shrink:0;text-align:right;font-size:0.68rem;
+                  color:${mFree ? 'var(--green)' : 'var(--muted)'};font-weight:${mFree ? '700' : '400'};">
+        ${mFree ? mFree + ' volno' : 'plno'}
+      </div>
+    </div>`;
+  }).join('');
+
+  const offGridNote = offGrid.length ? `
+    <div style="margin-top:8px;font-size:0.68rem;color:var(--muted);">
+      Mimo mřížku čt/so: ${offGrid.map(w =>
+        `<a onclick="openWeddingModal('${w.date}')" style="cursor:pointer;text-decoration:underline;">${fmtDate(w.date)}</a>`
+      ).join(', ')}
+    </div>` : '';
+
+  host.innerHTML = `
+    <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
+      <div style="font-size:1.5rem;font-weight:700;color:var(--green);line-height:1;">${free.length}</div>
+      <div style="font-size:0.75rem;color:var(--muted);">
+        volných z ${slots.length} · <strong style="color:var(--text);">${freeSat}</strong> sobot ·
+        <strong style="color:var(--text);">${freeThu}</strong> čtvrtků
+      </div>
+    </div>
+    ${rows}
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:0.68rem;color:var(--muted);">
+      <span><span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:var(--green-light);border:1.5px solid var(--green);vertical-align:-1px;"></span> volno — klik založí termín</span>
+      <span><span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:#ececec;border:1.5px solid #dcdcdc;vertical-align:-1px;"></span> obsazeno — klik otevře detail</span>
+      <span>velká dlaždice = sobota</span>
+    </div>
+    ${offGridNote}`;
 }
 
 // ============================================================
