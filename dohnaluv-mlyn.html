@@ -2602,13 +2602,13 @@ function renderFreeSlots() {
       ? `<div style="font-size:0.58rem;opacity:0.85;line-height:1.2;max-width:94%;overflow:hidden;
                      text-overflow:ellipsis;white-space:nowrap;">${escAttr(weddingContact[s.date])}</div>` : '';
     return `<div title="${escAttr(title)}" onclick="${click}"
-      style="flex:1 1 0;min-width:${s.sat ? 58 : 50}px;max-width:${s.sat ? 132 : 108}px;height:${s.sat ? 58 : 48}px;
-             border-radius:7px;background:${bg};border:${s.sat ? 2 : 1.5}px solid ${bd};
+      style="flex:1 1 0;min-width:56px;max-width:124px;height:56px;
+             border-radius:7px;background:${bg};border:1.5px solid ${bd};
              color:${fg};display:flex;flex-direction:column;align-items:center;justify-content:center;
              cursor:pointer;opacity:${past ? '0.35' : '1'};transition:transform .1s;"
       onmouseover="this.style.transform='scale(1.07)'" onmouseout="this.style.transform='none'">
-      <div style="font-size:${s.sat ? '1.15rem' : '0.92rem'};font-weight:700;line-height:1.05;">${+s.date.slice(8,10)}</div>
-      <div style="font-size:${s.sat ? '0.66rem' : '0.6rem'};opacity:0.8;line-height:1.2;">${s.sat ? 'So' : 'Čt'}</div>
+      <div style="font-size:1.05rem;font-weight:700;line-height:1.05;">${+s.date.slice(8,10)}</div>
+      <div style="font-size:0.63rem;opacity:0.8;line-height:1.2;">${s.sat ? 'So' : 'Čt'}</div>
       ${name}
     </div>`;
   };
@@ -2645,7 +2645,7 @@ function renderFreeSlots() {
     <div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:0.72rem;color:var(--muted);">
       <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--green-light);border:1.5px solid var(--green);vertical-align:-1px;"></span> volno — klik založí termín</span>
       <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#ececec;border:1.5px solid #dcdcdc;vertical-align:-1px;"></span> obsazeno — klik otevře detail</span>
-      <span>velká dlaždice = sobota</span>
+      <span>So = sobota · Čt = čtvrtek</span>
     </div>
     ${offGridNote}`;
 }
