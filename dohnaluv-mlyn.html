@@ -605,17 +605,15 @@
       <button class="btn btn-sm" onclick="openNewWeddingForm()">+ Zaregistrovat termín</button>
     </div>
   </div>
-  <div class="stats" id="najem-summary"></div>
   <div class="filters">
-    <div class="view-toggle">
-      <button class="view-btn active" id="view-btn-list" onclick="setTerminyView('list')">Seznam</button>
-      <button class="view-btn" id="view-btn-cal" onclick="setTerminyView('calendar')">Kalendář</button>
-    </div>
+    <!-- Přepínač Seznam / Kalendář byl odstraněn — termíny se zobrazují jen
+         jako seznam. Kód kalendáře (terminy-cal-view, renderCalendar) zůstal
+         v souboru nepoužitý pro případ, že by se zobrazení vracelo. -->
     <input type="text" id="filter-search" placeholder="Hledat jméno / datum..." oninput="renderTerminy()" style="min-width:200px;">
     <select id="filter-coord" onchange="renderTerminy()">
       <option value="">Všichni koordinátoři</option>
       <option value="__none__">Bez koordinátora</option>
-      <option>Honza + Verča</option>
+      <option>Verča</option>
       <option>Matěj</option>
       <option>Grochy</option>
       <option>Eliška a Vojta</option>
@@ -636,12 +634,13 @@
     <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;cursor:pointer;">
       <input type="checkbox" id="filter-future" onchange="renderTerminy()"> Jen nadcházející
     </label>
-    <button class="btn btn-outline btn-sm" onclick="document.getElementById('filter-search').value='';document.getElementById('filter-coord').value='';document.getElementById('filter-year').value='';document.getElementById('filter-month').value='';document.getElementById('filter-future').checked=false;renderTerminy()">Resetovat</button>
+    <button class="btn btn-outline btn-sm" onclick="resetTerminyFilters()">Resetovat</button>
   </div>
 
   <div id="terminy-list-view">
     <div class="table-wrap">
-      <table id="terminy-table">
+      <!-- Nájem je ve výchozím stavu schovaný pod šipkou v hlavičce -->
+      <table id="terminy-table" class="rent-collapsed">
         <thead>
           <tr>
             <th>Jméno a kontakt</th>
@@ -650,7 +649,7 @@
             <th>Hosté</th>
             <th>Obsluha (požad./skut.)</th>
             <th>Úklid (druhý den)</th>
-            <th style="width:28px;padding:4px 2px;text-align:center;"><button class="rent-toggle-btn" id="rent-toggle-btn" onclick="toggleRentCols()" title="Skrýt/zobrazit nájem">◀</button></th>
+            <th style="width:28px;padding:4px 2px;text-align:center;"><button class="rent-toggle-btn" id="rent-toggle-btn" onclick="toggleRentCols()" title="Zobrazit/skrýt nájem">▶</button></th>
             <th class="col-rent-th">Nájem záloha</th>
             <th class="col-rent-th">Nájem doplatek</th>
             <th></th>
@@ -691,8 +690,10 @@
       <option value="">— Vyberte zaměstnance —</option>
     </select>
     <button class="btn btn-sm btn-ghost-danger" onclick="(function(){ const n=document.getElementById('person-select').value; if(n) removeEmployee(n); })()">Odebrat</button>
+    <div class="season-switch" id="zam-year-switch" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
   </div>
   <div id="person-login"></div>
+  <div id="person-earnings"></div>
   <div id="person-schedule"></div>
 </div>
 
@@ -970,6 +971,7 @@
   </div>
   <div id="payroll-lock-screen"></div>
   <div id="payroll-unlocked-content" style="display:none;">
+    <div id="najem-summary-block"></div>
     <div id="payroll-content"></div>
   </div>
 </div>
@@ -1053,13 +1055,34 @@
   </div>
 </div>
 
+<!-- RYCHLÉ PŘIHLÁŠENÍ NA OBSLUHU / ÚKLID -->
+<!-- Samostatné okno jen s rozpisem. Detail svatby se záměrně neotevírá, aby při
+     zapsání na směnu nešlo omylem přepsat kontakt, nájem nebo checklist. -->
+<div class="modal-overlay" id="signup-overlay" onclick="closeSignupModal(event)" style="display:none;align-items:center;justify-content:center;">
+  <div class="modal" style="max-width:440px;width:92%;" onclick="event.stopPropagation()">
+    <!-- .modal má overflow:hidden a je flex sloupec — obsah proto musí být
+         v .modal-scroll, jinak text přeteče a plovoucí křížek se roztáhne -->
+    <div class="modal-scroll" id="signup-content" style="padding-bottom:24px;"></div>
+  </div>
+</div>
+
 <!-- CONFIRM MODAL -->
-<div class="modal-overlay" id="confirm-modal-overlay" style="display:none;align-items:center;justify-content:center;">
-  <div class="modal" style="max-width:360px;text-align:center;" onclick="event.stopPropagation()">
-    <div class="modal-title" style="margin-bottom:12px;" id="confirm-modal-msg"></div>
-    <div style="display:flex;gap:10px;justify-content:center;margin-top:8px;">
+<div class="modal-overlay" id="confirm-modal-overlay" onclick="closeConfirmModal(event)" style="display:none;align-items:center;justify-content:center;">
+  <div class="modal" style="max-width:420px;" onclick="event.stopPropagation()">
+    <div style="display:flex;gap:14px;align-items:flex-start;">
+      <div id="confirm-modal-icon" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;
+           display:flex;align-items:center;justify-content:center;font-size:1.15rem;font-weight:700;"></div>
+      <div style="flex:1;min-width:0;">
+        <div class="modal-title" id="confirm-modal-msg" style="font-size:1.12rem;margin-bottom:5px;"></div>
+        <div id="confirm-modal-detail" style="font-size:0.84rem;color:var(--muted);line-height:1.45;white-space:pre-line;"></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:20px;">
       <button class="btn btn-danger" id="confirm-modal-yes">Ano, provést</button>
       <button class="btn btn-outline" onclick="closeConfirmModal()">Zrušit</button>
+    </div>
+    <div style="text-align:center;margin-top:10px;font-size:0.7rem;color:var(--muted);opacity:0.75;">
+      Enter potvrdí · Esc zruší
     </div>
   </div>
 </div>
@@ -1087,35 +1110,35 @@
 // DATA
 // ============================================================
 const SEED_WEDDINGS = [
-  {date:'2026-04-18',day:'Sobota',coord:'Honza + Verča',staff:5,guests:100,service:['Lenka Helísková','Jan Kenša','Monika Kenša','Petra Pospíšilová'],cleaning:['Monika Kenša','Petra Grochalová','Petra Pospíšilová','Lenka Helísková','Lucka Dohnalová']},
+  {date:'2026-04-18',day:'Sobota',coord:'Verča',staff:5,guests:100,service:['Lenka Helísková','Jan Kenša','Monika Kenša','Petra Pospíšilová'],cleaning:['Monika Kenša','Petra Grochalová','Petra Pospíšilová','Lenka Helísková','Lucka Dohnalová']},
   {date:'2026-04-25',day:'Sobota',coord:'Matěj',staff:4,guests:60,service:['Matěj Dohnal','Petra Pospíšilová','Tereza Puršová','Lenka Helísková'],cleaning:['Petra Grochalová','Petra Pospíšilová','Kamča Zavadilová','Lenka Helísková','Monika Kenša']},
-  {date:'2026-05-02',day:'Sobota',coord:'Honza + Verča',staff:null,guests:60,service:[],cleaning:['Monika Kenša','Lenka Helísková']},
+  {date:'2026-05-02',day:'Sobota',coord:'Verča',staff:null,guests:60,service:[],cleaning:['Monika Kenša','Lenka Helísková']},
   {date:'2026-05-07',day:'Čtvrtek',coord:'Grochy',staff:null,guests:30,service:['Tomáš Grochal','Monika Kenša','Lenka Helísková'],cleaning:['Monika Kenša','Petra Grochalová','Kamča Zavadilová','Lenka Helísková','Lucka Dohnalová']},
   {date:'2026-05-09',day:'Sobota',coord:'Grochy',staff:null,guests:80,service:['Monika Kenša','Jan Kenša','Lenka Helísková','Kamča Zavadilová'],cleaning:['Petra Pospíšilová','Lenka Helísková','Lucka Dohnalová']},
   {date:'2026-05-14',day:'Čtvrtek',coord:'Matěj',staff:4,guests:65,service:['Monika Kenša','Tereza Puršová','Tomáš Grochal','Petra Pospíšilová'],cleaning:['Petra Grochalová','Kamča Zavadilová','Tereza Puršová']},
   {date:'2026-05-16',day:'Sobota',coord:'Matěj',staff:3,guests:50,service:['Monika Kenša','Jan Kenša','Tomáš Grochal','Petra Grochalová','Petra Pospíšilová'],cleaning:['Petra Pospíšilová','Lucka Dohnalová','Monika Kenša']},
   {date:'2026-05-21',day:'Čtvrtek',coord:'Eliška a Vojta',staff:null,guests:70,service:[],cleaning:['Monika Kenša','Tereza Puršová']},
   {date:'2026-05-23',day:'Sobota',coord:'Eliška a Vojta',staff:null,guests:90,service:['Tereza Puršová'],cleaning:['Petra Pospíšilová','Tereza Puršová']},
-  {date:'2026-05-28',day:'Čtvrtek',coord:'Honza + Verča',staff:null,guests:30,service:['Tomáš Grochal'],cleaning:['Monika Kenša','Lucka Dohnalová']},
-  {date:'2026-05-30',day:'Sobota',coord:'Honza + Verča',staff:null,guests:45,service:['Tomáš Grochal'],cleaning:['Monika Kenša','Lucka Dohnalová','Petra Pospíšilová']},
+  {date:'2026-05-28',day:'Čtvrtek',coord:'Verča',staff:null,guests:30,service:['Tomáš Grochal'],cleaning:['Monika Kenša','Lucka Dohnalová']},
+  {date:'2026-05-30',day:'Sobota',coord:'Verča',staff:null,guests:45,service:['Tomáš Grochal'],cleaning:['Monika Kenša','Lucka Dohnalová','Petra Pospíšilová']},
   {date:'2026-06-04',day:'Čtvrtek',coord:'Grochy',staff:null,guests:80,service:['Tomáš Grochal','Monika Kenša'],cleaning:['Petra Grochalová','Kamča Zavadilová']},
   {date:'2026-06-06',day:'Sobota',coord:'Grochy',staff:null,guests:80,service:['Monika Kenša','Jan Kenša'],cleaning:['Monika Kenša','Tereza Puršová','Petra Pospíšilová']},
   {date:'2026-06-11',day:'Čtvrtek',coord:'Matěj',staff:null,guests:null,service:['Monika Kenša','Tereza Puršová','Tomáš Grochal'],cleaning:['Tereza Puršová']},
   {date:'2026-06-13',day:'Sobota',coord:'Matěj',staff:5,guests:90,service:['Monika Kenša','Jan Kenša','Tomáš Grochal','Petra Grochalová','Petra Pospíšilová'],cleaning:['Tereza Puršová','Petra Pospíšilová']},
   {date:'2026-06-18',day:'Čtvrtek',coord:'Eliška a Vojta',staff:null,guests:60,service:['Tomáš Grochal'],cleaning:['Monika Kenša']},
   {date:'2026-06-20',day:'Sobota',coord:'Eliška a Vojta',staff:null,guests:50,service:[],cleaning:['Monika Kenša']},
-  {date:'2026-06-25',day:'Čtvrtek',coord:'Honza + Verča',staff:null,guests:80,service:['Tomáš Grochal'],cleaning:['Monika Kenša']},
-  {date:'2026-06-27',day:'Sobota',coord:'Honza + Verča',staff:null,guests:null,service:[],cleaning:['Monika Kenša']},
-  {date:'2026-07-02',day:'Čtvrtek',coord:'Honza + Verča',staff:null,guests:80,service:['Tomáš Grochal'],cleaning:['Monika Kenša']},
-  {date:'2026-07-04',day:'Sobota',coord:'Honza + Verča',staff:null,guests:70,service:['Jan Kenša','Monika Kenša','Petra Pospíšilová'],cleaning:[]},
+  {date:'2026-06-25',day:'Čtvrtek',coord:'Verča',staff:null,guests:80,service:['Tomáš Grochal'],cleaning:['Monika Kenša']},
+  {date:'2026-06-27',day:'Sobota',coord:'Verča',staff:null,guests:null,service:[],cleaning:['Monika Kenša']},
+  {date:'2026-07-02',day:'Čtvrtek',coord:'Verča',staff:null,guests:80,service:['Tomáš Grochal'],cleaning:['Monika Kenša']},
+  {date:'2026-07-04',day:'Sobota',coord:'Verča',staff:null,guests:70,service:['Jan Kenša','Monika Kenša','Petra Pospíšilová'],cleaning:[]},
   {date:'2026-07-09',day:'Čtvrtek',coord:'Grochy',staff:null,guests:45,service:['Monika Kenša','Jan Kenša'],cleaning:['Monika Kenša']},
   {date:'2026-07-11',day:'Sobota',coord:'Grochy',staff:null,guests:80,service:['Monika Kenša','Jan Kenša','Kamča Zavadilová'],cleaning:['Monika Kenša']},
   {date:'2026-07-16',day:'Čtvrtek',coord:'Eliška a Vojta',staff:null,guests:85,service:[],cleaning:['Monika Kenša']},
   {date:'2026-07-18',day:'Sobota',coord:'Eliška a Vojta',staff:null,guests:60,service:[],cleaning:['Monika Kenša','Petra Pospíšilová']},
   {date:'2026-07-23',day:'Čtvrtek',coord:'Matěj',staff:5,guests:75,service:['Tomáš Grochal','Petra Pospíšilová','Monika Kenša','Jan Kenša'],cleaning:['Tereza Puršová']},
   {date:'2026-07-25',day:'Sobota',coord:'Matěj',staff:3,guests:50,service:['Monika Kenša','Jan Kenša','Tereza Puršová','Tomáš Grochal','Petra Pospíšilová'],cleaning:['Petra Pospíšilová']},
-  {date:'2026-07-30',day:'Čtvrtek',coord:'Honza + Verča',staff:null,guests:60,service:['Tomáš Grochal'],cleaning:[]},
-  {date:'2026-08-01',day:'Sobota',coord:'Honza + Verča',staff:null,guests:80,service:[],cleaning:[]},
+  {date:'2026-07-30',day:'Čtvrtek',coord:'Verča',staff:null,guests:60,service:['Tomáš Grochal'],cleaning:[]},
+  {date:'2026-08-01',day:'Sobota',coord:'Verča',staff:null,guests:80,service:[],cleaning:[]},
   {date:'2026-08-06',day:'Čtvrtek',coord:'Eliška a Vojta',staff:null,guests:45,service:[],cleaning:['Monika Kenša']},
   {date:'2026-08-08',day:'Sobota',coord:'Eliška a Vojta',staff:null,guests:65,service:[],cleaning:['Monika Kenša']},
   {date:'2026-08-13',day:'Čtvrtek',coord:'Matěj',staff:3,guests:30,service:['Monika Kenša','Jan Kenša','Tomáš Grochal','Petra Pospíšilová'],cleaning:[]},
@@ -1128,60 +1151,67 @@ const SEED_WEDDINGS = [
   {date:'2026-09-05',day:'Sobota',coord:null,staff:null,guests:null,service:[],cleaning:[]},
   {date:'2026-09-10',day:'Čtvrtek',coord:'Matěj',staff:3,guests:null,service:['Tomáš Grochal'],cleaning:[]},
   {date:'2026-09-12',day:'Sobota',coord:'Matěj',staff:3,guests:null,service:['Monika Kenša','Jan Kenša','Tomáš Grochal','Petra Grochalová'],cleaning:[]},
-  {date:'2026-09-17',day:'Čtvrtek',coord:'Honza + Verča',staff:null,guests:65,service:['Tomáš Grochal'],cleaning:[]},
-  {date:'2026-09-19',day:'Sobota',coord:'Honza + Verča',staff:null,guests:80,service:[],cleaning:[]},
+  {date:'2026-09-17',day:'Čtvrtek',coord:'Verča',staff:null,guests:65,service:['Tomáš Grochal'],cleaning:[]},
+  {date:'2026-09-19',day:'Sobota',coord:'Verča',staff:null,guests:80,service:[],cleaning:[]},
   {date:'2026-09-24',day:'Čtvrtek',coord:'Grochy',staff:null,guests:60,service:['Tomáš Grochal'],cleaning:[]},
   {date:'2026-09-26',day:'Sobota',coord:'Grochy',staff:null,guests:65,service:['Tomáš Grochal','Monika Kenša','Jan Kenša'],cleaning:[]},
   {date:'2026-10-01',day:'Čtvrtek',coord:'Grochy',staff:null,guests:70,service:['Tomáš Grochal'],cleaning:[]},
   {date:'2026-10-03',day:'Sobota',coord:'Grochy',staff:null,guests:80,service:['Tomáš Grochal','Jan Kenša','Monika Kenša'],cleaning:[]},
   {date:'2026-10-10',day:'Sobota',coord:'Eliška a Vojta',staff:null,guests:50,service:[],cleaning:[]},
   // ---- Sezóna 2027 (import z Book1.xlsx, 26. 9. 2026) ----
-  {date:'2027-04-17',day:'Sobota',coord:null,staff:null,guests:null,service:[],cleaning:[]},
-  {date:'2027-04-24',day:'Sobota',coord:null,staff:null,guests:80,service:[],cleaning:[]},
-  {date:'2027-04-29',day:'Čtvrtek',coord:null,staff:null,guests:null,service:[],cleaning:[]},
-  {date:'2027-05-01',day:'Sobota',coord:null,staff:null,guests:100,service:[],cleaning:[]},
-  {date:'2027-05-08',day:'Sobota',coord:null,staff:null,guests:60,service:[],cleaning:[]},
-  {date:'2027-05-13',day:'Čtvrtek',coord:null,staff:null,guests:40,service:[],cleaning:[]},
-  {date:'2027-05-15',day:'Sobota',coord:null,staff:null,guests:90,service:[],cleaning:[]},
-  {date:'2027-05-20',day:'Čtvrtek',coord:null,staff:null,guests:45,service:[],cleaning:[]},
-  {date:'2027-05-22',day:'Sobota',coord:null,staff:null,guests:60,service:[],cleaning:[],guestsNote:'50-60 osob'},
-  {date:'2027-05-27',day:'Čtvrtek',coord:null,staff:null,guests:60,service:[],cleaning:[]},
-  {date:'2027-05-29',day:'Sobota',coord:null,staff:null,guests:50,service:[],cleaning:[]},
-  {date:'2027-06-03',day:'Čtvrtek',coord:null,staff:null,guests:50,service:[],cleaning:[]},
-  {date:'2027-06-05',day:'Sobota',coord:null,staff:null,guests:60,service:[],cleaning:[]},
-  {date:'2027-06-10',day:'Čtvrtek',coord:null,staff:null,guests:91,service:[],cleaning:[]},
-  {date:'2027-06-12',day:'Sobota',coord:null,staff:null,guests:55,service:[],cleaning:[]},
-  {date:'2027-06-17',day:'Čtvrtek',coord:null,staff:null,guests:70,service:[],cleaning:[]},
-  {date:'2027-06-19',day:'Sobota',coord:null,staff:null,guests:80,service:[],cleaning:[]},
-  {date:'2027-06-24',day:'Čtvrtek',coord:null,staff:null,guests:70,service:[],cleaning:[]},
-  {date:'2027-06-26',day:'Sobota',coord:null,staff:null,guests:60,service:[],cleaning:[]},
-  {date:'2027-07-01',day:'Čtvrtek',coord:null,staff:null,guests:60,service:[],cleaning:[]},
-  {date:'2027-07-05',day:'Pondělí',coord:null,staff:null,guests:95,service:[],cleaning:[]},
-  {date:'2027-07-08',day:'Čtvrtek',coord:null,staff:null,guests:70,service:[],cleaning:[]},
-  {date:'2027-07-10',day:'Sobota',coord:null,staff:null,guests:75,service:[],cleaning:[],guestsNote:'75 osob (bez dětí)'},
-  {date:'2027-07-15',day:'Čtvrtek',coord:null,staff:null,guests:55,service:[],cleaning:[]},
-  {date:'2027-07-17',day:'Sobota',coord:null,staff:null,guests:100,service:[],cleaning:[]},
-  {date:'2027-07-22',day:'Čtvrtek',coord:null,staff:null,guests:75,service:[],cleaning:[]},
-  {date:'2027-07-24',day:'Sobota',coord:null,staff:null,guests:50,service:[],cleaning:[]},
+  {date:'2027-04-17',day:'Sobota',coord:'Grochy',staff:null,guests:null,service:[],cleaning:[]},
+  {date:'2027-04-22',day:'Čtvrtek',coord:'Grochy',staff:null,guests:null,service:[],cleaning:[]},
+  {date:'2027-04-24',day:'Sobota',coord:'Eliška a Vojta',staff:null,guests:80,service:[],cleaning:[]},
+  {date:'2027-04-29',day:'Čtvrtek',coord:'Eliška a Vojta',staff:null,guests:null,service:[],cleaning:[]},
+  {date:'2027-05-01',day:'Sobota',coord:'Verča',staff:null,guests:100,service:[],cleaning:[]},
+  {date:'2027-05-06',day:'Čtvrtek',coord:'Verča',staff:null,guests:40,service:[],cleaning:[]},
+  {date:'2027-05-08',day:'Sobota',coord:'Grochy',staff:null,guests:60,service:[],cleaning:[]},
+  {date:'2027-05-13',day:'Čtvrtek',coord:'Grochy',staff:null,guests:40,service:[],cleaning:[]},
+  {date:'2027-05-15',day:'Sobota',coord:'Eliška a Vojta',staff:null,guests:90,service:[],cleaning:[]},
+  {date:'2027-05-20',day:'Čtvrtek',coord:'Eliška a Vojta',staff:null,guests:45,service:[],cleaning:[]},
+  {date:'2027-05-22',day:'Sobota',coord:'Matěj',staff:null,guests:60,service:[],cleaning:[],guestsNote:'50-60 osob'},
+  {date:'2027-05-27',day:'Čtvrtek',coord:'Grochy',staff:null,guests:60,service:[],cleaning:[]},
+  {date:'2027-05-29',day:'Sobota',coord:'Verča',staff:null,guests:50,service:[],cleaning:[]},
+  {date:'2027-06-03',day:'Čtvrtek',coord:'Grochy',staff:null,guests:50,service:[],cleaning:[]},
+  {date:'2027-06-05',day:'Sobota',coord:'Grochy',staff:null,guests:60,service:[],cleaning:[],eventNote:'Pronájem do pondělí do 10:00 — 6 500 Kč k nájmu'},
+  {date:'2027-06-10',day:'Čtvrtek',coord:'Grochy',staff:null,guests:91,service:[],cleaning:[]},
+  {date:'2027-06-12',day:'Sobota',coord:'Matěj',staff:null,guests:55,service:[],cleaning:[]},
+  {date:'2027-06-17',day:'Čtvrtek',coord:'Verča',staff:null,guests:70,service:[],cleaning:[]},
+  {date:'2027-06-19',day:'Sobota',coord:'Eliška a Vojta',staff:null,guests:80,service:[],cleaning:[]},
+  {date:'2027-06-24',day:'Čtvrtek',coord:'Eliška a Vojta',staff:null,guests:70,service:[],cleaning:[]},
+  {date:'2027-06-26',day:'Sobota',coord:'Verča',staff:null,guests:60,service:[],cleaning:[]},
+  {date:'2027-07-01',day:'Čtvrtek',coord:'Grochy',staff:null,guests:60,service:[],cleaning:[]},
+  {date:'2027-07-03',day:'Sobota',coord:'Eliška a Vojta',staff:null,guests:null,service:[],cleaning:[],eventNote:'Zatím nepotvrzeno (František a Eva?)'},
+  {date:'2027-07-05',day:'Pondělí',coord:'Verča',staff:null,guests:95,service:[],cleaning:[]},
+  {date:'2027-07-08',day:'Čtvrtek',coord:'Verča',staff:null,guests:70,service:[],cleaning:[]},
+  {date:'2027-07-10',day:'Sobota',coord:'Grochy',staff:null,guests:75,service:[],cleaning:[],guestsNote:'75 osob (bez dětí)'},
+  {date:'2027-07-15',day:'Čtvrtek',coord:'Grochy',staff:null,guests:55,service:[],cleaning:[]},
+  {date:'2027-07-17',day:'Sobota',coord:'Grochy',staff:null,guests:100,service:[],cleaning:[]},
+  {date:'2027-07-22',day:'Čtvrtek',coord:'Grochy',staff:null,guests:75,service:[],cleaning:[]},
+  {date:'2027-07-24',day:'Sobota',coord:'Matěj',staff:null,guests:50,service:[],cleaning:[]},
   {date:'2027-07-25',day:'Neděle',coord:null,staff:null,guests:null,service:[],cleaning:[],eventType:'vyroci',eventNote:'Výročí svatby 10 let, od 13:00'},
-  {date:'2027-07-29',day:'Čtvrtek',coord:null,staff:null,guests:65,service:[],cleaning:[]},
-  {date:'2027-07-31',day:'Sobota',coord:null,staff:null,guests:70,service:[],cleaning:[]},
-  {date:'2027-08-05',day:'Čtvrtek',coord:null,staff:null,guests:50,service:[],cleaning:[],guestsNote:'40-50 osob'},
-  {date:'2027-08-07',day:'Sobota',coord:null,staff:null,guests:75,service:[],cleaning:[]},
-  {date:'2027-08-12',day:'Čtvrtek',coord:null,staff:null,guests:100,service:[],cleaning:[],guestsNote:'90-100 osob'},
-  {date:'2027-08-14',day:'Sobota',coord:null,staff:null,guests:65,service:[],cleaning:[]},
-  {date:'2027-08-19',day:'Čtvrtek',coord:null,staff:null,guests:50,service:[],cleaning:[],guestsNote:'40-50 osob'},
-  {date:'2027-08-21',day:'Sobota',coord:null,staff:null,guests:60,service:[],cleaning:[]},
-  {date:'2027-08-26',day:'Čtvrtek',coord:null,staff:null,guests:80,service:[],cleaning:[]},
-  {date:'2027-08-28',day:'Sobota',coord:null,staff:null,guests:40,service:[],cleaning:[]},
-  {date:'2027-09-02',day:'Čtvrtek',coord:null,staff:null,guests:50,service:[],cleaning:[]},
-  {date:'2027-09-04',day:'Sobota',coord:null,staff:null,guests:100,service:[],cleaning:[],guestsNote:'90-100 osob'},
-  {date:'2027-09-09',day:'Čtvrtek',coord:null,staff:null,guests:50,service:[],cleaning:[]},
-  {date:'2027-09-11',day:'Sobota',coord:null,staff:null,guests:50,service:[],cleaning:[]},
-  {date:'2027-09-16',day:'Čtvrtek',coord:null,staff:null,guests:null,service:[],cleaning:[]},
-  {date:'2027-09-18',day:'Sobota',coord:null,staff:null,guests:100,service:[],cleaning:[],guestsNote:'85 osob na oběd, 100 celkem večer'},
-  {date:'2027-09-23',day:'Čtvrtek',coord:null,staff:null,guests:null,service:[],cleaning:[]},
-  {date:'2027-09-25',day:'Sobota',coord:null,staff:null,guests:60,service:[],cleaning:[],guestsNote:'50-60 osob'},
+  {date:'2027-07-29',day:'Čtvrtek',coord:'Eliška a Vojta',staff:null,guests:65,service:[],cleaning:[]},
+  {date:'2027-07-31',day:'Sobota',coord:'Matěj',staff:null,guests:70,service:[],cleaning:[]},
+  {date:'2027-08-05',day:'Čtvrtek',coord:'Grochy',staff:null,guests:50,service:[],cleaning:[],guestsNote:'40-50 osob'},
+  {date:'2027-08-07',day:'Sobota',coord:'Grochy',staff:null,guests:75,service:[],cleaning:[]},
+  {date:'2027-08-12',day:'Čtvrtek',coord:'Grochy',staff:null,guests:100,service:[],cleaning:[],guestsNote:'90-100 osob'},
+  {date:'2027-08-14',day:'Sobota',coord:'Matěj',staff:null,guests:65,service:[],cleaning:[]},
+  {date:'2027-08-19',day:'Čtvrtek',coord:'Eliška a Vojta',staff:null,guests:50,service:[],cleaning:[],guestsNote:'40-50 osob'},
+  {date:'2027-08-21',day:'Sobota',coord:'Eliška a Vojta',staff:null,guests:null,service:[],cleaning:[]},
+  {date:'2027-08-26',day:'Čtvrtek',coord:'Verča',staff:null,guests:80,service:[],cleaning:[]},
+  {date:'2027-08-28',day:'Sobota',coord:'Verča',staff:null,guests:40,service:[],cleaning:[]},
+  {date:'2027-09-02',day:'Čtvrtek',coord:'Grochy',staff:null,guests:50,service:[],cleaning:[]},
+  {date:'2027-09-04',day:'Sobota',coord:'Grochy',staff:null,guests:100,service:[],cleaning:[],guestsNote:'90-100 osob'},
+  {date:'2027-09-09',day:'Čtvrtek',coord:'Grochy',staff:null,guests:null,service:[],cleaning:[]},
+  {date:'2027-09-11',day:'Sobota',coord:'Matěj',staff:null,guests:50,service:[],cleaning:[]},
+  {date:'2027-09-16',day:'Čtvrtek',coord:'Verča',staff:null,guests:68,service:[],cleaning:[]},
+  {date:'2027-09-18',day:'Sobota',coord:'Verča',staff:null,guests:100,service:[],cleaning:[],guestsNote:'85 osob na oběd, 100 celkem večer'},
+  {date:'2027-09-23',day:'Čtvrtek',coord:'Grochy',staff:null,guests:null,service:[],cleaning:[]},
+  {date:'2027-09-25',day:'Sobota',coord:'Matěj',staff:null,guests:60,service:[],cleaning:[],guestsNote:'50-60 osob',eventNote:'Chtějí používat svíčky (!) — třeba pohlídat'},
+  {date:'2027-09-30',day:'Čtvrtek',coord:'Eliška a Vojta',staff:null,guests:50,service:[],cleaning:[],guestsNote:'40-50 osob'},
+  {date:'2027-10-02',day:'Sobota',coord:'Eliška a Vojta',staff:null,guests:null,service:[],cleaning:[]},
+  {date:'2027-10-07',day:'Čtvrtek',coord:'Verča',staff:null,guests:null,service:[],cleaning:[]},
+  {date:'2027-10-09',day:'Sobota',coord:'Verča',staff:null,guests:null,service:[],cleaning:[]},
 ];
 
 // Kontaktní seed data (jména / e-maily / telefony) pro sezónu 2027.
@@ -1192,6 +1222,7 @@ const SEED_NAMES = {
   '2027-04-24': 'Kristýna Růžičková',
   '2027-04-29': 'Lamrová, Dvořák',
   '2027-05-01': 'Jakub Hlavenka',
+  '2027-05-06': 'Ondřej Baletka',
   '2027-05-08': 'Adéla Soukupová',
   '2027-05-13': 'Veronika Kubincová',
   '2027-05-15': 'Vojtěch Dohnal',
@@ -1208,6 +1239,7 @@ const SEED_NAMES = {
   '2027-06-24': 'Kristýna Kušnieriková (Kristýna a Josue)',
   '2027-06-26': 'Michaela Jehlíková',
   '2027-07-01': 'Matelová Eva',
+  '2027-07-03': 'František a Eva?',
   '2027-07-05': 'Sára Hrdinová',
   '2027-07-08': 'Aneta Nejedlíková',
   '2027-07-10': 'Lenka Němečková',
@@ -1223,23 +1255,27 @@ const SEED_NAMES = {
   '2027-08-12': 'Johana Fabíková',
   '2027-08-14': 'Adéla Ziadehová',
   '2027-08-19': 'Kateřina Rožková',
-  '2027-08-21': 'Peluňková Monika',
+  '2027-08-21': 'Macháček Ondřej',
   '2027-08-26': 'Lucie Záděrová',
   '2027-08-28': 'Jakub Krejsa',
   '2027-09-02': 'Klára Tamási',
   '2027-09-04': 'Nadan Pojer',
-  '2027-09-09': 'Michal Charvát',
+  '2027-09-09': 'Kateřina Koukalová',
   '2027-09-11': 'Sára Konečná',
   '2027-09-16': 'Anna Huppertová',
   '2027-09-18': 'Ellen Palmeová',
-  '2027-09-23': 'Kristián Ondruška',
+  '2027-09-23': 'Kateřina Sedlářová',
   '2027-09-25': 'Ondřej Böhm + Krejsová',
+  '2027-09-30': 'Denis Kukan',
+  '2027-10-02': 'Petr Lahodný',
+  '2027-10-09': 'Tereza Gajdošíková',
 };
 const SEED_EMAILS = {
   '2027-04-17': 'katerina.vyletova@mmr.gov.cz',
   '2027-04-24': 'krist.ruzickova@gmail.com',
   '2027-04-29': 'svatba.hm@seznam.cz',
   '2027-05-01': 'jakub.hlavenka@email.cz',
+  '2027-05-06': 'ondrabaletka@seznam.cz',
   '2027-05-08': 'adela.sou@seznam.cz',
   '2027-05-13': 'verca.kubincova@gmail.com',
   '2027-05-15': 'dohnalv@proton.me',
@@ -1270,17 +1306,20 @@ const SEED_EMAILS = {
   '2027-08-12': 'Johanafab2000@seznam.cz',
   '2027-08-14': 'a.ziadehova@seznam.cz',
   '2027-08-19': 'RozkovaK@seznam.cz',
-  '2027-08-21': 'm.pelunkova@seznam.cz',
+  '2027-08-21': 'ondrejmachacek96@gmail.com',
   '2027-08-26': 'lucie95zaderova@gmail.com',
   '2027-08-28': 'jk.krejsa@seznam.cz',
   '2027-09-02': 'kajkatamasi@gmail.com',
   '2027-09-04': 'n.pojer@gmail.com',
-  '2027-09-09': 'charvat.michal24@seznam.cz',
+  '2027-09-09': 'katykouk@gmail.com',
   '2027-09-11': 'konecna.s@seznam.cz',
   '2027-09-16': 'AnnHuppert@seznam.cz',
   '2027-09-18': 'ellenpalme@seznam.cz',
-  '2027-09-23': 'k.ondruska.k@gmail.com',
+  '2027-09-23': 'sedlar.kacka@gmail.com',
   '2027-09-25': 'bohmondrej@gmail.com',
+  '2027-09-30': 'denis.kukan@gmail.com',
+  '2027-10-02': 'petr.lahodny@gmail.com',
+  '2027-10-09': 'terezka2804@seznam.cz',
 };
 const SEED_PHONES = {};
 
@@ -1388,6 +1427,7 @@ window.applyRoleUI = function applyRoleUI() {
     document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === 0));
   }
   if (_modalDate && document.getElementById('modal-overlay').classList.contains('open')) openWeddingModal(_modalDate);
+  if (window.prefillCurrentPerson) prefillCurrentPerson();
   if (document.getElementById('page-zamestnanec')?.classList.contains('active')) renderZamestnanec();
 };
 
@@ -1485,8 +1525,60 @@ async function loadState() {
   }
   weddingRentBalance = data.weddingRentBalance || {};
   weddingCoordOverride = data.weddingCoordOverride || {};
+  // Jednorázově: koordinátor „Honza + Verča" se přejmenoval na „Verča".
+  // Přepíše uložené volby v databázi, ať nezůstanou u neexistujícího jména.
+  if (!mig.renameVercaCoord) {
+    const renamed = {};
+    Object.keys(weddingCoordOverride).forEach(d => {
+      if (weddingCoordOverride[d] === 'Honza + Verča') { renamed[d] = 'Honza + Verča'; weddingCoordOverride[d] = 'Verča'; }
+    });
+    if (Object.keys(renamed).length) {
+      db.ref('weddingCoordOverride').set(weddingCoordOverride)
+        .then(() => db.ref('migrations/renameVercaCoord').set({ at: new Date().toISOString(), renamed }));
+    } else {
+      db.ref('migrations/renameVercaCoord').set({ at: new Date().toISOString(), renamed: {} });
+    }
+  }
+  // Jednorázově: čtvrteční svatby 2027 přecházejí od Matěje pod Grochy.
+  // V seed datech to už je, ale ručně uložená volba v databázi by seed přebila.
+  // Mění se jen ta data, kde je opravdu uložen „Matěj"; původní stav se zálohuje.
+  if (!mig.thursdaysMatejToGrochy2027) {
+    const MOVE_DATES = ['2027-05-27', '2027-06-10', '2027-07-22', '2027-08-12', '2027-09-09', '2027-09-23'];
+    const moved = {};
+    MOVE_DATES.forEach(d => {
+      if (weddingCoordOverride[d] === 'Matěj') { moved[d] = 'Matěj'; weddingCoordOverride[d] = 'Grochy'; }
+    });
+    const saveCoords = Object.keys(moved).length
+      ? db.ref('weddingCoordOverride').set(weddingCoordOverride)
+      : Promise.resolve();
+    saveCoords.then(() => db.ref('migrations/thursdaysMatejToGrochy2027')
+      .set({ at: new Date().toISOString(), moved }));
+  }
   weddingStaffOverride = data.weddingStaffOverride || {};
   weddingGuestsOverride = data.weddingGuestsOverride || {};
+  // Jednorázově: u tří termínů 2027 se podle novější tabulky změnil zájemce.
+  // Seed se uplatní jen tam, kde v databázi nic není, takže už uložená jména
+  // je potřeba přepsat zvlášť. Původní hodnoty se ukládají pro případ obnovy.
+  if (!mig.rewrite2027Contacts) {
+    const NEW_CONTACTS = {
+      '2027-08-21': { name: 'Macháček Ondřej',   email: 'ondrejmachacek96@gmail.com' },
+      '2027-09-09': { name: 'Kateřina Koukalová', email: 'katykouk@gmail.com' },
+      '2027-09-23': { name: 'Kateřina Sedlářová', email: 'sedlar.kacka@gmail.com' },
+    };
+    const before = {};
+    Object.entries(NEW_CONTACTS).forEach(([d, v]) => {
+      before[d] = { name: weddingContact[d] || '', email: weddingEmail[d] || '' };
+      weddingContact[d] = v.name;
+      weddingEmail[d] = v.email;
+      // u nového páru neplatí počet hostů ani záloha po tom původním
+      delete weddingGuestsOverride[d];
+      db.ref('weddingGuestsOverride/' + d).set(null);
+    });
+    Promise.all([
+      db.ref('weddingContact').set(weddingContact),
+      db.ref('weddingEmail').set(weddingEmail),
+    ]).then(() => db.ref('migrations/rewrite2027Contacts').set({ at: new Date().toISOString(), before }));
+  }
   weddingGuestsNote = data.weddingGuestsNote || {};
   weddingNote = data.weddingNote || {};
 
@@ -1495,6 +1587,40 @@ async function loadState() {
     todos = toArr(data.todos).filter(Boolean);
   } else {
     todos = [];
+  }
+
+  // Jednorázově: hoursLog, expenses a todos se překlápějí z pole na objekt
+  // klíčovaný id záznamu. V poli se adresuje pozicí, takže jediný možný zápis
+  // byl „ulož celé pole“ — a ten mazal změny, které mezitím udělal někdo jiný.
+  // Klíčem je id, díky čemuž lze zapisovat a mazat jednotlivé záznamy.
+  // Záznamům bez id (nebo s duplicitním) se id doplní, ať se žádný neztratí.
+  if (!mig.keyedCollections) {
+    const keyed = (arr, prefix) => {
+      const out = {};
+      const BAD_KEY_CHARS = ['.', '$', '#', '[', ']', '/'];   // znaky, které Firebase v klíči nedovolí
+      arr.forEach((e, i) => {
+        let id = e && e.id ? String(e.id) : '';
+        if (!id || out[id] || BAD_KEY_CHARS.some(c => id.includes(c))) id = prefix + 'mig' + i + '_' + Date.now().toString(36);
+        e.id = id;
+        out[id] = e;
+      });
+      return out;
+    };
+    const hKeyed = keyed(hoursLog, 'h_');
+    const eKeyed = keyed(expenses, 'exp_');
+    const tKeyed = keyed(todos, 'todo_');
+    Promise.all([
+      db.ref('hoursLog').set(hKeyed),
+      db.ref('expenses').set(eKeyed),
+      db.ref('todos').set(tKeyed),
+    ]).then(() => db.ref('migrations/keyedCollections').set({
+      at: new Date().toISOString(),
+      counts: {
+        hoursLog: Object.keys(hKeyed).length,
+        expenses: Object.keys(eKeyed).length,
+        todos: Object.keys(tKeyed).length
+      }
+    }));
   }
 
   // Custom weddings
@@ -1535,12 +1661,30 @@ async function loadState() {
     saveAssignments();
   }
 }
-function saveHours() { db.ref('hoursLog').set(hoursLog); }
+// --- Zápis kolekcí po jednotlivých záznamech --------------------------------
+// hoursLog, expenses a todos jsou v databázi objekty klíčované id záznamu.
+// Dřív se ukládalo celé pole (`set(hoursLog)`): zápis ze zařízení, které mělo
+// stránku otevřenou delší dobu, tím přepsal vše, co mezitím uložil někdo jiný.
+// writeEntry/removeEntry sahají jen na jeden záznam — souběžná editace ze dvou
+// telefonů si už navzájem nic nesmaže.
+function keyById(arr) {
+  const out = {};
+  arr.forEach(e => { if (e && e.id) out[e.id] = e; });
+  return out;
+}
+function writeEntry(node, entry) { return db.ref(node + '/' + entry.id).set(entry); }
+function removeEntry(node, id)   { return db.ref(node + '/' + id).remove(); }
+// Náhodný suffix navíc k časovému razítku — dva lidé mohou zapsat ve stejné
+// milisekundě a shodné id by v objektu znamenalo přepsaný záznam.
+function newId(prefix) { return prefix + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+
+// Zápis celé kolekce — jen pro prvotní naplnění ze seedu a pro migraci níže.
+function saveHours() { return db.ref('hoursLog').set(keyById(hoursLog)); }
 function saveRates() { db.ref('rates').set(rates); }
 function saveAssignments() { return db.ref('weddingAssignments').set(weddingAssignments); }
 function savePeople() { db.ref('people').set(ALL_PEOPLE); }
 function saveCustomWeddings() { db.ref('customWeddings').set(customWeddings); }
-function saveExpenses() { db.ref('expenses').set(expenses); }
+function saveExpenses() { return db.ref('expenses').set(keyById(expenses)); }
 function savePaymentPaid() { db.ref('paymentPaid').set(paymentPaid); }
 function saveBankAccounts() { db.ref('bankAccounts').set(bankAccounts); }
 function savePersonQR() { db.ref('personQR').set(personQR); }
@@ -1615,7 +1759,7 @@ function closeQRModal(e) {
 }
 function updateExpenseField(id, field, value) {
   const exp = expenses.find(e => e.id === id);
-  if (exp) { exp[field] = value; saveExpenses(); }
+  if (exp) { exp[field] = value; writeEntry('expenses', exp); }
 }
 function saveFeedback() { return db.ref('weddingFeedback').set(weddingFeedback); }
 function updateFeedback(date, val) {
@@ -1933,11 +2077,20 @@ function toggleRentCols() {
   const btn = document.getElementById('rent-toggle-btn');
   if (btn) btn.textContent = table.classList.contains('rent-collapsed') ? '▶' : '◀';
 }
-const COORDINATORS = ['Honza + Verča','Matěj','Grochy','Eliška a Vojta'];
+const COORDINATORS = ['Verča','Matěj','Grochy','Eliška a Vojta'];
+// Barvy koordinátorů na jednom místě — používá je průběh sezóny i dlaždice
+// volných termínů. Odpovídají CSS třídám .tc-* / .coord-*.
+const COORD_HEX = {
+  'Verča':          '#56708a',
+  'Matěj':          '#5d7150',
+  'Grochy':         '#a8714a',
+  'Eliška a Vojta': '#86607a'
+};
 function getCoord(date) { return weddingCoordOverride[date] || (WEDDINGS.find(w => w.date === date) || {}).coord || ''; }
 function saveCoordOverride() { return db.ref('weddingCoordOverride').set(weddingCoordOverride); }
 // Požadovaná obsluha: ruční hodnota z modalu > hodnota zadaná u termínu > automaticky z hostů.
 const GUESTS_PER_STAFF = 15;   // na každých 15 hostů jedna obsluha (zaokrouhleno nahoru)
+const CLEAN_REQ = 4;           // standardní počet lidí na úklid druhý den
 function autoStaff(date) {
   const g = getGuests(date);
   return g ? Math.ceil(g / GUESTS_PER_STAFF) : null;
@@ -2128,8 +2281,8 @@ function refreshRentSummary(date) {
   const el = document.getElementById('rent-summary');
   if (el) el.textContent = rentSummaryText(date);
 }
-function updateRentDeposit(date, val) { weddingRentDeposit[date] = val === '' ? null : Number(val); saveRentDeposit(); renderTerminy(); refreshRentSummary(date); }
-function updateRentBalance(date, val) { weddingRentBalance[date] = val === '' ? null : Number(val); saveRentBalance(); renderTerminy(); refreshRentSummary(date); }
+function updateRentDeposit(date, val) { weddingRentDeposit[date] = val === '' ? null : Number(val); saveRentDeposit(); renderTerminy(); renderNajemSummary(); refreshRentSummary(date); }
+function updateRentBalance(date, val) { weddingRentBalance[date] = val === '' ? null : Number(val); saveRentBalance(); renderTerminy(); renderNajemSummary(); refreshRentSummary(date); }
 function setRating(date, color) {
   weddingRating[date] = weddingRating[date] === color ? null : color;
   saveRating();
@@ -2154,14 +2307,76 @@ function populateSelects() {
   });
 }
 
-function confirmAction(msg, callback) {
-  document.getElementById('confirm-modal-msg').textContent = msg;
-  const btn = document.getElementById('confirm-modal-yes');
-  btn.onclick = () => { closeConfirmModal(); callback(); };
-  document.getElementById('confirm-modal-overlay').style.display = 'flex';
+// Roletky se zaměstnanci se předvyplní tím, kdo je přihlášený — brigádník
+// nemusí hledat sám sebe v seznamu všech lidí. Volá se z init() i z
+// applyRoleUI(), protože Firebase hlásí přihlášeného uživatele asynchronně
+// a může to stihnout až po prvním vykreslení. Přepisuje jen prázdnou roletku,
+// takže ruční volbu (ani volbu admina) nikdy nepřebije.
+function prefillCurrentPerson() {
+  const me = currentPerson();
+  if (!me) return;
+  const sel = document.getElementById('person-select');
+  if (sel && !sel.value && [...sel.options].some(o => o.value === me)) {
+    sel.value = me;
+    if (document.getElementById('page-zamestnanec')?.classList.contains('active')) renderZamestnanec();
+  }
+  // Hodinovka: respektuje poslední ruční volbu uloženou v localStorage
+  const hp = document.getElementById('h-person');
+  if (hp && !hp.value && [...hp.options].some(o => o.value === me)) {
+    hp.value = me;
+    onHkPersonChange(me);
+  }
 }
-function closeConfirmModal() {
+
+// Potvrzovací dialog.
+//   confirmAction(msg, cb)                     — jako dřív: červené „Ano, provést"
+//   confirmAction(msg, cb, { tone, detail, confirmLabel, icon })
+// tone řídí barvu tlačítka i ikony: 'success' pro přidání, 'danger' pro odebrání.
+const CONFIRM_TONES = {
+  danger:  { cls: 'btn btn-danger', bg: 'var(--red-light)',    fg: 'var(--red)',    icon: '✕' },
+  success: { cls: 'btn',            bg: 'var(--green-light)',  fg: 'var(--green)',  icon: '✓' },
+  accent:  { cls: 'btn',            bg: 'var(--accent-light)', fg: 'var(--accent)', icon: '?' }
+};
+let _confirmKeyHandler = null;
+
+function confirmAction(msg, callback, opts) {
+  opts = opts || {};
+  const t = CONFIRM_TONES[opts.tone] || CONFIRM_TONES.danger;
+
+  document.getElementById('confirm-modal-msg').textContent = msg;
+
+  const detailEl = document.getElementById('confirm-modal-detail');
+  detailEl.textContent = opts.detail || '';
+  detailEl.style.display = opts.detail ? 'block' : 'none';
+
+  const iconEl = document.getElementById('confirm-modal-icon');
+  iconEl.textContent = opts.icon || t.icon;
+  iconEl.style.background = t.bg;
+  iconEl.style.color = t.fg;
+
+  const btn = document.getElementById('confirm-modal-yes');
+  btn.className = t.cls;
+  btn.textContent = opts.confirmLabel || 'Ano, provést';
+  btn.onclick = () => { closeConfirmModal(); callback(); };
+
+  document.getElementById('confirm-modal-overlay').style.display = 'flex';
+  setTimeout(() => btn.focus(), 30);
+
+  _confirmKeyHandler = e => {
+    if (e.key === 'Escape') { e.preventDefault(); closeConfirmModal(); }
+    else if (e.key === 'Enter') { e.preventDefault(); btn.click(); }
+  };
+  document.addEventListener('keydown', _confirmKeyHandler);
+}
+
+// Bez argumentu zavírá vždy; s eventem jen když se kliklo mimo samotný dialog
+function closeConfirmModal(e) {
+  if (e && e.target !== document.getElementById('confirm-modal-overlay')) return;
   document.getElementById('confirm-modal-overlay').style.display = 'none';
+  if (_confirmKeyHandler) {
+    document.removeEventListener('keydown', _confirmKeyHandler);
+    _confirmKeyHandler = null;
+  }
 }
 
 function addEmployee() {
@@ -2229,11 +2444,27 @@ function assignmentTransaction(date, role, updateArr, onDone, onFail) {
   });
 }
 
+// Kontext pro potvrzovací dialog. Úklid je vždy den PO svatbě — dialog proto
+// musí ukázat datum práce, ne datum svatby, jinak lidé potvrzují špatný den.
+function assignDetail(date, role) {
+  const svc = role === 'service';
+  const w = WEDDINGS.find(x => x.date === date);
+  const workDate = svc ? date : addDays(date, 1);
+  const list = svc ? getService(date) : getCleaning(date);
+  const req = svc ? getStaff(date) : null;
+
+  const when = `${svc ? 'Obsluha' : 'Úklid'} · ${fmtDate(workDate)}`
+    + (svc ? (w && w.day ? ` (${w.day})` : '') : ' (den po svatbě)');
+  const wedding = `Svatba ${fmtDate(date)}${weddingContact[date] ? ' · ' + weddingContact[date] : ''}`;
+  const count = `Nyní přihlášeno: ${list.length}${req ? ' z ' + req : ''}`;
+  return `${when}\n${wedding}\n${count}`;
+}
+
 function signUp(date, person, role) {
   if (!person) return;
   if (!canManagePerson(person)) { alert('Můžete přihlásit pouze sami sebe.'); return; }
   const roleLabel = role === 'service' ? 'obsluhu' : 'úklid';
-  confirmAction(`Přihlásit ${person} na ${roleLabel} (${fmtDate(date)})?`, () => {
+  confirmAction(`Přihlásit ${person}?`, () => {
     const apply = () => assignmentTransaction(
       date, role,
       arr => { if (!arr.includes(person)) arr.push(person); return arr; },
@@ -2242,13 +2473,13 @@ function signUp(date, person, role) {
       () => modalSaveFailed(`${person} se nepodařilo přidat na ${roleLabel}.`, apply)
     );
     apply().catch(() => {});   // chybu už ošetřil onFail
-  });
+  }, { tone: 'success', confirmLabel: 'Přihlásit', detail: assignDetail(date, role) });
 }
 
 function unassign(date, person, role) {
   if (!canManagePerson(person)) { alert('Můžete odhlásit pouze sami sebe.'); return; }
   const roleLabel = role === 'service' ? 'obsluhy' : 'úklidu';
-  confirmAction(`Odhlásit ${person} z ${roleLabel} (${fmtDate(date)})?`, () => {
+  confirmAction(`Odhlásit ${person}?`, () => {
     const apply = () => assignmentTransaction(
       date, role,
       arr => arr.filter(p => p !== person),
@@ -2256,7 +2487,7 @@ function unassign(date, person, role) {
       () => modalSaveFailed(`${person} se nepodařilo odebrat z ${roleLabel}.`, apply)
     );
     apply().catch(() => {});
-  });
+  }, { tone: 'danger', confirmLabel: 'Odhlásit', detail: assignDetail(date, role) });
 }
 
 function refreshAll(date) {
@@ -2270,6 +2501,180 @@ function refreshAll(date) {
   if (document.getElementById('modal-overlay').classList.contains('open')) {
     openWeddingModal(date);
   }
+  // Totéž pro okno rychlého přihlášení — ať se nový zápis hned projeví v seznamu
+  if (signupModalOpen()) renderSignupModal();
+}
+
+// ============================================================
+// ODKAZY NA TERMÍN A SMĚNU (deep linky)
+// Adresa v prohlížeči drží, co je zrovna otevřené, takže se dá poslat
+// odkaz rovnou na termín nebo na přihlašování ke směně.
+//   #terminy                      — záložka
+//   #termin/2027-06-12            — detail termínu
+//   #smena/2027-06-12/service     — přihlašování na obsluhu (nebo /cleaning)
+// Používá se replaceState, ne location.hash: adresa se přepíše, ale do
+// historie nepřibude krok navíc, takže tlačítko Zpět funguje jako dřív.
+// Pozn.: odkaz je použitelný pro ostatní jen tehdy, když je aplikace
+// někde hostovaná. Otevřená ze souboru (file://) vede odkaz na disk
+// toho, kdo ho poslal.
+// ============================================================
+let _routing = false;   // true = adresu právě čteme, nepřepisovat ji zpět
+
+function appBaseUrl() { return location.href.split('#')[0]; }
+function weddingLink(date) { return appBaseUrl() + '#termin/' + date; }
+function shiftLink(date, role) { return appBaseUrl() + '#smena/' + date + '/' + role; }
+function currentPageName() { return (document.querySelector('.page.active')?.id || 'page-prehled').replace('page-', ''); }
+
+function setRoute(hash) {
+  if (_routing) return;
+  try { history.replaceState(null, '', '#' + hash); } catch (e) {}
+}
+
+function applyHashRoute() {
+  const h = (location.hash || '').replace(/^#/, '');
+  if (!h) return;
+  _routing = true;
+  try {
+    const parts = h.split('/');
+    if (parts[0] === 'termin' && parts[1]) {
+      showTab('terminy');
+      if (WEDDINGS.some(w => w.date === parts[1])) openWeddingModal(parts[1]);
+    } else if (parts[0] === 'smena' && parts[1] && parts[2]) {
+      showTab('terminy');
+      openSignupModal(parts[1], parts[2] === 'cleaning' ? 'cleaning' : 'service');
+    } else if (document.getElementById('page-' + parts[0])) {
+      showTab(parts[0]);
+    }
+  } finally { _routing = false; }
+}
+window.addEventListener('hashchange', applyHashRoute);
+
+// Schránka: moderní API, se záložním řešením pro starší prohlížeče a file://
+function copyToClipboard(text, btn) {
+  const flash = () => {
+    if (!btn) return;
+    const orig = btn.textContent;
+    btn.textContent = '✓ Zkopírováno';
+    setTimeout(() => { btn.textContent = orig; }, 1600);
+  };
+  const fallback = () => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); flash(); }
+    catch (e) { prompt('Zkopírujte text:', text); }
+    ta.remove();
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(flash).catch(fallback);
+  } else fallback();
+}
+function copyWeddingLink(date, btn) { copyToClipboard(weddingLink(date), btn); }
+
+// ============================================================
+// EXPORT SMĚN DO KALENDÁŘE (.ics)
+// Celodenní události — aplikace nikde neeviduje časy, tak si je
+// nevymýšlíme. UID je odvozené od data a role, takže opakovaný import
+// stejnou směnu v kalendáři přepíše místo zdvojení.
+// ============================================================
+function icsEscape(s) {
+  return String(s == null ? '' : s)
+    .replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
+}
+function icsDate(d) { return d.replace(/-/g, ''); }
+function icsStamp() { return new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, ''); }
+
+function shiftIcsEvent(date, role) {
+  const isSvc = role === 'service';
+  const workDate = isSvc ? date : addDays(date, 1);
+  const team = isSvc ? getService(date) : getCleaning(date);
+  const who = weddingContact[date] || '';
+  const guests = getGuests(date);
+  const coord = getCoord(date);
+  const desc = [
+    isSvc ? 'Obsluha svatby' : 'Úklid po svatbě ' + fmtDate(date),
+    who ? 'Pár: ' + who : '',
+    coord ? 'Koordinátor: ' + coord : '',
+    (isSvc && guests) ? 'Hostů: ' + guests : '',
+    team.length ? 'Tým: ' + team.join(', ') : '',
+    'Detail: ' + weddingLink(date)
+  ].filter(Boolean).join('\n');
+  return {
+    uid: workDate + '-' + role + '@dohnaluv-mlyn',
+    date: workDate,
+    summary: (isSvc ? 'Obsluha' : 'Úklid') + ' — Dohnalův Mlýn' + (who ? ' (' + who + ')' : ''),
+    description: desc
+  };
+}
+
+function buildIcs(events) {
+  const L = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Dohnaluv Mlyn//Planovani//CS', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
+  events.forEach(ev => {
+    L.push('BEGIN:VEVENT');
+    L.push('UID:' + ev.uid);
+    L.push('DTSTAMP:' + icsStamp());
+    L.push('DTSTART;VALUE=DATE:' + icsDate(ev.date));
+    L.push('DTEND;VALUE=DATE:' + icsDate(addDays(ev.date, 1)));
+    L.push('SUMMARY:' + icsEscape(ev.summary));
+    L.push('DESCRIPTION:' + icsEscape(ev.description));
+    L.push('LOCATION:' + icsEscape('Dohnalův Mlýn'));
+    L.push('END:VEVENT');
+  });
+  L.push('END:VCALENDAR');
+  return L.join('\r\n');
+}
+
+function downloadIcs(filename, ics) {
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function exportShiftIcs(date, role) {
+  const ev = shiftIcsEvent(date, role);
+  downloadIcs('mlyn-' + ev.date + '-' + (role === 'service' ? 'obsluha' : 'uklid') + '.ics', buildIcs([ev]));
+}
+
+// Všechny nadcházející směny jednoho člověka do jednoho souboru.
+function exportPersonIcs(person) {
+  const events = [];
+  personWorkEvents(person)
+    .filter(e => !isPast(e.workDate))
+    .forEach(e => {
+      if (e.inService) events.push(shiftIcsEvent(e.wedding.date, 'service'));
+      if (e.inClean)   events.push(shiftIcsEvent(e.wedding.date, 'cleaning'));
+    });
+  if (!events.length) { alert('Žádné nadcházející směny k exportu.'); return; }
+  events.sort((a, b) => a.date.localeCompare(b.date));
+  downloadIcs('mlyn-smeny-' + person.replace(/[^\p{L}\d]+/gu, '-').toLowerCase() + '.ics', buildIcs(events));
+}
+
+// ============================================================
+// VÝDĚLKY JEDNOHO ČLOVĚKA
+// Stejný výpočet jako záložka Výplaty: hodinovka podle sazby uložené
+// u záznamu, úklid 5 000 Kč na akci děleno počtem lidí v týmu.
+// Proplacené částky jsou vedené po měsících (paymentPaid).
+// ============================================================
+function personEarnings(person, year) {
+  const inYear = d => !year || d.startsWith(year + '-');
+  const hrs = hoursLog.filter(e => e.person === person && inYear(e.date));
+  const hours = hrs.reduce((s, e) => s + e.hours, 0);
+  const hoursPay = hrs.reduce((s, e) => s + entryPay(e), 0);
+  let cleanPay = 0, cleanCount = 0;
+  WEDDINGS.forEach(w => {
+    const team = getCleaning(w.date);
+    const cleanDate = addDays(w.date, 1);
+    if (team.includes(person) && inYear(cleanDate)) { cleanPay += 5000 / team.length; cleanCount++; }
+  });
+  const paid = Object.keys(paymentPaid)
+    .filter(ym => !year || ym.startsWith(year + '-'))
+    .reduce((s, ym) => s + ((paymentPaid[ym] || {})[person] || 0), 0);
+  const total = hoursPay + cleanPay;
+  return { hours, hoursPay, cleanPay, cleanCount, total, paid, remaining: total - paid };
 }
 
 // ============================================================
@@ -2277,7 +2682,7 @@ function refreshAll(date) {
 // ============================================================
 function coordClass(coord) {
   if (!coord) return '';
-  if (coord.includes('Honza')) return 'honza';
+  if (coord.includes('Verča') || coord.includes('Honza')) return 'honza';
   if (coord.includes('Matěj')) return 'matej';
   if (coord.includes('Grochy')) return 'grochy';
   if (coord.includes('Eliška')) return 'eliska';
@@ -2380,14 +2785,30 @@ function defaultSeason() {
 let prehledSeason = null;
 function setPrehledSeason(y) { prehledSeason = y; renderPrehled(); }
 
+// Při prvním naplnění se filtr roku nastaví na výchozí sezónu, ať uživatel
+// rovnou vidí aktuální sezónu místo všech roků. Další volání (po přidání nebo
+// smazání termínu) zachovají, co má uživatel vybráno — včetně „Všechny roky".
+let yearFilterDefaulted = false;
 function populateYearFilter() {
   const sel = document.getElementById('filter-year');
   if (!sel) return;
   const cur = sel.value;
   sel.innerHTML = '<option value="">Všechny roky</option>' +
     seasonYears().map(y => `<option value="${y}" ${cur === y ? 'selected' : ''}>${y}</option>`).join('');
+  if (!yearFilterDefaulted) { yearFilterDefaulted = true; sel.value = defaultSeason(); }
   const hdr = document.getElementById('hdr-seasons');
   if (hdr) hdr.textContent = 'Sezóny ' + seasonYears().join(' · ');
+}
+
+// Reset filtrů vrací rok na výchozí sezónu, ne na „Všechny roky" —
+// uživatel tak dostane stejný pohled jako po otevření stránky.
+function resetTerminyFilters() {
+  document.getElementById('filter-search').value = '';
+  document.getElementById('filter-coord').value = '';
+  document.getElementById('filter-year').value = defaultSeason();
+  document.getElementById('filter-month').value = '';
+  document.getElementById('filter-future').checked = false;
+  renderTerminy();
 }
 
 function renderPrehled() {
@@ -2443,12 +2864,7 @@ function renderPrehled() {
   }
 
   // === SEASON PROGRESS VISUALIZATION ===
-  const COORD_COLORS = {
-    'Honza + Verča': '#56708a',
-    'Matěj':         '#5d7150',
-    'Grochy':        '#a8714a',
-    'Eliška a Vojta':'#86607a'
-  };
+  const COORD_COLORS = COORD_HEX;
   const MONTHS = [
     {num:'04',label:'Dub'},{num:'05',label:'Kvě'},{num:'06',label:'Čer'},
     {num:'07',label:'Čvc'},{num:'08',label:'Srp'},{num:'09',label:'Zář'},
@@ -2589,27 +3005,37 @@ function renderFreeSlots() {
   // Dlaždice se roztahují přes celou šířku řádku (flex-grow), takže sekce využije
   // místo i na širokém monitoru. max-width je pojistka, aby v měsíci s málo sloty
   // nevznikly nesmyslně široké obdélníky — zbytek pak rozdělí justify-content.
+  // Obsazený termín nese plnou barvu svého koordinátora (bílý text), termín bez
+  // koordinátora zůstává neutrálně šedý. Volný termín je světlý s čárkovaným
+  // rámečkem a okrovým popiskem — okr nemá žádný koordinátor, takže se nepletou.
   const tile = s => {
     const isBooked = booked.has(s.date);
     const past = s.date < now;
-    const bg = isBooked ? '#ececec' : 'var(--green-light)';
-    const bd = isBooked ? '#dcdcdc' : 'var(--green)';
-    const fg = isBooked ? 'var(--muted)' : 'var(--green)';
+    const coord = isBooked ? getCoord(s.date) : '';
+    const col = COORD_HEX[coord] || null;
+    const bg = isBooked ? (col || '#ececec') : 'var(--card)';
+    const bd = isBooked ? (col || '#dcdcdc') : 'var(--border-strong)';
+    const fg = isBooked ? (col ? '#fff' : 'var(--muted)') : 'var(--yellow)';
     const who = isBooked && weddingContact[s.date] ? ' · ' + weddingContact[s.date] : '';
-    const title = `${fmtDate(s.date)} — ${isBooked ? 'obsazeno' + who : 'VOLNO'}`;
+    const title = `${fmtDate(s.date)} — ${isBooked ? 'obsazeno' + who + (coord ? ' · ' + coord : '') : 'VOLNO'}`;
     const click = isBooked ? `openWeddingModal('${s.date}')` : `openNewWeddingForm('${s.date}')`;
-    const name = isBooked && weddingContact[s.date]
-      ? `<div style="font-size:0.58rem;opacity:0.85;line-height:1.2;max-width:94%;overflow:hidden;
-                     text-overflow:ellipsis;white-space:nowrap;">${escAttr(weddingContact[s.date])}</div>` : '';
+    // Popisek: u obsazeného jméno páru, u volného „volný termín".
+    // Na úzké dlaždici se ořízne třemi tečkami, výška zůstává 56 px.
+    const label = isBooked ? (weddingContact[s.date] ? escAttr(weddingContact[s.date]) : '') : 'volný termín';
+    const labelHtml = label
+      ? `<div style="font-size:0.58rem;line-height:1.2;max-width:94%;overflow:hidden;
+                     text-overflow:ellipsis;white-space:nowrap;
+                     ${isBooked ? 'opacity:0.85;' : 'font-weight:700;'}">${label}</div>`
+      : '';
     return `<div title="${escAttr(title)}" onclick="${click}"
       style="flex:1 1 0;min-width:56px;max-width:124px;height:56px;
-             border-radius:7px;background:${bg};border:1.5px solid ${bd};
+             border-radius:7px;background:${bg};border:1.5px ${isBooked ? 'solid' : 'dashed'} ${bd};
              color:${fg};display:flex;flex-direction:column;align-items:center;justify-content:center;
              cursor:pointer;opacity:${past ? '0.35' : '1'};transition:transform .1s;"
       onmouseover="this.style.transform='scale(1.07)'" onmouseout="this.style.transform='none'">
       <div style="font-size:1.05rem;font-weight:700;line-height:1.05;">${+s.date.slice(8,10)}</div>
       <div style="font-size:0.63rem;opacity:0.8;line-height:1.2;">${s.sat ? 'So' : 'Čt'}</div>
-      ${name}
+      ${labelHtml}
     </div>`;
   };
 
@@ -2643,8 +3069,10 @@ function renderFreeSlots() {
     </div>
     ${rows}
     <div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:0.72rem;color:var(--muted);">
-      <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--green-light);border:1.5px solid var(--green);vertical-align:-1px;"></span> volno — klik založí termín</span>
-      <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#ececec;border:1.5px solid #dcdcdc;vertical-align:-1px;"></span> obsazeno — klik otevře detail</span>
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--card);border:1.5px dashed var(--border-strong);vertical-align:-1px;"></span> <span style="color:var(--yellow);font-weight:700;">volný termín</span> — klik založí termín</span>
+      <span>obsazeno (klik otevře detail): ${COORDINATORS.map(c =>
+        `<span style="white-space:nowrap;"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:${COORD_HEX[c]};vertical-align:-1px;"></span> ${c}</span>`
+      ).join(' · ')}</span>
       <span>So = sobota · Čt = čtvrtek</span>
     </div>
     ${offGridNote}`;
@@ -2774,10 +3202,14 @@ function removeWedding(date) {
   });
 }
 
+// Přepínač zobrazení už v hlavičce není, funkce ale zůstává — volá ji jumpToMonth
+// z Přehledu. Tlačítka proto hledá opatrně, aby nespadla, když chybí.
 function setTerminyView(v) {
   terminyView = v;
-  document.getElementById('view-btn-list').classList.toggle('active', v === 'list');
-  document.getElementById('view-btn-cal').classList.toggle('active', v === 'calendar');
+  const btnList = document.getElementById('view-btn-list');
+  const btnCal  = document.getElementById('view-btn-cal');
+  if (btnList) btnList.classList.toggle('active', v === 'list');
+  if (btnCal)  btnCal.classList.toggle('active', v === 'calendar');
   document.getElementById('terminy-list-view').style.display = v === 'list' ? '' : 'none';
   document.getElementById('terminy-cal-view').style.display = v === 'calendar' ? '' : 'none';
   if (v === 'calendar') renderCalendar();
@@ -2952,7 +3384,6 @@ function renderTerminy() {
       ? `<span style="color:var(--red);font-size:0.8rem;">⚠ nepřiřazena</span>${staffBadge}`
       : svc.map(s => `<span class="tag tag-service">${s}</span>`).join('') + staffBadge;
 
-    const CLEAN_REQ = 4;
     const cleanDateLabel = !noCleaning ? (() => {
       const d = new Date(w.date); d.setDate(d.getDate()+1);
       return `<span style="font-size:0.72rem;color:var(--muted);display:block;margin-bottom:3px;">${fmtDate(d.toISOString().split('T')[0])}</span>`;
@@ -2987,7 +3418,11 @@ function renderTerminy() {
       <td style="width:28px;padding:0;"></td>
       <td class="col-rent" style="text-align:right;">${deposit != null ? `<strong>${deposit.toLocaleString('cs-CZ')} Kč</strong>` : '<span style="color:var(--muted);">—</span>'}</td>
       <td class="col-rent" style="text-align:right;">${balance != null ? `<strong>${balance.toLocaleString('cs-CZ')} Kč</strong>` : '<span style="color:var(--muted);">—</span>'}</td>
-      <td><button class="btn btn-sm btn-outline" onclick="event.stopPropagation();openWeddingModal('${w.date}')" style="white-space:nowrap">Otevřít</button></td>
+      <td style="white-space:nowrap;"><div style="display:flex;flex-direction:column;gap:4px;">
+        ${past ? '' : `<button class="btn btn-sm" style="background:var(--blue);" title="Přihlásit na obsluhu" onclick="event.stopPropagation();openSignupModal('${w.date}','service')">+ Obsluha</button>
+        <button class="btn btn-sm" style="background:var(--green);" title="Přihlásit na úklid" onclick="event.stopPropagation();openSignupModal('${w.date}','cleaning')">+ Úklid</button>`}
+        <button class="btn btn-sm btn-outline" onclick="event.stopPropagation();openWeddingModal('${w.date}')">Otevřít</button>
+      </div></td>
     </tr>`;
   }).join('');
 
@@ -3000,29 +3435,6 @@ function renderTerminy() {
     <td class="col-rent" style="text-align:right;white-space:nowrap;">${totalBalance.toLocaleString('cs-CZ')} Kč</td>
     <td></td>
   </tr>`;
-
-  // Rent summary cards (respects active filters)
-  const todayStr = today();
-  const balancePaid   = data.filter(w => w.date <= todayStr).reduce((s, w) => s + (weddingRentBalance[w.date] || 0), 0);
-  const balanceFuture = data.filter(w => w.date >  todayStr).reduce((s, w) => s + (weddingRentBalance[w.date] || 0), 0);
-  const fmt = n => n.toLocaleString('cs-CZ') + ' Kč';
-  document.getElementById('najem-summary').innerHTML = `
-    <div class="stat">
-      <div class="stat-label">Záloha celkem</div>
-      <div class="stat-value" style="color:var(--green);">${fmt(totalDeposit)}</div>
-      <div class="stat-sub">všechny zálohy zaplaceny</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Doplatek — zaplaceno</div>
-      <div class="stat-value" style="color:var(--green);">${fmt(balancePaid)}</div>
-      <div class="stat-sub">svatby do dneška</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Doplatek — bude zaplaceno</div>
-      <div class="stat-value" style="color:var(--accent);">${fmt(balanceFuture)}</div>
-      <div class="stat-sub">nadcházející svatby</div>
-    </div>
-  `;
 }
 
 function updateGuests(date, val) {
@@ -3085,6 +3497,123 @@ function staffStatusHtml(date) {
   return `<span style="color:var(--green);font-weight:600;">✓ ${actual}/${req}</span>`;
 }
 
+// ============================================================
+// RYCHLÉ PŘIHLÁŠENÍ NA OBSLUHU / ÚKLID
+// Okno pracuje jen s rozpisem (weddingAssignments). Detail svatby neotevírá —
+// pole kontaktu, nájmu a checklistu se ukládají při psaní, takže je lepší je
+// při pouhém zapsání na směnu vůbec nezobrazovat.
+// ============================================================
+let _signupModal = null;   // { date, role }
+
+function openSignupModal(date, role) {
+  if (!WEDDINGS.some(w => w.date === date)) return;
+  _signupModal = { date, role };
+  renderSignupModal();
+  document.getElementById('signup-overlay').style.display = 'flex';
+  setRoute('smena/' + date + '/' + role);
+}
+
+function closeSignupModal(e) {
+  // klik do okna ho nezavírá, jen klik na pozadí nebo na křížek
+  if (e && e.target !== document.getElementById('signup-overlay')) return;
+  document.getElementById('signup-overlay').style.display = 'none';
+  _signupModal = null;
+  setRoute(currentPageName());
+}
+
+function signupModalOpen() {
+  const el = document.getElementById('signup-overlay');
+  return !!_signupModal && !!el && el.style.display === 'flex';
+}
+
+function renderSignupModal() {
+  if (!_signupModal) return;
+  const { date, role } = _signupModal;
+  const host = document.getElementById('signup-content');
+  if (!host) return;
+
+  const isService = role === 'service';
+  const people = isService ? getService(date) : getCleaning(date);
+  const roleWord = isService ? 'Obsluha' : 'Úklid';
+  const tagCls = isService ? 'tag-service' : 'tag-cleaning';
+  const col = isService ? 'var(--blue)' : 'var(--green)';
+  const colLight = isService ? 'var(--blue-light)' : 'var(--green-light)';
+  // úklid se dělá den po svatbě — v hlavičce proto svítí datum úklidu
+  const workDate = isService ? date : addDays(date, 1);
+  const coord = getCoord(date);
+  const me = currentPerson();
+  const mine = !!me && people.includes(me);
+
+  // Kolik lidí ještě chybí: u obsluhy podle požadavku termínu, u úklidu standard.
+  const req = isService ? getStaff(date) : CLEAN_REQ;
+  let countText, countCol;
+  if (req == null) {
+    countText = people.length ? `${people.length} přihlášeno` : 'zatím nikdo';
+    countCol = 'var(--muted)';
+  } else {
+    const missing = Math.max(0, req - people.length);
+    countText = missing ? `${people.length} ze ${req} · chybí ${missing}` : `${people.length} ze ${req} · kompletní`;
+    countCol = missing ? (people.length === 0 ? 'var(--red)' : 'var(--yellow)') : 'var(--green)';
+  }
+
+  // Hlavní úkon — velké tlačítko přes celou šířku.
+  const bigBtn = (label, onclick) => `<button class="btn" onclick="${onclick}"
+    style="width:100%;padding:14px 18px;font-size:1rem;font-weight:600;background:${col};border-radius:10px;">${label}</button>`;
+  const infoBox = (text, strong) => `<div style="padding:13px 16px;border-radius:10px;background:${colLight};
+    color:${strong ? col : 'var(--muted)'};font-weight:${strong ? '600' : '400'};text-align:center;font-size:0.88rem;">${text}</div>`;
+
+  let action;
+  if (isAdmin()) {
+    const opts = ALL_PEOPLE.filter(p => !people.includes(p)).map(p => `<option value="${p}">${p}</option>`).join('');
+    action = `<select id="signup-pick" style="width:100%;padding:11px 12px;border:1px solid var(--border);
+        border-radius:10px;font-size:0.92rem;background:var(--card);margin-bottom:10px;">
+        <option value="">— Vyberte osobu —</option>${opts}
+      </select>` + bigBtn('+ Přihlásit', `signUp('${date}',document.getElementById('signup-pick').value,'${role}')`);
+  } else if (!me) {
+    action = infoBox(`Váš e-mail (${escAttr(window.currentUserEmail || '—')}) není přiřazen k žádnému zaměstnanci — požádejte administrátora.`, false);
+  } else if (mine) {
+    action = infoBox('✓ Jste přihlášen/a', true)
+      + `<div style="margin-top:8px;font-size:0.76rem;color:var(--muted);text-align:center;">Odhlásit se můžete křížkem u svého jména níže.</div>`;
+  } else {
+    action = bigBtn(`+ Přihlásit se (${escAttr(me)})`, `signUp('${date}','${me}','${role}')`);
+  }
+
+  // Odhlásit lze jen sebe (admin kohokoli) — stejné pravidlo jako v detailu.
+  const assigned = people.length
+    ? `<div style="display:flex;flex-wrap:wrap;gap:4px;">` + people.map(p => `<span class="tag ${tagCls}" style="margin:0;padding:4px 10px;">${p}${
+        canManagePerson(p)
+          ? `<button onclick="unassign('${date}','${p}','${role}')" style="background:none;border:none;cursor:pointer;font-size:0.9rem;color:inherit;padding:0 0 0 5px;line-height:1;" title="Odhlásit">×</button>`
+          : ''}</span>`).join('') + `</div>`
+    : '<em style="color:var(--muted);font-size:0.85rem;">Nikdo přihlášen</em>';
+
+  host.innerHTML = `
+    <button class="modal-close" onclick="closeSignupModal()">×</button>
+    <div class="modal-eyebrow" style="color:${col};">${roleWord} · ${fmtDate(workDate)}</div>
+    <div class="modal-title" style="margin-bottom:8px;">${weddingContact[date] ? escAttr(weddingContact[date]) : 'Termín bez zájemce'}</div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px;font-size:0.8rem;color:var(--muted);">
+      ${coord ? coordTag(coord) : ''}
+      ${isService ? '' : `<span>úklid den po svatbě ${fmtDate(date)}</span>`}
+    </div>
+    ${action}
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:22px 0 8px;">
+      <span style="font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);">Přihlášeni</span>
+      <span style="font-size:0.78rem;font-weight:700;color:${countCol};">${countText}</span>
+    </div>
+    ${assigned}
+    <div style="margin-top:20px;padding-top:12px;border-top:1px solid var(--border);font-size:0.74rem;color:var(--muted);">
+      Okno mění jen rozpis směn. Celý detail svatby otevřete tlačítkem <strong>Otevřít</strong> v tabulce.
+    </div>`;
+}
+
+// Nástroje ke směně v detailu termínu: stažení .ics do kalendáře.
+function shiftToolsHtml(date, role) {
+  const st = 'padding:4px 10px;font-size:0.75rem;';
+  return `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
+    <button class="btn btn-sm btn-outline" style="${st}" onclick="exportShiftIcs('${date}','${role}')"
+      title="Stáhne .ics — směna se přidá do kalendáře">📅 Do kalendáře</button>
+  </div>`;
+}
+
 function openWeddingModal(date) {
   const w = WEDDINGS.find(x => x.date === date);
   if (!w) return;
@@ -3094,6 +3623,7 @@ function openWeddingModal(date) {
   const cln = getCleaning(date);
 
   _modalDate = date; _modalDirty = false;
+  setRoute('termin/' + date);
   // Reset footeru. Neuzavřenou chybu (_modalRetry) ponecháme — jinak by
   // překreslení modalu smazalo červené hlášení o neuloženém zápisu.
   if (!_modalRetry) {
@@ -3139,6 +3669,10 @@ function openWeddingModal(date) {
     <div class="modal-eyebrow">${w.date.slice(0,4)} · ${w.day}${eventLabel(date) ? ` · <span class="tag tag-event">${eventLabel(date)}</span>` : ''}</div>
     <div class="modal-title">${fmtDate(w.date)}${weddingContact[w.date] ? ` <span class="modal-title-name">${escAttr(weddingContact[w.date])}</span>` : ''}</div>
     ${w.eventNote ? `<div class="modal-hint">${escAttr(w.eventNote)}</div>` : ''}
+    <div style="margin:8px 0 2px;">
+      <button class="btn btn-sm btn-outline" style="padding:3px 10px;font-size:0.74rem;"
+        onclick="copyWeddingLink('${date}', this)" title="Zkopíruje odkaz, který otevře rovnou tento termín">🔗 Kopírovat odkaz</button>
+    </div>
 
     <section class="m-card m-card--contact">
     <div class="m-card-label">Kontakt</div>
@@ -3201,6 +3735,7 @@ function openWeddingModal(date) {
         ${renderAssigned(svc, 'service', 'tag-service')}
       </div>
       ${renderSignupControls(svc, 'service', `svc-pick-${date}`, '')}
+      ${shiftToolsHtml(date, 'service')}
     </div>
 
     <div class="m-sub m-sub--cln">
@@ -3212,6 +3747,7 @@ function openWeddingModal(date) {
         ${renderAssigned(cln, 'cleaning', 'tag-cleaning')}
       </div>
       ${renderSignupControls(cln, 'cleaning', `cln-pick-${date}`, 'background:var(--green);')}
+      ${shiftToolsHtml(date, 'cleaning')}
     </div>
 
     <div class="checklist-sum">
@@ -3284,6 +3820,7 @@ function openWeddingModal(date) {
 function closeModal(e) {
   if (!e || e.target === document.getElementById('modal-overlay')) {
     document.getElementById('modal-overlay').classList.remove('open');
+    setRoute(currentPageName());
   }
 }
 
@@ -3307,7 +3844,74 @@ function updatePersonEmail() {
   );
 }
 
+// ---- Filtr sezóny v sekci Zaměstnanec ----
+// null = všechny roky. Rok se bere podle data svatby, aby nedělní úklid
+// zůstal u své sezóny i přes přelom roku.
+let zamYear = null;
+let zamYearDefaulted = false;
+function setZamYear(y) { zamYear = y; renderZamestnanec(); }
+function renderZamYearSwitch() {
+  const el = document.getElementById('zam-year-switch');
+  if (!el) return;
+  const years = seasonYears();
+  // Při prvním otevření ukážeme aktuální sezónu (stejně jako Přehled);
+  // další volání už respektují, co si uživatel přepnul — včetně „Oba roky".
+  if (!zamYearDefaulted) { zamYearDefaulted = true; zamYear = defaultSeason(); }
+  if (zamYear && !years.includes(zamYear)) zamYear = null;
+  const allLabel = years.length === 2 ? 'Oba roky' : 'Všechny roky';
+  el.innerHTML = years.slice().reverse().map(y =>
+      `<button class="view-btn ${zamYear === y ? 'active' : ''}" onclick="setZamYear('${y}')">${y}</button>`).join('') +
+    `<button class="view-btn ${zamYear === null ? 'active' : ''}" onclick="setZamYear(null)">${allLabel}</button>`;
+}
+
+// Karta s výdělky a exportem směn do kalendáře.
+// Částky vidí jen ten, koho se týkají, a admin — je to mzdový údaj a
+// záložku Zaměstnanec si může otevřít kdokoli a přepnout na jiné jméno.
+function renderPersonEarnings(name) {
+  const el = document.getElementById('person-earnings');
+  if (!el) return;
+  const pKey = name.replace(/'/g, "\\'");
+  const upcomingCount = personWorkEvents(name).filter(e => !isPast(e.workDate))
+    .reduce((s, e) => s + (e.inService ? 1 : 0) + (e.inClean ? 1 : 0), 0);
+
+  const exportBtn = `<button class="btn btn-sm btn-outline" onclick="exportPersonIcs('${pKey}')"
+      title="Stáhne .ics se všemi nadcházejícími směnami">📅 Nadcházející směny do kalendáře${upcomingCount ? ' (' + upcomingCount + ')' : ''}</button>`;
+
+  if (!canManagePerson(name)) {
+    el.innerHTML = `<div style="margin-bottom:18px;">${exportBtn}</div>`;
+    return;
+  }
+
+  const e = personEarnings(name, zamYear);
+  const obdobi = zamYear ? 'sezóna ' + zamYear : 'všechny sezóny';
+  const kc = n => Math.round(n).toLocaleString('cs-CZ') + ' Kč';
+  const box = (label, value, color, sub) => `
+    <div class="card" style="padding:14px 16px;">
+      <div class="card-title">${label}</div>
+      <div style="font-size:1.35rem;font-weight:700;color:${color};line-height:1.2;">${value}</div>
+      ${sub ? `<div class="card-sub">${sub}</div>` : ''}
+    </div>`;
+
+  el.innerHTML = `
+    <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+      <span>${name === currentPerson() ? 'Moje výdělky' : 'Výdělky — ' + name}
+        <span style="font-weight:400;color:var(--muted);font-size:0.78rem;">· ${obdobi}</span></span>
+      ${exportBtn}
+    </div>
+    <div class="grid-4" style="margin-bottom:10px;">
+      ${box('Hodinovka', kc(e.hoursPay), 'var(--text)', e.hours.toLocaleString('cs-CZ', { maximumFractionDigits: 1 }) + ' h')}
+      ${box('Úklidy', kc(e.cleanPay), 'var(--text)', e.cleanCount + (e.cleanCount === 1 ? ' akce' : e.cleanCount < 5 ? ' akce' : ' akcí'))}
+      ${box('Celkem', kc(e.total), 'var(--accent)', 'hodinovka + úklidy')}
+      ${box(e.remaining > 0 ? 'Zbývá proplatit' : 'Vše proplaceno',
+            e.remaining > 0 ? kc(e.remaining) : '✓',
+            e.remaining > 0 ? 'var(--red)' : 'var(--green)',
+            'proplaceno ' + kc(e.paid))}
+    </div>
+    <p class="notice" style="margin-bottom:18px;">Úklid se počítá jako 5 000 Kč za akci děleno počtem lidí v týmu. Proplacené částky zadává admin ve Výplatách.</p>`;
+}
+
 function renderZamestnanec() {
+  renderZamYearSwitch();
   const name = document.getElementById('person-select').value;
   const container = document.getElementById('person-schedule');
   const statsEl = document.getElementById('person-stats');
@@ -3320,13 +3924,18 @@ function renderZamestnanec() {
       <span id="person-email-msg" style="font-size:0.85rem;"></span>
     </div>` : '';
 
+  const earnEl = document.getElementById('person-earnings');
+
   if (!name) {
     container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">👤</div><div>Vyberte zaměstnance</div></div>';
     statsEl.innerHTML = '';
+    if (earnEl) earnEl.innerHTML = '';
     return;
   }
 
-  const workEvents = personWorkEvents(name);
+  renderPersonEarnings(name);
+
+  const workEvents = personWorkEvents(name).filter(e => !zamYear || e.weddingDate.startsWith(zamYear + '-'));
   const upcoming = workEvents.filter(e => !isPast(e.workDate));
   const past = workEvents.filter(e => isPast(e.workDate));
 
@@ -3355,7 +3964,7 @@ function renderZamestnanec() {
   `;
 
   if (workEvents.length === 0) {
-    container.innerHTML = `<div class="alert alert-info">Žádné termíny pro <strong>${name}</strong></div>`;
+    container.innerHTML = `<div class="alert alert-info">Žádné termíny pro <strong>${name}</strong>${zamYear ? ` v sezóně ${zamYear}` : ''}</div>`;
     return;
   }
 
@@ -3390,6 +3999,11 @@ function renderZamestnanec() {
               <div style="flex:1">
                 <div>${coordTag(w.coord)}</div>
                 ${teammates.length ? `<div style="font-size:0.78rem;color:var(--muted);margin-top:4px;">Obsluhuje: ${teammates.join(', ')}</div>` : ''}
+                <div style="margin-top:6px;">
+                  <button class="btn btn-sm btn-outline" style="padding:3px 9px;font-size:0.72rem;"
+                    onclick="event.stopPropagation(); exportShiftIcs('${w.date}','service')"
+                    title="Stáhne .ics — směna se přidá do kalendáře">📅 Do kalendáře</button>
+                </div>
               </div>
             </div>`;
         } else {
@@ -3405,6 +4019,11 @@ function renderZamestnanec() {
               <div style="flex:1">
                 <div>${coordTag(w.coord)}</div>
                 ${teammates.length ? `<div style="font-size:0.78rem;color:var(--muted);margin-top:4px;">Uklízí: ${teammates.join(', ')}</div>` : ''}
+                <div style="margin-top:6px;">
+                  <button class="btn btn-sm btn-outline" style="padding:3px 9px;font-size:0.72rem;"
+                    onclick="event.stopPropagation(); exportShiftIcs('${w.date}','cleaning')"
+                    title="Stáhne .ics — směna se přidá do kalendáře">📅 Do kalendáře</button>
+                </div>
               </div>
             </div>`;
         }
@@ -3501,8 +4120,9 @@ function addHoursEntry() {
   if (!hours || hours <= 0 || hours > 24) return hkMsg('Zadejte počet hodin (0,5 – 24).');
   if (isNaN(rate) || rate < 0) return hkMsg('Zadejte hodinovou sazbu v Kč.');
 
-  hoursLog.push({ id: Date.now().toString(), date, person, hours, rate, note });
-  saveHours();
+  const entry = { id: newId('h_'), date, person, hours, rate, note };
+  hoursLog.push(entry);
+  writeEntry('hoursLog', entry);
 
   hkMsg(`✓ Uloženo: ${escAttr(person)} · ${fmtDate(date)} · ${hkFmtNum(hours)} h × ${hkFmtKc(rate)} = <strong>${hkFmtKc(hours * rate)}</strong>`, true);
   document.getElementById('h-hours').value = '';
@@ -3516,7 +4136,7 @@ function updateHoursRate(id, value) {
   const r = parseFloat(value);
   if (!e || isNaN(r) || r < 0) return;
   e.rate = r;
-  saveHours();
+  writeEntry('hoursLog', e);
   refreshHodinovka();
 }
 
@@ -3524,7 +4144,7 @@ function deleteHoursEntry(id) {
   const e = hoursLog.find(x => x.id === id);
   if (!e || !confirm(`Smazat záznam: ${e.person}, ${fmtDate(e.date)}, ${hkFmtNum(e.hours)} h?`)) return;
   hoursLog = hoursLog.filter(x => x.id !== id);
-  saveHours();
+  removeEntry('hoursLog', id);
   refreshHodinovka();
 }
 
@@ -3544,8 +4164,9 @@ function addExpenseEntry() {
   if (!type) return hkMsg('Vyberte typ výdaje.');
   if (isNaN(amount) || amount <= 0) return hkMsg('Zadejte částku v Kč.');
 
-  expenses.push({ id: 'exp_' + Date.now(), date, person, type, amount, note });
-  saveExpenses();
+  const entry = { id: newId('exp_'), date, person, type, amount, note };
+  expenses.push(entry);
+  writeEntry('expenses', entry);
 
   hkMsg(`✓ Náklad uložen: ${escAttr(person)} · ${escAttr(type)} · <strong>${hkFmtKc(amount)}</strong>`, true);
   document.getElementById('exp-type').value = '';
@@ -3558,7 +4179,7 @@ function deleteExpenseEntry(id) {
   const e = expenses.find(x => x.id === id);
   if (!e || !confirm(`Smazat náklad: ${e.person}, ${e.type}, ${hkFmtKc(e.amount)}?`)) return;
   expenses = expenses.filter(x => x.id !== id);
-  saveExpenses();
+  removeEntry('expenses', id);
   refreshHodinovka();
 }
 
@@ -3810,7 +4431,54 @@ function setPayrollMonth(m) {
   renderVyplaty();
 }
 
+// --- NÁJEM: zálohy a doplatky (KPI karty v sekci Výplaty) ---
+// Počítá přes všechny termíny, nezávisle na filtrech v záložce Termíny;
+// vlastní filtr roku je výchozí na aktuální sezónu.
+let rentYear = null;
+let rentYearDefaulted = false;
+function setRentYear(y) { rentYear = y; renderNajemSummary(); }
+
+function renderNajemSummary() {
+  const box = document.getElementById('najem-summary-block');
+  if (!box) return;
+  if (!rentYearDefaulted) { rentYearDefaulted = true; rentYear = defaultSeason(); }
+
+  const data = rentYear ? WEDDINGS.filter(w => w.date.startsWith(rentYear + '-')) : WEDDINGS;
+  const todayStr = today();
+  const totalDeposit  = data.reduce((s, w) => s + (weddingRentDeposit[w.date] || 0), 0);
+  const balancePaid   = data.filter(w => w.date <= todayStr).reduce((s, w) => s + (weddingRentBalance[w.date] || 0), 0);
+  const balanceFuture = data.filter(w => w.date >  todayStr).reduce((s, w) => s + (weddingRentBalance[w.date] || 0), 0);
+  const fmt = n => n.toLocaleString('cs-CZ') + ' Kč';
+
+  box.innerHTML = `
+    <div class="section-title">Nájem — zálohy a doplatky</div>
+    <div class="filters" style="gap:6px;">
+      <span style="font-size:0.82rem;color:var(--muted);font-weight:600;margin-right:4px;">Rok:</span>
+      <button class="view-btn${rentYear === null ? ' active' : ''}" onclick="setRentYear(null)">Vše</button>
+      ${seasonYears().map(y => `<button class="view-btn${rentYear === y ? ' active' : ''}" onclick="setRentYear('${y}')">${y}</button>`).join('')}
+    </div>
+    <div class="stats" style="margin-bottom:28px;">
+      <div class="stat">
+        <div class="stat-label">Záloha celkem</div>
+        <div class="stat-value" style="color:var(--green);">${fmt(totalDeposit)}</div>
+        <div class="stat-sub">všechny zálohy zaplaceny</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Doplatek — zaplaceno</div>
+        <div class="stat-value" style="color:var(--green);">${fmt(balancePaid)}</div>
+        <div class="stat-sub">svatby do dneška</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Doplatek — bude zaplaceno</div>
+        <div class="stat-value" style="color:var(--accent);">${fmt(balanceFuture)}</div>
+        <div class="stat-sub">nadcházející svatby</div>
+      </div>
+    </div>
+  `;
+}
+
 function renderVyplaty() {
+  renderNajemSummary();
   // Collect all months with data (hours or cleaning)
   const hoursMonths = hoursLog.map(e => e.date.substring(0,7));
   const cleanMonths = WEDDINGS
@@ -4581,13 +5249,13 @@ function lockTodo() {
 // ============================================================
 let todos = [];
 
-function saveTodos() { db.ref('todos').set(todos); }
+function saveTodos() { return db.ref('todos').set(keyById(todos)); }
 
 function addTodo() {
   const task = document.getElementById('todo-new-task').value.trim();
   if (!task) { document.getElementById('todo-new-task').focus(); return; }
   const todo = {
-    id: 'todo_' + Date.now(),
+    id: newId('todo_'),
     task,
     deadline: document.getElementById('todo-new-deadline').value,
     priority: document.getElementById('todo-new-priority').value,
@@ -4596,7 +5264,7 @@ function addTodo() {
     createdAt: new Date().toISOString()
   };
   todos.unshift(todo);
-  saveTodos();
+  writeEntry('todos', todo);
   document.getElementById('todo-new-task').value = '';
   document.getElementById('todo-new-comment').value = '';
   document.getElementById('todo-new-deadline').value = '';
@@ -4606,12 +5274,12 @@ function addTodo() {
 
 function toggleTodoDone(id) {
   const t = todos.find(x => x.id === id);
-  if (t) { t.done = !t.done; saveTodos(); renderTodos(); }
+  if (t) { t.done = !t.done; writeEntry('todos', t); renderTodos(); }
 }
 
 function deleteTodo(id) {
   todos = todos.filter(x => x.id !== id);
-  saveTodos();
+  removeEntry('todos', id);
   renderTodos();
 }
 
@@ -4661,7 +5329,7 @@ function saveTodoEdit(id) {
   t.deadline = document.getElementById('te-deadline-' + id).value;
   t.priority = document.getElementById('te-priority-' + id).value;
   t.comment  = document.getElementById('te-comment-' + id).value.trim();
-  saveTodos();
+  writeEntry('todos', t);
   renderTodos();
 }
 
@@ -4775,6 +5443,7 @@ function showTab(name) {
     if (todoUnlocked) renderTodos();
     else renderTodoLock();
   }
+  setRoute(name);
 }
 
 // ============================================================
@@ -4797,10 +5466,12 @@ async function init() {
   document.getElementById('h-date').value = today();
   syncHkDayChips();
   restoreHkPerson();
+  prefillCurrentPerson();
 
   // Initial render
   window.applyRoleUI();
   renderPrehled();
+  applyHashRoute();   // otevřít to, na co míří adresa (#termin/…, #smena/…)
 }
 
 document.addEventListener('DOMContentLoaded', init);
