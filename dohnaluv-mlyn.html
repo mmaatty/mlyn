@@ -1202,6 +1202,7 @@ const SEED_WEDDINGS = [
   {date:'2027-08-28',day:'Sobota',coord:'Verča',staff:null,guests:40,service:[],cleaning:[]},
   {date:'2027-09-02',day:'Čtvrtek',coord:'Grochy',staff:null,guests:50,service:[],cleaning:[]},
   {date:'2027-09-04',day:'Sobota',coord:'Grochy',staff:null,guests:100,service:[],cleaning:[],guestsNote:'90-100 osob'},
+  {date:'2027-09-06',day:'Pondělí',coord:null,staff:null,guests:null,service:[],cleaning:[]},
   {date:'2027-09-09',day:'Čtvrtek',coord:'Grochy',staff:null,guests:null,service:[],cleaning:[]},
   {date:'2027-09-11',day:'Sobota',coord:'Matěj',staff:null,guests:50,service:[],cleaning:[]},
   {date:'2027-09-16',day:'Čtvrtek',coord:'Verča',staff:null,guests:68,service:[],cleaning:[]},
@@ -1239,7 +1240,7 @@ const SEED_NAMES = {
   '2027-06-24': 'Kristýna Kušnieriková (Kristýna a Josue)',
   '2027-06-26': 'Michaela Jehlíková',
   '2027-07-01': 'Matelová Eva',
-  '2027-07-03': 'František a Eva?',
+  '2027-07-03': 'František Kropáč',
   '2027-07-05': 'Sára Hrdinová',
   '2027-07-08': 'Aneta Nejedlíková',
   '2027-07-10': 'Lenka Němečková',
@@ -1260,14 +1261,15 @@ const SEED_NAMES = {
   '2027-08-28': 'Jakub Krejsa',
   '2027-09-02': 'Klára Tamási',
   '2027-09-04': 'Nadan Pojer',
-  '2027-09-09': 'Kateřina Koukalová',
+  '2027-09-06': 'Anna Jaborníková',
+  '2027-09-09': 'Eliška Kotkolíková',
   '2027-09-11': 'Sára Konečná',
   '2027-09-16': 'Anna Huppertová',
   '2027-09-18': 'Ellen Palmeová',
   '2027-09-23': 'Kateřina Sedlářová',
-  '2027-09-25': 'Ondřej Böhm + Krejsová',
+  '2027-09-25': 'Ondřej Böhm',
   '2027-09-30': 'Denis Kukan',
-  '2027-10-02': 'Petr Lahodný',
+  '2027-10-02': 'Tereza Nezvalová',
   '2027-10-09': 'Tereza Gajdošíková',
 };
 const SEED_EMAILS = {
@@ -1292,6 +1294,7 @@ const SEED_EMAILS = {
   '2027-06-24': 'kikyajosue@gmail.com',
   '2027-06-26': 'michaelajehlikova@gmail.com',
   '2027-07-01': 'evca.matelova68@gmail.com',
+  '2027-07-03': 'muckovaevca@seznam.cz, kropac.ff@gmail.com',
   '2027-07-05': 'hrdinova.sa@seznam.cz',
   '2027-07-08': 'anetanejedlikova@gmail.com',
   '2027-07-10': 'lenusnemeckova@seznam.cz',
@@ -1311,14 +1314,15 @@ const SEED_EMAILS = {
   '2027-08-28': 'jk.krejsa@seznam.cz',
   '2027-09-02': 'kajkatamasi@gmail.com',
   '2027-09-04': 'n.pojer@gmail.com',
-  '2027-09-09': 'katykouk@gmail.com',
+  '2027-09-06': 'anyk177@gmail.com',
+  '2027-09-09': 'kotkolikova.eliska@gmail.com',
   '2027-09-11': 'konecna.s@seznam.cz',
   '2027-09-16': 'AnnHuppert@seznam.cz',
   '2027-09-18': 'ellenpalme@seznam.cz',
   '2027-09-23': 'sedlar.kacka@gmail.com',
   '2027-09-25': 'bohmondrej@gmail.com',
   '2027-09-30': 'denis.kukan@gmail.com',
-  '2027-10-02': 'petr.lahodny@gmail.com',
+  '2027-10-02': '74nezvalova@seznam.cz',
   '2027-10-09': 'terezka2804@seznam.cz',
 };
 const SEED_PHONES = {};
@@ -1388,6 +1392,9 @@ let weddingPhone = {};        // { 'YYYY-MM-DD': 'telefon' }
 let weddingEmail = {};        // { 'YYYY-MM-DD': 'email' }
 let weddingRentDeposit = {};  // { 'YYYY-MM-DD': number } záloha v CZK
 let weddingRentBalance = {};  // { 'YYYY-MM-DD': number } doplatek v CZK
+// Účet, na který jde nájem svatby — záloha i doplatek dohromady.
+// Ukládají se jen šedé; co v mapě není, je oficiální účet.
+let weddingAccount = {};      // { 'YYYY-MM-DD': 'grey' }
 let weddingCoordOverride = {}; // { 'YYYY-MM-DD': 'coord' } přepsání koordinátora
 let weddingStaffOverride = {}; // { 'YYYY-MM-DD': number|null } přepsání požadované obsluhy
 let weddingGuestsOverride = {}; // { 'YYYY-MM-DD': number|null } přepsání počtu hostů
@@ -1444,7 +1451,7 @@ function rebuildWeddings() {
 const STATE_KEYS = [
   'people', 'peopleEmails', 'hoursLog', 'rates', 'expenses', 'paymentPaid', 'bankAccounts', 'personQR',
   'weddingFeedback', 'weddingRating', 'weddingChecklist', 'weddingContact', 'weddingPhone', 'weddingEmail',
-  'weddingRentDeposit', 'weddingRentBalance', 'weddingCoordOverride', 'weddingStaffOverride',
+  'weddingRentDeposit', 'weddingRentBalance', 'weddingAccount', 'weddingCoordOverride', 'weddingStaffOverride',
   'weddingGuestsOverride', 'weddingGuestsNote', 'weddingNote',
   'todos', 'customWeddings', 'weddingAssignments', 'deletedWeddings', 'migrations'
 ];
@@ -1524,6 +1531,7 @@ async function loadState() {
       .then(() => db.ref('migrations/clear2027Deposits').set({ at: new Date().toISOString(), removed }));
   }
   weddingRentBalance = data.weddingRentBalance || {};
+  weddingAccount = data.weddingAccount || {};
   weddingCoordOverride = data.weddingCoordOverride || {};
   // Jednorázově: koordinátor „Honza + Verča" se přejmenoval na „Verča".
   // Přepíše uložené volby v databázi, ať nezůstanou u neexistujícího jména.
@@ -1632,6 +1640,101 @@ async function loadState() {
   // Rebuild WEDDINGS = seed + custom − smazané, sorted by date
   deletedWeddings = data.deletedWeddings || {};
   rebuildWeddings();
+
+  // Jednorázově: nájem sezóny 2027 podle ceníku.
+  // Záloha 50 000 Kč u všech, doplatek 19 000 Kč ve čtvrtek a v pondělí,
+  // 49 000 Kč v sobotu. Přepisuje i dříve zadané částky — původní stav se
+  // ukládá do migrations/rent2027/before pro případ obnovy.
+  // Jiné akce než svatby (výročí 25. 7.) a ostatní dny v týdnu se vynechávají.
+  if (!mig.rent2027) {
+    const RENT_DEPOSIT_2027 = 50000;
+    const RENT_BALANCE_BY_DOW = { 1: 19000, 4: 19000, 6: 49000 };   // Po, Čt, So
+    const before = {};
+    let changed = 0;
+    WEDDINGS.filter(w => w.date.startsWith('2027-')).forEach(w => {
+      if ((w.eventType || 'svatba') !== 'svatba') return;
+      const balance = RENT_BALANCE_BY_DOW[new Date(w.date + 'T00:00:00').getDay()];
+      if (balance === undefined) return;
+      before[w.date] = {
+        deposit: weddingRentDeposit[w.date] ?? null,
+        balance: weddingRentBalance[w.date] ?? null
+      };
+      weddingRentDeposit[w.date] = RENT_DEPOSIT_2027;
+      weddingRentBalance[w.date] = balance;
+      changed++;
+    });
+    const saveRent = changed
+      ? Promise.all([
+          db.ref('weddingRentDeposit').set(weddingRentDeposit),
+          db.ref('weddingRentBalance').set(weddingRentBalance)
+        ])
+      : Promise.resolve();
+    saveRent.then(() => db.ref('migrations/rent2027')
+      .set({ at: new Date().toISOString(), count: changed, before }));
+  }
+
+  // Jednorázově: rozdělení na oficiální a šedý účet podle listu „2027–kontakty"
+  // ve sdílené tabulce Termíny – Dohnalův mlýn, sloupec H (TYP ÚČTU), stav k 21. 11. 2026.
+  // Šedé jsou vyjmenované níže, zbytek sezóny 2027 je oficiální.
+  // Termíny bez vyplněného typu účtu (17. 4., 22. 4., 29. 4., 25. 7., 7. 10., 9. 10.)
+  // zůstávají oficiální, protože to je výchozí stav — až se v tabulce doplní, je
+  // třeba je přepnout ručně. Původní stav se ukládá pro případ obnovy.
+  if (!mig.greyAccounts2027) {
+    const GREY_2027 = [
+      '2027-04-24', '2027-05-01', '2027-05-08', '2027-05-13', '2027-05-20', '2027-05-22',
+      '2027-06-10', '2027-06-24', '2027-07-01', '2027-07-05', '2027-07-22', '2027-07-29',
+      '2027-08-05', '2027-08-19', '2027-08-26', '2027-09-25'
+    ];
+    const beforeAccounts = {};
+    Object.keys(weddingAccount).forEach(d => {
+      if (d.startsWith('2027-')) beforeAccounts[d] = weddingAccount[d];
+    });
+    // list je pro sezónu 2027 zdrojem pravdy — co v něm šedé není, je oficiální
+    Object.keys(weddingAccount).forEach(d => {
+      if (d.startsWith('2027-') && !GREY_2027.includes(d)) delete weddingAccount[d];
+    });
+    GREY_2027.forEach(d => { weddingAccount[d] = 'grey'; });
+    db.ref('weddingAccount').set(weddingAccount)
+      .then(() => db.ref('migrations/greyAccounts2027')
+        .set({ at: new Date().toISOString(), count: GREY_2027.length, before: beforeAccounts }));
+  }
+
+  // Jednorázově: srovnání kontaktů se sdíleným listem „2027–kontakty" (stav k 21. 11. 2026).
+  // U čtyř termínů se změnil zájemce a 6. 9. je nová svatba — seed se uplatní jen tam,
+  // kde databáze nic nemá, proto se už uložené hodnoty přepisují zvlášť.
+  // Nájem u nové svatby doplňujeme ručně, protože migrace rent2027 už proběhla:
+  // pondělí = záloha 50 000 Kč, doplatek 19 000 Kč. Účet je oficiální, což je výchozí stav.
+  if (!mig.syncSheet2027) {
+    const SHEET_CONTACTS = {
+      '2027-07-03': { name: 'František Kropáč',   email: 'muckovaevca@seznam.cz, kropac.ff@gmail.com' },
+      '2027-09-06': { name: 'Anna Jaborníková',   email: 'anyk177@gmail.com' },
+      '2027-09-09': { name: 'Eliška Kotkolíková', email: 'kotkolikova.eliska@gmail.com' },
+      '2027-09-25': { name: 'Ondřej Böhm',        email: 'bohmondrej@gmail.com' },
+      '2027-10-02': { name: 'Tereza Nezvalová',   email: '74nezvalova@seznam.cz' }
+    };
+    const beforeContacts = {};
+    Object.entries(SHEET_CONTACTS).forEach(([d, v]) => {
+      beforeContacts[d] = {
+        name: weddingContact[d] || '',
+        email: weddingEmail[d] || '',
+        guests: weddingGuestsOverride[d] ?? null
+      };
+      weddingContact[d] = v.name;
+      weddingEmail[d] = v.email;
+      // u nového páru neplatí počet hostů po tom původním
+      delete weddingGuestsOverride[d];
+      db.ref('weddingGuestsOverride/' + d).set(null);
+    });
+    weddingRentDeposit['2027-09-06'] = 50000;
+    weddingRentBalance['2027-09-06'] = 19000;
+    Promise.all([
+      db.ref('weddingContact').set(weddingContact),
+      db.ref('weddingEmail').set(weddingEmail),
+      db.ref('weddingRentDeposit').set(weddingRentDeposit),
+      db.ref('weddingRentBalance').set(weddingRentBalance)
+    ]).then(() => db.ref('migrations/syncSheet2027')
+      .set({ at: new Date().toISOString(), before: beforeContacts }));
+  }
 
   // Assignments — seeded from WEDDINGS on first load
   if (data.weddingAssignments) {
@@ -2272,10 +2375,26 @@ function updateEmail(date, val) {
   const row = document.querySelector(`#terminy-body tr[onclick="openWeddingModal('${date}')"]`);
   if (row) row.cells[0].innerHTML = contactCellHtml(date);
 }
+// ---- Oficiální vs. šedý účet ----
+// Platí pro celou svatbu, tedy pro zálohu i doplatek. Výchozí je oficiální,
+// v databázi se drží jen svatby označené jako šedé.
+function isGreyAccount(date) { return weddingAccount[date] === 'grey'; }
+function accountLabel(date) { return isGreyAccount(date) ? 'šedý účet' : 'oficiální účet'; }
+function accountTag(date) {
+  const grey = isGreyAccount(date);
+  return `<span class="tag" title="${accountLabel(date)}" style="font-size:0.66rem;padding:1px 6px;margin:0 0 0 5px;vertical-align:1px;
+    background:${grey ? '#e0ded5' : 'var(--green-light)'};color:${grey ? '#6b6960' : 'var(--green)'};">${grey ? 'Š' : 'O'}</span>`;
+}
+function updateAccount(date, val) {
+  if (val === 'grey') weddingAccount[date] = 'grey'; else delete weddingAccount[date];
+  db.ref('weddingAccount/' + date).set(val === 'grey' ? 'grey' : null);
+  renderTerminy(); renderNajemSummary(); refreshRentSummary(date);
+}
+
 // Souhrn v záhlaví sbalené karty Nájem
 function rentSummaryText(date) {
   const f = v => v != null ? v.toLocaleString('cs-CZ') + ' Kč' : '—';
-  return `záloha ${f(weddingRentDeposit[date])} · doplatek ${f(weddingRentBalance[date])}`;
+  return `záloha ${f(weddingRentDeposit[date])} · doplatek ${f(weddingRentBalance[date])} · ${accountLabel(date)}`;
 }
 function refreshRentSummary(date) {
   const el = document.getElementById('rent-summary');
@@ -3416,8 +3535,8 @@ function renderTerminy() {
       <td>${serviceHtml}</td>
       <td style="${cleanCellStyle}">${cleanHtml}</td>
       <td style="width:28px;padding:0;"></td>
-      <td class="col-rent" style="text-align:right;">${deposit != null ? `<strong>${deposit.toLocaleString('cs-CZ')} Kč</strong>` : '<span style="color:var(--muted);">—</span>'}</td>
-      <td class="col-rent" style="text-align:right;">${balance != null ? `<strong>${balance.toLocaleString('cs-CZ')} Kč</strong>` : '<span style="color:var(--muted);">—</span>'}</td>
+      <td class="col-rent" style="text-align:right;white-space:nowrap;">${deposit != null ? `<strong>${deposit.toLocaleString('cs-CZ')} Kč</strong>${accountTag(w.date)}` : '<span style="color:var(--muted);">—</span>'}</td>
+      <td class="col-rent" style="text-align:right;white-space:nowrap;">${balance != null ? `<strong>${balance.toLocaleString('cs-CZ')} Kč</strong>${accountTag(w.date)}` : '<span style="color:var(--muted);">—</span>'}</td>
       <td style="white-space:nowrap;"><div style="display:flex;flex-direction:column;gap:4px;">
         ${past ? '' : `<button class="btn btn-sm" style="background:var(--blue);" title="Přihlásit na obsluhu" onclick="event.stopPropagation();openSignupModal('${w.date}','service')">+ Obsluha</button>
         <button class="btn btn-sm" style="background:var(--green);" title="Přihlásit na úklid" onclick="event.stopPropagation();openSignupModal('${w.date}','cleaning')">+ Úklid</button>`}
@@ -3722,6 +3841,11 @@ function openWeddingModal(date) {
       <label class="m-field"><span>Doplatek (Kč)</span>
         <input type="number" min="0" value="${weddingRentBalance[w.date] ?? ''}" placeholder="—"
           onchange="updateRentBalance('${w.date}', this.value); markModalSaved('Doplatek uložen')"></label>
+      <label class="m-field m-span2"><span>Účet <em>(platí pro zálohu i doplatek)</em></span>
+        <select onchange="updateAccount('${w.date}', this.value); markModalSaved('Účet uložen')">
+          <option value="official" ${isGreyAccount(w.date) ? '' : 'selected'}>Oficiální účet</option>
+          <option value="grey" ${isGreyAccount(w.date) ? 'selected' : ''}>Šedý účet</option>
+        </select></label>
     </div>
     </details>
 
@@ -4450,6 +4574,18 @@ function renderNajemSummary() {
   const balanceFuture = data.filter(w => w.date >  todayStr).reduce((s, w) => s + (weddingRentBalance[w.date] || 0), 0);
   const fmt = n => n.toLocaleString('cs-CZ') + ' Kč';
 
+  // Rozpad podle účtu — příznak je na svatbě, platí pro zálohu i doplatek.
+  const sumBy = (rows, map) => rows.reduce((s, w) => s + (map[w.date] || 0), 0);
+  const official = rows => rows.filter(w => !isGreyAccount(w.date));
+  const grey     = rows => rows.filter(w =>  isGreyAccount(w.date));
+  const paid   = data.filter(w => w.date <= todayStr);
+  const future = data.filter(w => w.date >  todayStr);
+  const split = (o, g) => `<div class="stat-sub" style="margin-top:3px;">
+      <span style="color:var(--green);font-weight:600;">oficiální ${fmt(o)}</span>
+      <span style="color:var(--muted);"> · </span>
+      <span style="color:#6b6960;font-weight:600;">šedý ${fmt(g)}</span>
+    </div>`;
+
   box.innerHTML = `
     <div class="section-title">Nájem — zálohy a doplatky</div>
     <div class="filters" style="gap:6px;">
@@ -4462,16 +4598,19 @@ function renderNajemSummary() {
         <div class="stat-label">Záloha celkem</div>
         <div class="stat-value" style="color:var(--green);">${fmt(totalDeposit)}</div>
         <div class="stat-sub">všechny zálohy zaplaceny</div>
+        ${split(sumBy(official(data), weddingRentDeposit), sumBy(grey(data), weddingRentDeposit))}
       </div>
       <div class="stat">
         <div class="stat-label">Doplatek — zaplaceno</div>
         <div class="stat-value" style="color:var(--green);">${fmt(balancePaid)}</div>
         <div class="stat-sub">svatby do dneška</div>
+        ${split(sumBy(official(paid), weddingRentBalance), sumBy(grey(paid), weddingRentBalance))}
       </div>
       <div class="stat">
         <div class="stat-label">Doplatek — bude zaplaceno</div>
         <div class="stat-value" style="color:var(--accent);">${fmt(balanceFuture)}</div>
         <div class="stat-sub">nadcházející svatby</div>
+        ${split(sumBy(official(future), weddingRentBalance), sumBy(grey(future), weddingRentBalance))}
       </div>
     </div>
   `;
