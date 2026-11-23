@@ -202,6 +202,22 @@
 
   /* EMPTY STATE */
   .empty-state { text-align: center; padding: 40px; color: var(--muted); }
+  /* ---- CHANGELOG (audit log) ---- */
+  .cl-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 18px; }
+  .cl-stat { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; box-shadow: var(--shadow); }
+  .cl-stat-val { font-size: 1.45rem; font-weight: 700; color: var(--text); line-height: 1.1; }
+  .cl-stat-lbl { font-size: 0.74rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 3px; }
+  .cl-act { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; font-size: 0.84rem; }
+  .cl-who { font-weight: 600; }
+  .cl-mail { display: block; font-size: 0.75rem; color: var(--muted); }
+  .cl-when { white-space: nowrap; font-variant-numeric: tabular-nums; font-size: 0.84rem; }
+  .cl-when-rel { display: block; font-size: 0.73rem; color: var(--muted); }
+  .cl-detail { color: var(--muted); font-size: 0.84rem; }
+  /* Dlouhy souvisly retezec (nazev ukolu, jmeno) jinak roztahne tabulku
+     tak, ze dalsi radky vypadnou z pohledu - proto zalamovat i uprostred slova. */
+  .cl-detail, .cl-target { overflow-wrap: anywhere; word-break: break-word; }
+  .cl-target { max-width: 220px; }
+  .cl-grp { background: var(--bg, #f5f3ec); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); padding: 2px 7px; border-radius: 999px; border: 1px solid var(--border); }
   .empty-state-icon { font-size: 3rem; margin-bottom: 12px; }
 
   /* MODAL */
@@ -525,6 +541,18 @@
     }
     window.currentUserEmail = (user.email || '').toLowerCase();
     if (window.applyRoleUI) window.applyRoleUI();
+    // Prihlaseni zapiseme jednou za relaci prohlizece - ne pri kazdem F5.
+    // logAudit je v pozdejsim <script>, proto kratke cekani s pevnym stropem.
+    try {
+      if (!sessionStorage.getItem('auditLoginLogged')) {
+        sessionStorage.setItem('auditLoginLogged', '1');
+        let tries = 0;
+        (function tryLogLogin() {
+          if (window.logAudit) { window.logAudit('login', '', 'Přihlášení do aplikace'); return; }
+          if (++tries < 25) setTimeout(tryLogLogin, 400);
+        })();
+      }
+    } catch (e) { /* sessionStorage muze byt zakazane */ }
   });
 </script>
 <style>
@@ -558,6 +586,7 @@
   <div class="tab" onclick="showTab('zamestnanec')">Zaměstnanec</div>
   <div class="tab" onclick="showTab('hodinovka')">Hodinovka</div>
   <div class="tab" id="tab-vyplaty" onclick="showTab('vyplaty')" style="display:none;">Výplaty</div>
+  <div class="tab" id="tab-changelog" onclick="showTab('changelog')" style="display:none;">Changelog 🔒</div>
   <div class="tab" onclick="showTab('crm')" style="display:none;">CRM 🔒</div>
   <div class="tab" onclick="showTab('todo')">To-Do 🔒</div>
 </div>
@@ -974,6 +1003,33 @@
     <div id="najem-summary-block"></div>
     <div id="payroll-content"></div>
   </div>
+</div>
+
+<!-- CHANGELOG — auditní stopa, jen pro adminy -->
+<div class="page" id="page-changelog">
+  <div class="page-head">
+    <div>
+      <h2 class="page-title">Changelog</h2>
+      <div class="page-sub">Kdo co v aplikaci změnil. Zaznamenávají se <strong>změny dat a přihlášení</strong>, nikoli prohlížení stránek. Záznamy starší než <strong>90 dní</strong> se mažou automaticky.</div>
+    </div>
+    <div class="page-actions">
+      <button class="btn btn-outline btn-sm" onclick="openChangelog(true)" title="Načíst znovu z databáze">↻ Obnovit</button>
+      <button class="btn btn-outline btn-sm" onclick="exportChangelogCsv()" title="Stáhnout zobrazené záznamy jako CSV">⬇ Export CSV</button>
+    </div>
+  </div>
+  <div id="cl-stats" class="cl-stats"></div>
+  <div class="filters">
+    <input type="text" id="cl-filter-text" placeholder="Hledat v záznamech..." oninput="renderChangelog()" style="min-width:200px;">
+    <select id="cl-filter-user" onchange="renderChangelog()"><option value="">Všichni uživatelé</option></select>
+    <select id="cl-filter-action" onchange="renderChangelog()"><option value="">Všechny akce</option></select>
+    <select id="cl-filter-days" onchange="renderChangelog()">
+      <option value="7">Posledních 7 dní</option>
+      <option value="30" selected>Posledních 30 dní</option>
+      <option value="90">Posledních 90 dní</option>
+      <option value="0">Vše</option>
+    </select>
+  </div>
+  <div id="cl-content"></div>
 </div>
 
 <!-- NOVÝ TERMÍN (ruční registrace) -->
@@ -1427,8 +1483,21 @@ function canManagePerson(person) { return isAdmin() || (!!person && person === c
 window.applyRoleUI = function applyRoleUI() {
   const tab = document.getElementById('tab-vyplaty');
   if (tab) tab.style.display = isAdmin() ? '' : 'none';
-  // Neadmin, který měl Výplaty otevřené, se vrátí na Přehled
-  if (!isAdmin() && document.getElementById('page-vyplaty')?.classList.contains('active')) {
+  const tabCl = document.getElementById('tab-changelog');
+  if (tabCl) tabCl.style.display = isAdmin() ? '' : 'none';
+  // Pri prihlaseni jineho uctu na stejnem prohlizeci nesmi v DOM zustat
+  // zaznamy predchoziho admina - vycistit a vynutit nove nacteni.
+  if (!isAdmin()) {
+    auditLog = [];
+    auditLoaded = false;
+    const clBox = document.getElementById('cl-content');
+    if (clBox) clBox.innerHTML = '';
+    const clStats = document.getElementById('cl-stats');
+    if (clStats) clStats.innerHTML = '';
+  }
+  // Neadmin, který měl Výplaty nebo Changelog otevřené, se vrátí na Přehled
+  if (!isAdmin() && (document.getElementById('page-vyplaty')?.classList.contains('active')
+                  || document.getElementById('page-changelog')?.classList.contains('active'))) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-prehled').classList.add('active');
     document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === 0));
@@ -1437,6 +1506,268 @@ window.applyRoleUI = function applyRoleUI() {
   if (window.prefillCurrentPerson) prefillCurrentPerson();
   if (document.getElementById('page-zamestnanec')?.classList.contains('active')) renderZamestnanec();
 };
+
+// ============================================================
+// CHANGELOG / AUDITNI STOPA
+// Zapisuje ZMENY DAT a PRIHLASENI - ne prohlizeni stranek. Jde o auditni
+// stopu ("kdo prepsal ty hodiny?"), ne o sledovani zamestnancu.
+// Uzel `auditLog` se ZAMERNE nenacita pri startu (neni v STATE_KEYS) - roste
+// a bezny uzivatel ho nikdy nepotrebuje. Nacte se line az adminovi.
+// Pozn.: skryti zalozky je jen UI. Skutecnou ochranu musi zajistit pravidla
+// Firebase - auditLog by mel jit zapisovat vsem prihlasenym, ale cist jen
+// adminum, jinak si log precte (nebo smaze) kdokoli.
+// ============================================================
+const AUDIT_NODE = 'auditLog';
+const AUDIT_RETENTION_DAYS = 90;
+let auditLog = [];
+let auditLoaded = false;
+
+const AUDIT_ACTIONS = {
+  login:            { label: 'Přihlášení',           icon: '🔑', group: 'Účet' },
+  shift_signup:     { label: 'Přihlášení na směnu',  icon: '✅', group: 'Směny' },
+  shift_unassign:   { label: 'Odhlášení ze směny',   icon: '🚫', group: 'Směny' },
+  wedding_save:     { label: 'Úprava svatby',        icon: '✏️', group: 'Termíny' },
+  wedding_delete:   { label: 'Smazání termínu',      icon: '🗑️', group: 'Termíny' },
+  wedding_create:   { label: 'Nový termín',          icon: '➕', group: 'Termíny' },
+  checklist_toggle: { label: 'Checklist',            icon: '☑️', group: 'Termíny' },
+  coord_change:     { label: 'Změna koordinátora',   icon: '🧭', group: 'Termíny' },
+  photo_add:        { label: 'Nahrání fotek',        icon: '📷', group: 'Termíny' },
+  hours_add:        { label: 'Přidání hodin',        icon: '⏱️', group: 'Hodinovka' },
+  hours_rate:       { label: 'Změna sazby',          icon: '💱', group: 'Hodinovka' },
+  hours_delete:     { label: 'Smazání hodin',        icon: '🗑️', group: 'Hodinovka' },
+  expense_add:      { label: 'Přidání nákladu',      icon: '🧾', group: 'Hodinovka' },
+  expense_delete:   { label: 'Smazání nákladu',      icon: '🗑️', group: 'Hodinovka' },
+  todo_add:         { label: 'Nový úkol',            icon: '📝', group: 'To-Do' },
+  todo_done:        { label: 'Stav úkolu',           icon: '☑️', group: 'To-Do' },
+  todo_edit:        { label: 'Úprava úkolu',         icon: '✏️', group: 'To-Do' },
+  todo_delete:      { label: 'Smazání úkolu',        icon: '🗑️', group: 'To-Do' },
+  employee_add:     { label: 'Nový zaměstnanec',     icon: '👤', group: 'Tým' },
+  employee_remove:  { label: 'Odebrání zaměstnance', icon: '👥', group: 'Tým' },
+  crm_edit:         { label: 'Úprava CRM',           icon: '📇', group: 'CRM' },
+  payroll_paid:     { label: 'Zápis výplaty',        icon: '💰', group: 'Výplaty' },
+};
+function auditMeta(a) { return AUDIT_ACTIONS[a] || { label: a || 'Neznámá akce', icon: '•', group: 'Ostatní' }; }
+
+// Kdo akci provedl. Nikdy nesmi vyhodit vyjimku - vola se z beznych akci.
+function auditActor() {
+  const email = (window.currentUserEmail || '').toLowerCase();
+  let person = '';
+  try { person = currentPerson() || ''; } catch (e) { person = ''; }
+  return { email: email, person: person };
+}
+
+// Fire-and-forget. Selhani zapisu NESMI shodit akci uzivatele, proto
+// try/catch i .catch() - log je doplnek, ne soucast transakce.
+function logAudit(action, target, detail) {
+  try {
+    if (!window.currentUserEmail) return;
+    const a = auditActor();
+    const entry = {
+      id: newId('a_'),
+      ts: Date.now(),
+      email: a.email,
+      person: a.person,
+      action: action,
+      target: target == null ? '' : String(target).slice(0, 120),
+      detail: detail == null ? '' : String(detail).slice(0, 300)
+    };
+    const p = db.ref(AUDIT_NODE + '/' + entry.id).set(entry);
+    if (p && p.catch) p.catch(function () {});
+  } catch (e) { /* audit nikdy neshodi akci uzivatele */ }
+}
+window.logAudit = logAudit;
+
+function loadAudit() {
+  return db.ref(AUDIT_NODE).once('value').then(function (snap) {
+    const v = snap.val() || {};
+    auditLog = Object.keys(v).map(function (k) { return v[k]; }).filter(Boolean)
+      .sort(function (x, y) { return (y.ts || 0) - (x.ts || 0); });
+    auditLoaded = true;
+    return auditLog;
+  });
+}
+
+// Retence 90 dni - maze se pri otevreni sekce adminem (nemame server, kde
+// by bezel cron; admin do sekce chodi dost casto na to, aby log nerostl).
+function pruneAudit() {
+  const cutoff = Date.now() - AUDIT_RETENTION_DAYS * 86400000;
+  const stale = auditLog.filter(function (e) { return (e.ts || 0) < cutoff && e.id; });
+  if (!stale.length) return Promise.resolve(0);
+  const updates = {};
+  stale.forEach(function (e) { updates[e.id] = null; });
+  return db.ref(AUDIT_NODE).update(updates)
+    .then(function () {
+      auditLog = auditLog.filter(function (e) { return (e.ts || 0) >= cutoff; });
+      return stale.length;
+    })
+    .catch(function () { return 0; });
+}
+
+function auditFmtWhen(ts) {
+  const d = new Date(ts || 0);
+  const p = function (n) { return String(n).padStart(2, '0'); };
+  return p(d.getDate()) + '.' + p(d.getMonth() + 1) + '.' + d.getFullYear()
+       + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+function auditFmtRel(ts) {
+  const diff = Date.now() - (ts || 0);
+  if (diff < 60000) return 'před chvílí';
+  const m = Math.floor(diff / 60000);
+  if (m < 60) return 'před ' + m + ' min';
+  const h = Math.floor(m / 60);
+  if (h < 24) return 'před ' + h + ' h';
+  const dd = Math.floor(h / 24);
+  if (dd === 1) return 'včera';
+  if (dd < 31) return 'před ' + dd + ' dny';
+  return 'před ' + Math.floor(dd / 30) + ' měs.';
+}
+// Jmeno, pokud e-mail zname; jinak samotny e-mail.
+function auditWho(e) { return e.person || (e.email || '').split('@')[0] || '—'; }
+
+function openChangelog(force) {
+  const box = document.getElementById('cl-content');
+  if (!isAdmin()) { if (box) box.innerHTML = ''; return; }
+  if (auditLoaded && !force) { renderChangelog(); return; }
+  if (box) box.innerHTML = '<div class="empty-state">Načítám záznamy…</div>';
+  loadAudit()
+    .then(function () { return pruneAudit(); })
+    .then(function () { fillChangelogFilters(); renderChangelog(); })
+    .catch(function () {
+      if (box) box.innerHTML = '<div class="empty-state"><div class="empty-state-icon">⚠️</div>'
+        + 'Záznamy se nepodařilo načíst.<br><span style="font-size:0.85rem;">'
+        + 'Zkontrolujte pravidla Firebase pro uzel <code>auditLog</code>.</span></div>';
+    });
+}
+
+// Roletky se plni z dat, ne natvrdo - at nenabizeji uzivatele, kteri nic neudelali.
+function fillChangelogFilters() {
+  const uSel = document.getElementById('cl-filter-user');
+  const aSel = document.getElementById('cl-filter-action');
+  if (uSel) {
+    const prev = uSel.value;
+    const users = Array.from(new Set(auditLog.map(function (e) { return e.email; }).filter(Boolean))).sort();
+    uSel.innerHTML = '<option value="">Všichni uživatelé</option>'
+      + users.map(function (em) {
+          const hit = auditLog.find(function (e) { return e.email === em; }) || {};
+          const nm = hit.person || em.split('@')[0];
+          return '<option value="' + escAttr(em) + '">' + escAttr(nm) + ' (' + escAttr(em) + ')</option>';
+        }).join('');
+    uSel.value = prev;
+  }
+  if (aSel) {
+    const prev = aSel.value;
+    const acts = Array.from(new Set(auditLog.map(function (e) { return e.action; }).filter(Boolean)))
+      .sort(function (x, y) { return auditMeta(x).label.localeCompare(auditMeta(y).label, 'cs'); });
+    aSel.innerHTML = '<option value="">Všechny akce</option>'
+      + acts.map(function (a) {
+          return '<option value="' + escAttr(a) + '">' + auditMeta(a).icon + ' ' + escAttr(auditMeta(a).label) + '</option>';
+        }).join('');
+    aSel.value = prev;
+  }
+}
+
+function changelogFiltered() {
+  const txtEl = document.getElementById('cl-filter-text');
+  const txt  = (txtEl ? txtEl.value : '').toLowerCase().trim();
+  const uEl = document.getElementById('cl-filter-user');
+  const aEl = document.getElementById('cl-filter-action');
+  const dEl = document.getElementById('cl-filter-days');
+  const user = uEl ? uEl.value : '';
+  const act  = aEl ? aEl.value : '';
+  const days = parseInt(dEl ? dEl.value : '30', 10);
+  const cutoff = days > 0 ? Date.now() - days * 86400000 : 0;
+  return auditLog.filter(function (e) {
+    if (cutoff && (e.ts || 0) < cutoff) return false;
+    if (user && e.email !== user) return false;
+    if (act && e.action !== act) return false;
+    if (txt) {
+      const hay = [auditWho(e), e.email, auditMeta(e.action).label, e.target, e.detail]
+        .join(' ').toLowerCase();
+      if (hay.indexOf(txt) === -1) return false;
+    }
+    return true;
+  });
+}
+
+function renderChangelog() {
+  if (!isAdmin()) return;
+  const rows = changelogFiltered();
+  const dayAgo = Date.now() - 86400000, weekAgo = Date.now() - 7 * 86400000;
+
+  const stats = document.getElementById('cl-stats');
+  if (stats) {
+    const cards = [
+      [rows.length, 'Zobrazených záznamů'],
+      [auditLog.filter(function (e) { return (e.ts || 0) >= dayAgo; }).length, 'Za 24 hodin'],
+      [auditLog.filter(function (e) { return (e.ts || 0) >= weekAgo; }).length, 'Za 7 dní'],
+      [new Set(auditLog.filter(function (e) { return (e.ts || 0) >= weekAgo; })
+          .map(function (e) { return e.email; })).size, 'Aktivních uživatelů (7 dní)'],
+      [auditLog.length, 'Celkem v logu'],
+    ];
+    stats.innerHTML = cards.map(function (c) {
+      return '<div class="cl-stat"><div class="cl-stat-val">' + c[0] + '</div>'
+           + '<div class="cl-stat-lbl">' + escAttr(c[1]) + '</div></div>';
+    }).join('');
+  }
+
+  const box = document.getElementById('cl-content');
+  if (!box) return;
+  if (!rows.length) {
+    box.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🗒️</div>'
+      + (auditLog.length ? 'Žádný záznam neodpovídá filtru.'
+                         : 'Zatím žádné záznamy. Log se plní od nasazení této verze.')
+      + '</div>';
+    return;
+  }
+  const MAX = 500;
+  const shown = rows.slice(0, MAX);
+  box.innerHTML =
+    '<div class="table-container"><div class="table-wrap"><table>'
+    + '<thead><tr>'
+    + '<th style="width:130px;">Kdy</th>'
+    + '<th style="width:150px;">Kdo</th>'
+    + '<th style="width:190px;">Akce</th>'
+    + '<th style="width:150px;">Čeho se týká</th>'
+    + '<th>Detail</th>'
+    + '</tr></thead><tbody>'
+    + shown.map(function (e) {
+        const m = auditMeta(e.action);
+        return '<tr>'
+          + '<td class="cl-when">' + auditFmtWhen(e.ts)
+            + '<span class="cl-when-rel">' + escAttr(auditFmtRel(e.ts)) + '</span></td>'
+          + '<td><span class="cl-who">' + escAttr(auditWho(e)) + '</span>'
+            + '<span class="cl-mail">' + escAttr(e.email || '') + '</span></td>'
+          + '<td><span class="cl-act">' + m.icon + ' ' + escAttr(m.label) + '</span><br>'
+            + '<span class="cl-grp">' + escAttr(m.group) + '</span></td>'
+          + '<td class="cl-target">' + escAttr(e.target || '—') + '</td>'
+          + '<td class="cl-detail">' + escAttr(e.detail || '') + '</td>'
+          + '</tr>';
+      }).join('')
+    + '</tbody></table></div></div>'
+    + (rows.length > MAX
+        ? '<div class="page-sub" style="margin-top:10px;">Zobrazeno prvních ' + MAX + ' z '
+          + rows.length + ' záznamů — zužte filtr nebo použijte Export CSV.</div>'
+        : '');
+}
+
+function exportChangelogCsv() {
+  const rows = changelogFiltered();
+  if (!rows.length) return;
+  const esc = function (v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; };
+  const csv = ['Kdy;Kdo;E-mail;Akce;Skupina;Ceho se tyka;Detail'].concat(
+    rows.map(function (e) {
+      return [auditFmtWhen(e.ts), auditWho(e), e.email || '',
+              auditMeta(e.action).label, auditMeta(e.action).group,
+              e.target || '', e.detail || ''].map(esc).join(';');
+    })).join('\r\n');
+  // BOM - bez nej Excel v cestine rozhodi diakritiku
+  const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'changelog-' + new Date().toISOString().slice(0, 10) + '.csv';
+  document.body.appendChild(a); a.click();
+  setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
 
 let deletedWeddings = {}; // { 'YYYY-MM-DD': true } — smazané termíny (i ty ze seed dat)
 // Seed + ručně přidané, bez smazaných. Ručně přidaný termín má přednost před seedem stejného data.
@@ -1910,6 +2241,11 @@ function toggleChecklist(date, key, checked) {
   if (!weddingChecklist[date]) weddingChecklist[date] = {};
   weddingChecklist[date][key] = checked;
   saveChecklist(date);
+  {
+    const _it = CHECKLIST_ITEMS.find(i => i.key === key);
+    logAudit('checklist_toggle', fmtDate(date),
+      `${(_it && _it.label) || key}: ${checked ? 'zaškrtnuto' : 'odškrtnuto'}`);
+  }
   const counter = document.getElementById('checklist-count-' + date);
   if (counter) counter.textContent = `${checklistDone(date)}/${CHECKLIST_ITEMS.length}`;
   const sum = document.getElementById('summary-' + date);
@@ -2328,14 +2664,16 @@ function saveModalAll() {
         saveChecklist(_modalDate), saveGuestsFor(_modalDate), saveGuestsNoteFor(_modalDate),
         saveNoteFor(_modalDate),
       ]);
+  const _auditDate = _modalDate;
   Promise.resolve(op).then(
-    () => modalSaved('Uloženo'),
+    () => { logAudit('wedding_save', fmtDate(_auditDate), weddingContact[_auditDate] || ''); modalSaved('Uloženo'); },
     () => modalSaveFailed('Uložení se opět nezdařilo.', retry)
   );
 }
 function updateCoord(date, val) {
   weddingCoordOverride[date] = val;
   saveCoordOverride();
+  logAudit('coord_change', fmtDate(date), `nově: ${val || '—'}`);
   const row = document.querySelector(`#terminy-body tr[onclick="openWeddingModal('${date}')"]`);
   if (row) row.cells[2].innerHTML = coordTag(val);
 }
@@ -2510,6 +2848,7 @@ function addEmployee() {
     ALL_PEOPLE.push(name);
     if (!rates[name]) { rates[name] = 150; saveRates(); }
     savePeople();
+    logAudit('employee_add', name, 'přidán/a do týmu');
     populateSelects();
     input.value = '';
     document.getElementById('new-employee-msg').textContent = `✓ ${name} přidán/a do týmu.`;
@@ -2521,6 +2860,7 @@ function removeEmployee(name) {
   confirmAction(`Odebrat zaměstnance „${name}" z týmu?`, () => {
     ALL_PEOPLE = ALL_PEOPLE.filter(p => p !== name);
     savePeople();
+    logAudit('employee_remove', name, 'odebrán/a z týmu');
     populateSelects();
     document.getElementById('person-select').value = '';
     renderZamestnanec();
@@ -2588,7 +2928,8 @@ function signUp(date, person, role) {
       date, role,
       arr => { if (!arr.includes(person)) arr.push(person); return arr; },
       // refreshAll překreslí modal (a tím i footer), hlášení proto až po něm
-      () => { refreshAll(date); modalSaved(`${person} přidán/a na ${roleLabel} — ${fmtDate(date)}`); },
+      () => { logAudit('shift_signup', fmtDate(date), `${person} — ${roleLabel}`);
+               refreshAll(date); modalSaved(`${person} přidán/a na ${roleLabel} — ${fmtDate(date)}`); },
       () => modalSaveFailed(`${person} se nepodařilo přidat na ${roleLabel}.`, apply)
     );
     apply().catch(() => {});   // chybu už ošetřil onFail
@@ -2602,7 +2943,8 @@ function unassign(date, person, role) {
     const apply = () => assignmentTransaction(
       date, role,
       arr => arr.filter(p => p !== person),
-      () => { refreshAll(date); modalSaved(`${person} odebrán/a z ${roleLabel} — ${fmtDate(date)}`); },
+      () => { logAudit('shift_unassign', fmtDate(date), `${person} — ${roleLabel}`);
+               refreshAll(date); modalSaved(`${person} odebrán/a z ${roleLabel} — ${fmtDate(date)}`); },
       () => modalSaveFailed(`${person} se nepodařilo odebrat z ${roleLabel}.`, apply)
     );
     apply().catch(() => {});
@@ -3305,6 +3647,7 @@ function addNewWedding() {
 function removeWedding(date) {
   if (!isAdmin()) return;
   confirmAction(`Smazat termín ${fmtDate(date)}${weddingContact[date] ? ' (' + weddingContact[date] + ')' : ''}?`, () => {
+    logAudit('wedding_delete', fmtDate(date), weddingContact[date] || 'bez kontaktu');
     const wasCustom = customWeddings.some(c => c.date === date);
     customWeddings = customWeddings.filter(c => c.date !== date);
     if (wasCustom) saveCustomWeddings();
@@ -4247,6 +4590,7 @@ function addHoursEntry() {
   const entry = { id: newId('h_'), date, person, hours, rate, note };
   hoursLog.push(entry);
   writeEntry('hoursLog', entry);
+  logAudit('hours_add', person, `${fmtDate(date)} · ${hours} h × ${rate} Kč${note ? ' · ' + note : ''}`);
 
   hkMsg(`✓ Uloženo: ${escAttr(person)} · ${fmtDate(date)} · ${hkFmtNum(hours)} h × ${hkFmtKc(rate)} = <strong>${hkFmtKc(hours * rate)}</strong>`, true);
   document.getElementById('h-hours').value = '';
@@ -4259,14 +4603,17 @@ function updateHoursRate(id, value) {
   const e = hoursLog.find(x => x.id === id);
   const r = parseFloat(value);
   if (!e || isNaN(r) || r < 0) return;
+  const _oldRate = e.rate;
   e.rate = r;
   writeEntry('hoursLog', e);
+  logAudit('hours_rate', e.person, `${fmtDate(e.date)} · sazba ${_oldRate} → ${r} Kč/h`);
   refreshHodinovka();
 }
 
 function deleteHoursEntry(id) {
   const e = hoursLog.find(x => x.id === id);
   if (!e || !confirm(`Smazat záznam: ${e.person}, ${fmtDate(e.date)}, ${hkFmtNum(e.hours)} h?`)) return;
+  logAudit('hours_delete', e.person, `${fmtDate(e.date)} · ${e.hours} h × ${e.rate} Kč`);
   hoursLog = hoursLog.filter(x => x.id !== id);
   removeEntry('hoursLog', id);
   refreshHodinovka();
@@ -4291,6 +4638,7 @@ function addExpenseEntry() {
   const entry = { id: newId('exp_'), date, person, type, amount, note };
   expenses.push(entry);
   writeEntry('expenses', entry);
+  logAudit('expense_add', person, `${fmtDate(date)} · ${type} · ${amount} Kč${note ? ' · ' + note : ''}`);
 
   hkMsg(`✓ Náklad uložen: ${escAttr(person)} · ${escAttr(type)} · <strong>${hkFmtKc(amount)}</strong>`, true);
   document.getElementById('exp-type').value = '';
@@ -4302,6 +4650,7 @@ function addExpenseEntry() {
 function deleteExpenseEntry(id) {
   const e = expenses.find(x => x.id === id);
   if (!e || !confirm(`Smazat náklad: ${e.person}, ${e.type}, ${hkFmtKc(e.amount)}?`)) return;
+  logAudit('expense_delete', e.person, `${fmtDate(e.date)} · ${e.type} · ${e.amount} Kč`);
   expenses = expenses.filter(x => x.id !== id);
   removeEntry('expenses', id);
   refreshHodinovka();
@@ -4808,7 +5157,7 @@ function renderVyplaty() {
                     value="${paid || ''}"
                     placeholder="0"
                     style="width:100px;text-align:right;"
-                    onchange="if(!paymentPaid['${payrollMonth}'])paymentPaid['${payrollMonth}']={};paymentPaid['${payrollMonth}']['${p.replace(/'/g,"\\'")}'] = parseFloat(this.value)||0; savePaymentPaid(); renderVyplaty();">`
+                    onchange="if(!paymentPaid['${payrollMonth}'])paymentPaid['${payrollMonth}']={};paymentPaid['${payrollMonth}']['${p.replace(/'/g,"\\'")}'] = parseFloat(this.value)||0; savePaymentPaid(); logAudit('payroll_paid', '${p.replace(/'/g,"\\'")}', '${payrollMonth} · ' + (parseFloat(this.value)||0) + ' Kč'); renderVyplaty();">`
                 : `<span style="font-weight:600;">${paid > 0 ? paid.toLocaleString('cs-CZ',{maximumFractionDigits:0})+' Kč' : '—'}</span>`;
               const pKey = p.replace(/'/g,"\\'");
               const hasQR = !!personQR[p];
@@ -5113,8 +5462,11 @@ function unsubscribeCrm() {
 }
 
 function saveCrmCell(globalIdx, key, value) {
+  const _prev = crmEvents[globalIdx][key];
   crmEvents[globalIdx][key] = value;
   saveCrmToFirebase();
+  logAudit('crm_edit', (crmEvents[globalIdx].jmeno || '') + ' / ' + key,
+    `„${_prev == null || _prev === '' ? '—' : _prev}" → „${value === '' ? '—' : value}"`);
   renderCrm();
 }
 
@@ -5404,6 +5756,7 @@ function addTodo() {
   };
   todos.unshift(todo);
   writeEntry('todos', todo);
+  logAudit('todo_add', task.slice(0, 60), `priorita: ${todo.priority}${todo.deadline ? ' · termín ' + fmtDate(todo.deadline) : ''}`);
   document.getElementById('todo-new-task').value = '';
   document.getElementById('todo-new-comment').value = '';
   document.getElementById('todo-new-deadline').value = '';
@@ -5413,10 +5766,17 @@ function addTodo() {
 
 function toggleTodoDone(id) {
   const t = todos.find(x => x.id === id);
-  if (t) { t.done = !t.done; writeEntry('todos', t); renderTodos(); }
+  if (t) {
+    t.done = !t.done;
+    writeEntry('todos', t);
+    logAudit('todo_done', (t.task || '').slice(0, 60), t.done ? 'označeno jako splněné' : 'vráceno mezi aktivní');
+    renderTodos();
+  }
 }
 
 function deleteTodo(id) {
+  const _t = todos.find(x => x.id === id);
+  logAudit('todo_delete', ((_t && _t.task) || id).slice(0, 60), '');
   todos = todos.filter(x => x.id !== id);
   removeEntry('todos', id);
   renderTodos();
@@ -5469,6 +5829,7 @@ function saveTodoEdit(id) {
   t.priority = document.getElementById('te-priority-' + id).value;
   t.comment  = document.getElementById('te-comment-' + id).value.trim();
   writeEntry('todos', t);
+  logAudit('todo_edit', (t.task || '').slice(0, 60), `priorita: ${t.priority}${t.deadline ? ' · termín ' + fmtDate(t.deadline) : ''}`);
   renderTodos();
 }
 
@@ -5554,7 +5915,14 @@ function renderTodos() {
 // ============================================================
 // TAB NAVIGATION
 // ============================================================
+// Sekce jen pro adminy. Kontroluje se v showTab JESTE PRED tim, nez se
+// stranka oznaci jako aktivni - jinak by pri `#changelog` v adrese (hash
+// router vola showTab s cimkoli) sekce na okamzik probliskla, vcetne nadpisu
+// a filtru. Zustava i puvodni kontrola uvnitr showTab jako druha pojistka.
+const ADMIN_ONLY_PAGES = ['vyplaty', 'changelog'];
+
 function showTab(name) {
+  if (ADMIN_ONLY_PAGES.indexOf(name) !== -1 && !isAdmin()) { showTab('prehled'); return; }
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
@@ -5573,6 +5941,10 @@ function showTab(name) {
     document.getElementById('payroll-lock-screen').innerHTML = '';
     if (payrollUnlocked) renderVyplaty();
     else renderPayrollLock();
+  }
+  if (name === 'changelog') {
+    if (!isAdmin()) { showTab('prehled'); return; }
+    openChangelog();
   }
   if (name === 'crm') {
     if (crmUnlocked) renderCrm();
