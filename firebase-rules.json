@@ -1,0 +1,63 @@
+{
+  "rules": {
+    "//": "Dohnaluv Mlyn - pravidla Realtime Database. Vlozit ve Firebase konzoli: Realtime Database -> Rules -> Publish.",
+    "//1": "ADMIN = e-mail z ADMIN_EMAILS v dohnaluv-mlyn.html. Pri zmene admina upravit OBOJI - tady i v kodu.",
+    "//2": "Korenove .read/.write false znamena, ze novy uzel neni verejny, dokud mu sem nekdo pravidlo nenapise.",
+
+    ".read": false,
+    ".write": false,
+
+    "people":        { ".read": "auth != null", ".write": "auth != null" },
+    "peopleEmails":  { ".read": "auth != null", ".write": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'" },
+    "rates":         { ".read": "auth != null", ".write": "auth != null" },
+
+    "hoursLog":      { ".read": "auth != null", "$id": { ".write": "auth != null" } },
+    "expenses":      { ".read": "auth != null", "$id": { ".write": "auth != null" } },
+    "todos":         { ".read": "auth != null", "$id": { ".write": "auth != null" } },
+    "paymentPaid":   { ".read": "auth != null", ".write": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'" },
+
+    "//3": "Platebni udaje - jen admin. Cte je modal 'Vyplatit' v sekci Vyplaty, ktera je stejne jen pro adminy.",
+    "bankAccounts":  { ".read": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'", ".write": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'" },
+    "personQR":      { ".read": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'", ".write": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'" },
+
+    "//4": "Auditni stopa: zapsat novy zaznam smi kdokoli prihlaseny, ale prepsat/smazat uz jen admin (jinak si kazdy zahladi stopu). Cist smi jen admin.",
+    "auditLog": {
+      ".read": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'",
+      "$id": {
+        ".write": "auth != null && (!data.exists() || auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz')",
+        ".validate": "newData.hasChildren(['id','ts','email','action']) || !newData.exists()"
+      }
+    },
+
+    "//5": "Terminy a jejich detaily - cte i zapisuje kdokoli z tymu.",
+    "weddingAssignments":   { ".read": "auth != null", ".write": "auth != null" },
+    "weddingContact":       { ".read": "auth != null", ".write": "auth != null" },
+    "weddingPhone":         { ".read": "auth != null", ".write": "auth != null" },
+    "weddingEmail":         { ".read": "auth != null", ".write": "auth != null" },
+    "weddingNote":          { ".read": "auth != null", ".write": "auth != null" },
+    "weddingGuestsNote":    { ".read": "auth != null", ".write": "auth != null" },
+    "weddingGuestsOverride":{ ".read": "auth != null", ".write": "auth != null" },
+    "weddingStaffOverride": { ".read": "auth != null", ".write": "auth != null" },
+    "weddingCoordOverride": { ".read": "auth != null", ".write": "auth != null" },
+    "weddingRentDeposit":   { ".read": "auth != null", ".write": "auth != null" },
+    "weddingRentBalance":   { ".read": "auth != null", ".write": "auth != null" },
+    "weddingAccount":       { ".read": "auth != null", ".write": "auth != null" },
+    "weddingFeedback":      { ".read": "auth != null", ".write": "auth != null" },
+    "weddingRating":        { ".read": "auth != null", ".write": "auth != null" },
+    "weddingChecklist":     { ".read": "auth != null", ".write": "auth != null" },
+    "weddingPhotos":        { ".read": "auth != null", ".write": "auth != null" },
+
+    "//6": "Zakladani a mazani terminu je spravcovska akce (v kodu uz ji hlida isAdmin).",
+    "customWeddings":  { ".read": "auth != null", ".write": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'" },
+    "deletedWeddings": { ".read": "auth != null", ".write": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'" },
+
+    "//7": "Migrace uz vsechny probehly - priznaky i zalohy jsou jen pro cteni, aby je nikdo omylem nepretocil a migrace nebehla znovu.",
+    "migrations": { ".read": "auth != null", ".write": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'" },
+
+    "//8": "CRM zalozka je v aplikaci skryta (display:none). Data se zamykaji, nez padne rozhodnuti vratit nebo smazat.",
+    "crmEvents": { ".read": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'", ".write": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'" },
+
+    "//9": "Stary uzel z prvni verze - nikde se nepouziva.",
+    "svatebni_sezona": { ".read": false, ".write": false }
+  }
+}

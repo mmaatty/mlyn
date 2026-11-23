@@ -1788,10 +1788,18 @@ const STATE_KEYS = [
 ];
 
 async function loadState() {
-  const snaps = await Promise.all(STATE_KEYS.map(k => db.ref(k).once('value')));
+  // Kazdy uzel se nacita samostatne a selhani se spolkne. Az budou pravidla
+  // Firebase prisnejsi (napr. bankAccounts jen pro adminy), vrati takovy uzel
+  // zamitnuti - bez tohoto catch by Promise.all spadl cely a aplikace by se
+  // zamestnanci vubec nenacetla. Uzel, na ktery uzivatel nema pravo, je proste
+  // prazdny a prislusna cast rozhrani zustane bez dat.
+  const denied = [];
+  const snaps = await Promise.all(STATE_KEYS.map(k =>
+    db.ref(k).once('value').catch(err => { denied.push(k); return null; })));
+  if (denied.length) console.info('Bez opravneni ke ctení uzlu:', denied.join(', '));
   const data = {};
   STATE_KEYS.forEach((k, i) => {
-    const v = snaps[i].val();
+    const v = snaps[i] ? snaps[i].val() : null;
     if (v !== null && v !== undefined) data[k] = v;
   });
 
@@ -2160,7 +2168,7 @@ function openPaymentModal(person, remaining) {
       onchange="uploadQR('${pKey}', this)">
 
     <label style="display:block;font-size:0.78rem;font-weight:600;color:var(--muted);margin:14px 0 4px;">IBAN</label>
-    <input type="text" value="${iban}" placeholder="CZ00 0000 0000 0000 0000 0000"
+    <input type="text" value="${escAttr(iban)}" placeholder="CZ00 0000 0000 0000 0000 0000"
       style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:0.85rem;font-family:monospace;"
       onchange="saveIBAN('${pKey}', this.value)">
   `;
@@ -2688,12 +2696,12 @@ function contactCellHtml(date) {
   const email = weddingEmail[date]   || '';
   if (!name && !phone && !email) return '<span style="color:var(--muted);font-size:0.8rem;">—</span>';
   const phoneLink = phone
-    ? `<a href="tel:${phone.replace(/\s/g,'')}" onclick="event.stopPropagation()" style="display:block;font-size:0.8rem;color:var(--accent);text-decoration:none;margin-top:2px;">📞 ${phone}</a>`
+    ? `<a href="tel:${escAttr(phone.replace(/\s/g,''))}" onclick="event.stopPropagation()" style="display:block;font-size:0.8rem;color:var(--accent);text-decoration:none;margin-top:2px;">📞 ${escAttr(phone)}</a>`
     : '';
   const emailLink = email
-    ? `<a href="mailto:${email}" onclick="event.stopPropagation()" style="display:block;font-size:0.8rem;color:var(--accent);text-decoration:none;margin-top:2px;">✉ ${email}</a>`
+    ? `<a href="mailto:${escAttr(email)}" onclick="event.stopPropagation()" style="display:block;font-size:0.8rem;color:var(--accent);text-decoration:none;margin-top:2px;">✉ ${escAttr(email)}</a>`
     : '';
-  return `<span style="font-size:0.85rem;display:block;">${name}</span>${phoneLink}${emailLink}`;
+  return `<span style="font-size:0.85rem;display:block;">${escAttr(name)}</span>${phoneLink}${emailLink}`;
 }
 function updateContact(date, val) {
   weddingContact[date] = val;
@@ -3294,7 +3302,7 @@ function renderPrehled() {
     <div class="stat">
       <div class="stat-label">Nejbližší termín</div>
       <div class="stat-value">${upcoming[0] ? fmtDate(upcoming[0].date) : '—'}</div>
-      <div class="stat-sub">${upcoming[0] ? `za ${daysBetween(upcoming[0].date, now)} dní · ${weddingContact[upcoming[0].date] || getCoord(upcoming[0].date) || '?'}` : ''}</div>
+      <div class="stat-sub">${upcoming[0] ? `za ${daysBetween(upcoming[0].date, now)} dní · ${escAttr(weddingContact[upcoming[0].date] || getCoord(upcoming[0].date) || '?')}` : ''}</div>
     </div>
   `;
 
@@ -3368,7 +3376,7 @@ function renderPrehled() {
     const dots = mW.map(w => {
       const past = w.date < now;
       const col = past ? '#d0d0d0' : (COORD_COLORS[getCoord(w.date)] || '#aaa');
-      const contact = weddingContact[w.date] ? ` · ${weddingContact[w.date]}` : '';
+      const contact = weddingContact[w.date] ? ` · ${escAttr(weddingContact[w.date])}` : '';
       return `<span title="${fmtDate(w.date)}${contact}\n${getCoord(w.date)||'?'}"
         style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${col};margin:1px;cursor:pointer;flex-shrink:0;"
         onclick="event.stopPropagation();jumpToMonth('${m.num}')"></span>`;
@@ -4707,8 +4715,8 @@ function renderHodinovkaCalendar() {
     const dayTotal = entries.reduce((s, e) => s + e.hours, 0);
 
     let events = entries.map(e =>
-      `<div class="cal-event" style="background:var(--accent-light);color:var(--accent);border-left:3px solid var(--accent);" title="${e.person}: ${e.hours}h${e.note?' — '+e.note:''}">
-        ${filterPerson ? '' : `<strong>${e.person.split(' ')[0]}</strong> · `}${e.hours}h${e.note ? ` <span style="opacity:0.7">${e.note}</span>` : ''}
+      `<div class="cal-event" style="background:var(--accent-light);color:var(--accent);border-left:3px solid var(--accent);" title="${escAttr(e.person)}: ${e.hours}h${e.note?' — '+escAttr(e.note):''}">
+        ${filterPerson ? '' : `<strong>${escAttr(e.person.split(' ')[0])}</strong> · `}${e.hours}h${e.note ? ` <span style="opacity:0.7">${escAttr(e.note)}</span>` : ''}
       </div>`
     ).join('');
 
@@ -5202,6 +5210,10 @@ function renderVyplaty() {
 // ============================================================
 const ADMIN_PASSWORD = 'matejhonza2026';
 let payrollUnlocked = false;
+// Admin heslo bezne nezadava - staci prihlaseni. Tlacitko "Zamknout" ale musi
+// obrazovku opravdu zamknout (odchod od pocitace), proto si ten zamer pamatujeme
+// a prepneme ho zpet az po zadani hesla.
+let payrollLockedByUser = false;
 
 function renderPayrollLock(errorMsg) {
   document.getElementById('payroll-unlocked-content').style.display = 'none';
@@ -5226,6 +5238,7 @@ function checkPayrollPassword() {
   const val = document.getElementById('pwd-input')?.value || '';
   if (val === ADMIN_PASSWORD) {
     payrollUnlocked = true;
+    payrollLockedByUser = false;
     document.getElementById('payroll-lock-screen').innerHTML = '';
     document.getElementById('payroll-unlocked-content').style.display = 'block';
     document.getElementById('payroll-actions').hidden = false;
@@ -5242,6 +5255,7 @@ function checkPayrollPassword() {
 
 function lockPayroll() {
   payrollUnlocked = false;
+  payrollLockedByUser = true;
   document.getElementById('payroll-unlocked-content').style.display = 'none';
   renderPayrollLock();
   document.querySelectorAll('.tab').forEach(t => {
@@ -5795,7 +5809,7 @@ function openTodoEdit(id) {
     <div class="form-row">
       <div class="form-group" style="flex:1;min-width:200px;">
         <label>Úkol</label>
-        <input type="text" id="te-task-${id}" value="${t.task.replace(/"/g,'&quot;')}" style="width:100%;">
+        <input type="text" id="te-task-${id}" value="${escAttr(t.task)}" style="width:100%;">
       </div>
       <div class="form-group">
         <label>Deadline</label>
@@ -5812,7 +5826,7 @@ function openTodoEdit(id) {
     </div>
     <div class="form-group">
       <label>Komentář</label>
-      <textarea id="te-comment-${id}">${t.comment||''}</textarea>
+      <textarea id="te-comment-${id}">${escAttr(t.comment||'')}</textarea>
     </div>
     <div style="display:flex;gap:8px;">
       <button class="btn btn-sm" onclick="saveTodoEdit('${id}')">Uložit</button>
@@ -5891,12 +5905,12 @@ function renderTodos() {
       deadlineHtml = `<span class="${cls}">📅 ${t.deadline}${label}</span>`;
     }
     const overdueBanner = isOverdue ? `<span class="overdue-banner">⚠️ PO TERMÍNU</span>` : '';
-    const commentHtml = t.comment ? `<div class="todo-comment">💬 ${t.comment}</div>` : '';
+    const commentHtml = t.comment ? `<div class="todo-comment">💬 ${escAttr(t.comment)}</div>` : '';
     return `
       <div class="todo-item ${t.done ? 'done-item' : (isOverdue ? 'overdue-item' : '')}" id="todo-item-${t.id}">
         <input type="checkbox" class="todo-check" ${t.done ? 'checked' : ''} onchange="toggleTodoDone('${t.id}')">
         <div class="todo-body">
-          <div class="todo-task-text">${t.task}</div>
+          <div class="todo-task-text">${escAttr(t.task)}</div>
           <div class="todo-meta">
             <span class="prio-badge ${prioClass[t.priority]||'prio-medium'}">${prioLabel[t.priority]||t.priority}</span>
             ${deadlineHtml}
@@ -5935,12 +5949,16 @@ function showTab(name) {
   if (name === 'hodinovka') renderHodinovka(); if (hodinovkaView === 'calendar') renderHodinovkaCalendar();
   if (name === 'vyplaty') {
     if (!isAdmin()) { showTab('prehled'); return; }
-    payrollUnlocked = true;   // admin se nepřihlašuje heslem podruhé
-    document.getElementById('payroll-unlocked-content').style.display = '';
-    document.getElementById('payroll-actions').hidden = false;
-    document.getElementById('payroll-lock-screen').innerHTML = '';
-    if (payrollUnlocked) renderVyplaty();
-    else renderPayrollLock();
+    // Admin se heslem neprokazuje - pokud si ale sekci sam zamkl, zustane zamcena.
+    if (!payrollLockedByUser) payrollUnlocked = true;
+    if (payrollUnlocked) {
+      document.getElementById('payroll-unlocked-content').style.display = '';
+      document.getElementById('payroll-actions').hidden = false;
+      document.getElementById('payroll-lock-screen').innerHTML = '';
+      renderVyplaty();
+    } else {
+      renderPayrollLock();
+    }
   }
   if (name === 'changelog') {
     if (!isAdmin()) { showTab('prehled'); return; }
