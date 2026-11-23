@@ -452,7 +452,17 @@
   .sum-row span:last-child { white-space: nowrap; }
   .sum-total { opacity: 1; color: var(--text); font-weight: 700; border-top: 1px solid var(--border-strong); margin-top: 6px; padding-top: 8px; }
   @media (max-width: 520px) { .checklist-sum { grid-template-columns: 1fr; } }
-  @media (max-width: 520px) { .m-grid { grid-template-columns: 1fr; } .page { padding: 16px; } header { padding: 14px 16px; } }
+  @media (max-width: 520px) {
+    .m-grid { grid-template-columns: 1fr; }
+    .page { padding: 16px; }
+    /* Hlavicka je flex bez zalamovani, takze se na uzkem displeji tlacitko
+       Odhlasit vystrcilo za okraj a cela stranka se dala posouvat do strany.
+       Na telefonu se smi zalomit a datum i odznak sezony se zmensi. */
+    header { padding: 14px 16px; flex-wrap: wrap; gap: 6px 10px; }
+    header h1 { font-size: 1.15rem; }
+    #hdr-date { font-size: 0.7rem; }
+    .header-badge { font-size: 0.68rem; padding: 2px 9px; }
+  }
 
   /* ==== JEDNOTNÝ LAYOUT SEKCÍ ====
      Každá záložka: .page-head (název + popis + akce) → .stats → .panel (formulář) → .filters → obsah */
@@ -587,7 +597,6 @@
   <div class="tab" onclick="showTab('hodinovka')">Hodinovka</div>
   <div class="tab" id="tab-vyplaty" onclick="showTab('vyplaty')" style="display:none;">Výplaty</div>
   <div class="tab" id="tab-changelog" onclick="showTab('changelog')" style="display:none;">Changelog 🔒</div>
-  <div class="tab" onclick="showTab('crm')" style="display:none;">CRM 🔒</div>
   <div class="tab" onclick="showTab('todo')">To-Do 🔒</div>
 </div>
 
@@ -839,36 +848,6 @@
   </div>
 </div>
 
-<!-- ===================== PAGE: CRM ===================== -->
-<div class="page" id="page-crm">
-  <div class="page-head">
-    <div>
-      <h2 class="page-title">CRM</h2>
-      <div class="page-sub">Evidence svateb a kontaktů</div>
-    </div>
-    <div class="page-actions" id="crm-actions" hidden>
-      <button class="btn btn-sm" onclick="openCrmForm()">+ Přidat svatbu</button>
-      <button class="unlock-badge" onclick="lockCrm()" title="Zamknout sekci">🔒 Zamknout</button>
-    </div>
-  </div>
-  <div id="crm-lock-screen"></div>
-  <div id="crm-unlocked-content" style="display:none;">
-    <div id="crm-content">
-      <div class="filters">
-        <input type="text" id="crm-search" placeholder="Název svatby..." oninput="renderCrm()" style="min-width:180px;">
-        <select id="crm-search-mesic" onchange="renderCrm()" style="min-width:160px;">
-          <option value="">Všechny měsíce</option>
-        </select>
-        <select id="crm-search-coord" onchange="renderCrm()" style="min-width:160px;">
-          <option value="">Všichni koordinátoři</option>
-        </select>
-        <button class="btn btn-outline btn-sm" onclick="clearCrmFilters()">Resetovat</button>
-      </div>
-      <div class="table-wrap" id="crm-table-wrap"></div>
-    </div>
-  </div>
-</div>
-
 <!-- ===================== PAGE: TO-DO ===================== -->
 <div class="page" id="page-todo">
   <div class="page-head">
@@ -943,48 +922,6 @@
   <!-- List -->
   <div class="todo-list" id="todo-list"></div>
   </div><!-- /todo-unlocked-content -->
-</div>
-
-<!-- CRM ADD MODAL -->
-<div class="modal-overlay" id="crm-modal-overlay" onclick="closeCrmForm(event)" style="display:none;">
-  <div class="modal" style="max-width:480px;" onclick="event.stopPropagation()">
-    <button class="modal-close" onclick="closeCrmForm()">×</button>
-    <div class="modal-title">＋ Nová svatba</div>
-    <div style="display:flex;flex-direction:column;gap:12px;">
-      <div>
-        <label style="font-size:0.8rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;">DATUM A DEN *</label>
-        <input id="crm-new-datum" type="date" class="filters" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;">
-      </div>
-      <div>
-        <label style="font-size:0.8rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;">JMÉNO A PŘÍJMENÍ *</label>
-        <input id="crm-new-jmeno" type="text" placeholder="např. Nováková" class="filters" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;">
-      </div>
-      <div>
-        <label style="font-size:0.8rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;">KONTAKT</label>
-        <textarea id="crm-new-kontakt" rows="2" placeholder="email&#10;telefon" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;font-family:inherit;resize:vertical;box-sizing:border-box;"></textarea>
-      </div>
-      <div>
-        <label style="font-size:0.8rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;">KOORDINÁTOR</label>
-        <select id="crm-new-koord" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;background:#fff;"></select>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div>
-          <label style="font-size:0.8rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;">POČET OSOB</label>
-          <input id="crm-new-osoby" type="number" min="0" placeholder="0" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;box-sizing:border-box;">
-        </div>
-        <div>
-          <label style="font-size:0.8rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;">POČET OBSLUHY</label>
-          <input id="crm-new-obsluha" type="number" min="0" placeholder="0" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;box-sizing:border-box;">
-        </div>
-      </div>
-      <div>
-        <label style="font-size:0.8rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;">POZNÁMKA</label>
-        <textarea id="crm-new-poznamka" rows="2" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;font-family:inherit;resize:vertical;box-sizing:border-box;"></textarea>
-      </div>
-      <div id="crm-form-error" style="color:var(--red);font-size:0.85rem;display:none;"></div>
-      <button class="btn" onclick="submitCrmForm()" style="width:100%;padding:11px;font-size:0.95rem;">Uložit svatbu</button>
-    </div>
-  </div>
 </div>
 
 <!-- ===================== PAGE: VÝPLATY ===================== -->
@@ -1841,6 +1778,22 @@ async function loadState() {
 
   // Payment paid (výplaty)
   paymentPaid = data.paymentPaid || {};
+  // Starsi verze zapisovala do paymentPaid vedle spravnych mesicnich klicu
+  // 'YYYY-MM' (objekt {jmeno: castka}) i klice se jmenem cloveka a holym cislem.
+  // Takovy klic nikdo necte, jen mate a sveda k chybe v pristim vypoctu.
+  // Ukliz je idempotentni - po vycisteni uz neni co zapisovat, takze nepotrebuje
+  // priznak migrace. Zapis smi jen admin, proto ta podminka i .catch().
+  const badPaid = Object.keys(paymentPaid)
+    .filter(k => !/^\d{4}-\d{2}$/.test(k) || typeof paymentPaid[k] !== 'object' || paymentPaid[k] === null);
+  if (badPaid.length) {
+    const removedPaid = {};
+    badPaid.forEach(k => { removedPaid[k] = paymentPaid[k]; delete paymentPaid[k]; });
+    if (isAdmin()) {
+      db.ref('migrations/paymentPaidCleanup').set({ at: new Date().toISOString(), removed: removedPaid })
+        .then(() => db.ref('paymentPaid').set(paymentPaid))
+        .catch(() => {});
+    }
+  }
   bankAccounts = data.bankAccounts || {};
   peopleEmails = data.peopleEmails || {};
   personQR = data.personQR || {};
@@ -2126,7 +2079,6 @@ function saveRates() { db.ref('rates').set(rates); }
 function saveAssignments() { return db.ref('weddingAssignments').set(weddingAssignments); }
 function savePeople() { db.ref('people').set(ALL_PEOPLE); }
 function saveCustomWeddings() { db.ref('customWeddings').set(customWeddings); }
-function saveExpenses() { return db.ref('expenses').set(keyById(expenses)); }
 function savePaymentPaid() { db.ref('paymentPaid').set(paymentPaid); }
 function saveBankAccounts() { db.ref('bankAccounts').set(bankAccounts); }
 function savePersonQR() { db.ref('personQR').set(personQR); }
@@ -2234,7 +2186,11 @@ function checklistDone(date) {
 }
 
 // Ceník služeb pro sumář v modalu (Kč). Klíče odpovídají CHECKLIST_ITEMS.
-const SERVICE_PRICES = { maringotka: 4000, konobar: 5000, kava: 1500, uklid: 2500 };
+const SERVICE_PRICES = { maringotka: 4500, konobar: 5000, kava: 1500, uklid: 3000 };
+// Odmena tymu za uklid po JEDNE svatbe (Kc). Deli se rovnym dilem mezi vsechny,
+// kdo je na ten uklid prihlaseny. Pozor: neni to totez co SERVICE_PRICES.uklid,
+// coz je cena po-svatebniho uklidu uctovana paru. Menit jen tady.
+const CLEANING_PAY_PER_WEDDING = 5000;
 function fmtKc(n) { return n.toLocaleString('cs-CZ') + ' Kč'; }
 function summaryHtml(date) {
   const c = weddingChecklist[date] || {};
@@ -2991,7 +2947,6 @@ let _routing = false;   // true = adresu právě čteme, nepřepisovat ji zpět
 
 function appBaseUrl() { return location.href.split('#')[0]; }
 function weddingLink(date) { return appBaseUrl() + '#termin/' + date; }
-function shiftLink(date, role) { return appBaseUrl() + '#smena/' + date + '/' + role; }
 function currentPageName() { return (document.querySelector('.page.active')?.id || 'page-prehled').replace('page-', ''); }
 
 function setRoute(hash) {
@@ -3110,13 +3065,9 @@ function exportShiftIcs(date, role) {
 
 // Všechny nadcházející směny jednoho člověka do jednoho souboru.
 function exportPersonIcs(person) {
-  const events = [];
-  personWorkEvents(person)
-    .filter(e => !isPast(e.workDate))
-    .forEach(e => {
-      if (e.inService) events.push(shiftIcsEvent(e.wedding.date, 'service'));
-      if (e.inClean)   events.push(shiftIcsEvent(e.wedding.date, 'cleaning'));
-    });
+  const events = personShifts(person)
+    .filter(sh => !isPast(sh.date))
+    .map(sh => shiftIcsEvent(sh.weddingDate, sh.role));
   if (!events.length) { alert('Žádné nadcházející směny k exportu.'); return; }
   events.sort((a, b) => a.date.localeCompare(b.date));
   downloadIcs('mlyn-smeny-' + person.replace(/[^\p{L}\d]+/gu, '-').toLowerCase() + '.ics', buildIcs(events));
@@ -3137,7 +3088,7 @@ function personEarnings(person, year) {
   WEDDINGS.forEach(w => {
     const team = getCleaning(w.date);
     const cleanDate = addDays(w.date, 1);
-    if (team.includes(person) && inYear(cleanDate)) { cleanPay += 5000 / team.length; cleanCount++; }
+    if (team.includes(person) && inYear(cleanDate)) { cleanPay += CLEANING_PAY_PER_WEDDING / team.length; cleanCount++; }
   });
   const paid = Object.keys(paymentPaid)
     .filter(ym => !year || ym.startsWith(year + '-'))
@@ -3170,26 +3121,12 @@ function fmtDate(d) {
 }
 function isPast(d) { return d < today(); }
 
-function allPeople(wDate) {
-  return [...new Set([...getService(wDate), ...getCleaning(wDate)])].filter(Boolean);
-}
 
 function addDays(dateStr, n) {
   const d = new Date(dateStr); d.setDate(d.getDate() + n);
   return d.toISOString().split('T')[0];
 }
 
-// Úklid probíhá vždy den PO svatbě
-function getCleaningPay(person) {
-  let total = 0;
-  WEDDINGS.forEach(w => {
-    const cleaning = getCleaning(w.date);
-    if (cleaning.length > 0 && cleaning.includes(person)) {
-      total += 5000 / cleaning.length;
-    }
-  });
-  return total;
-}
 
 function getCleaningEvents(person) {
   return WEDDINGS.filter(w => getCleaning(w.date).includes(person)).map(w => {
@@ -3198,7 +3135,7 @@ function getCleaningEvents(person) {
       date: addDays(w.date, 1),
       weddingDate: w.date,
       totalPeople: cleaning.length,
-      share: 5000 / cleaning.length,
+      share: CLEANING_PAY_PER_WEDDING / cleaning.length,
       team: cleaning
     };
   });
@@ -3221,24 +3158,21 @@ function personWorkEvents(name) {
   return events.sort((a, b) => a.workDate.localeCompare(b.workDate));
 }
 
-function personWeddings(name) {
-  return WEDDINGS.filter(w => getService(w.date).includes(name) || getCleaning(w.date).includes(name));
-}
-
-function hoursForPerson(person, month) {
-  return hoursLog.filter(e => {
-    if (e.person !== person) return false;
-    if (month) {
-      const m = parseInt(e.date.split('-')[1]);
-      if (m !== month) return false;
-    }
-    return true;
+// Rozpad na jednotlive smeny. Kdo je na svatbe na obsluze I na uklidu, ma dve
+// smeny ve dvou ruznych dnech (uklid je den po svatbe). personWorkEvents ma pro
+// takovy zaznam jediny workDate (den svatby), takze filtr "nadchazejici" shodil
+// i uklid, ktery teprve bude. Tady ma kazda smena sve vlastni datum.
+function personShifts(name) {
+  const out = [];
+  personWorkEvents(name).forEach(e => {
+    if (e.inService) out.push({ weddingDate: e.wedding.date, role: 'service',  date: e.wedding.date });
+    if (e.inClean)   out.push({ weddingDate: e.wedding.date, role: 'cleaning', date: addDays(e.wedding.date, 1) });
   });
+  return out.sort((a, b) => a.date.localeCompare(b.date));
 }
 
-function totalHours(person, month) {
-  return hoursForPerson(person, month).reduce((s,e) => s + e.hours, 0);
-}
+
+
 
 // ============================================================
 // PŘEHLED
@@ -3565,8 +3499,6 @@ function jumpToMonth(monthNum) {
 
 let terminyView = 'list';
 let calYear = 2026, calMonth = 4; // v init() se posune na měsíc nejbližšího termínu
-let feedbackPage = 0;
-function setFeedbackPage(n) { feedbackPage = n; renderPrehled(); }
 
 function openNewWeddingForm(prefillDate) {
   ['nw-date','nw-name','nw-phone','nw-email','nw-guests','nw-guests-note','nw-staff','nw-deposit','nw-balance','nw-note']
@@ -4346,8 +4278,7 @@ function renderPersonEarnings(name) {
   const el = document.getElementById('person-earnings');
   if (!el) return;
   const pKey = name.replace(/'/g, "\\'");
-  const upcomingCount = personWorkEvents(name).filter(e => !isPast(e.workDate))
-    .reduce((s, e) => s + (e.inService ? 1 : 0) + (e.inClean ? 1 : 0), 0);
+  const upcomingCount = personShifts(name).filter(sh => !isPast(sh.date)).length;
 
   const exportBtn = `<button class="btn btn-sm btn-outline" onclick="exportPersonIcs('${pKey}')"
       title="Stáhne .ics se všemi nadcházejícími směnami">📅 Nadcházející směny do kalendáře${upcomingCount ? ' (' + upcomingCount + ')' : ''}</button>`;
@@ -5006,7 +4937,7 @@ function renderVyplaty() {
   const fPersonPay = (person) => fHours.filter(e => e.person === person).reduce((s,e)=>s+entryPay(e),0);
   const fPersonCleanPay = (person) => fWeddings.reduce((s,w)=>{
     const team = getCleaning(w.date);
-    return team.includes(person) ? s + 5000/team.length : s;
+    return team.includes(person) ? s + CLEANING_PAY_PER_WEDDING/team.length : s;
   }, 0);
 
   // Month columns for hodinovka (all months view)
@@ -5110,7 +5041,7 @@ function renderVyplaty() {
           </thead>
           <tbody>
             ${cleaningRows.map(({w, team, cleanDate}) => {
-              const share = 5000 / team.length;
+              const share = CLEANING_PAY_PER_WEDDING / team.length;
               const peopleHtml = team.map(p =>
                 `<div style="display:flex;justify-content:space-between;align-items:center;padding:2px 0;border-bottom:1px solid var(--border);">
                   <span style="font-size:0.85rem;">${p}</span>
@@ -5132,8 +5063,8 @@ function renderVyplaty() {
             <tr style="background:var(--accent-light);font-weight:700;">
               <td colspan="3">CELKEM</td>
               <td style="text-align:center;">${cleaningRows.length} akcí</td>
-              <td style="text-align:right;color:var(--green);">${(5000).toLocaleString('cs-CZ')} Kč</td>
-              <td style="font-size:0.8rem;color:var(--muted);">Celkem vyplaceno: ${cleaningRows.reduce((s,{team})=>s+5000,0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
+              <td style="text-align:right;color:var(--green);">${CLEANING_PAY_PER_WEDDING.toLocaleString('cs-CZ')} Kč</td>
+              <td style="font-size:0.8rem;color:var(--muted);">Celkem vyplaceno: ${cleaningRows.reduce((s)=>s+CLEANING_PAY_PER_WEDDING,0).toLocaleString('cs-CZ',{maximumFractionDigits:0})} Kč</td>
             </tr>
           </tfoot>
         </table>
@@ -5263,440 +5194,6 @@ function lockPayroll() {
   });
 }
 
-// CRM LOCK
-// ============================================================
-const CRM_PASSWORD = 'Mlyn2026';
-let crmUnlocked = false;
-
-function renderCrmLock(errorMsg) {
-  document.getElementById('crm-unlocked-content').style.display = 'none';
-  document.getElementById('crm-actions').hidden = true;
-  document.getElementById('crm-lock-screen').innerHTML = `
-    <div class="lock-screen">
-      <div class="lock-icon">🔐</div>
-      <div class="lock-title">Sekce CRM je chráněna heslem</div>
-      <div class="lock-sub">Zadejte heslo pro zobrazení CRM</div>
-      <div class="lock-form">
-        <input class="lock-input" type="password" id="crm-pwd-input" placeholder="Heslo"
-          onkeydown="if(event.key==='Enter') checkCrmPassword()">
-        <button class="btn" onclick="checkCrmPassword()">Odemknout</button>
-      </div>
-      ${errorMsg ? `<div class="lock-error">❌ ${errorMsg}</div>` : ''}
-    </div>
-  `;
-  setTimeout(() => document.getElementById('crm-pwd-input')?.focus(), 50);
-}
-
-function checkCrmPassword() {
-  const val = document.getElementById('crm-pwd-input')?.value || '';
-  if (val === CRM_PASSWORD) {
-    crmUnlocked = true;
-    document.getElementById('crm-lock-screen').innerHTML = '';
-    document.getElementById('crm-unlocked-content').style.display = 'block';
-    document.getElementById('crm-actions').hidden = false;
-    subscribeCrm();
-    document.querySelectorAll('.tab').forEach(t => {
-      if (t.textContent.includes('CRM')) t.innerHTML = 'CRM 🔓';
-    });
-  } else {
-    crmUnlocked = false;
-    renderCrmLock('Nesprávné heslo. Zkuste znovu.');
-  }
-}
-
-function lockCrm() {
-  crmUnlocked = false;
-  unsubscribeCrm();
-  document.getElementById('crm-unlocked-content').style.display = 'none';
-  renderCrmLock();
-  document.querySelectorAll('.tab').forEach(t => {
-    if (t.textContent.includes('CRM')) t.innerHTML = 'CRM 🔒';
-  });
-}
-
-// CRM TABLE
-// ============================================================
-const CRM_FIELDS = [
-  { key: 'koordinator',      label: 'Koordinátor' },
-  { key: 'datum',            label: 'Datum a den' },
-  { key: 'jmeno',            label: 'Jméno a příjmení' },
-  { key: 'kontakt',          label: 'Kontakt' },
-  { key: 'pocetOsob',        label: 'Počet osob' },
-  { key: 'pocetObsluhy',     label: 'Počet obsluhy (250 Kč/hod)' },
-  { key: 'cateringValkovi',  label: 'Catering Válkovi', type: 'bool' },
-  { key: 'maringotka',       label: 'Maringotka (4 000 Kč — Adam)', type: 'bool' },
-  { key: 'kava',             label: 'Káva (1 500 Kč)', type: 'bool' },
-  { key: 'doplatekPronajmu', label: 'Doplatek pronájmu mlýna', type: 'kc' },
-  { key: 'konskBar',         label: 'Koňská bar (5 000 Kč — Honza)', type: 'bool' },
-  { key: 'vyzdoba',          label: 'Výzdoba Heyday (provize 1 000 Kč)', type: 'bool' },
-  { key: 'celkem',           label: 'Celkem k úhradě po svatbě', type: 'kc' },
-  { key: 'poznamka',         label: 'Poznámka' },
-];
-
-const crmEvents = [
-  {
-    koordinator: '', datum: '25. 4. 2026 — sobota', jmeno: 'Pospěch',
-    kontakt: 'lukpospech@gmail.com\n737 354 083',
-    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
-    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
-  },
-  {
-    koordinator: '', datum: '14. 5. 2026 — čtvrtek', jmeno: 'Větříčková',
-    kontakt: 'tereza.vetrickova@gmail.com\n776 744 616',
-    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
-    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
-  },
-  {
-    koordinator: '', datum: '16. 5. 2026 — sobota', jmeno: 'Vojáčková',
-    kontakt: 'vojackovamichaela@gmail.com\n605 321 073',
-    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
-    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
-  },
-  {
-    koordinator: '', datum: '13. 6. 2026 — sobota', jmeno: 'Felt',
-    kontakt: 'tomasfelt@icloud.com\n720 440 344',
-    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
-    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
-  },
-  {
-    koordinator: '', datum: '23. 7. 2026 — čtvrtek', jmeno: 'Zbrožková',
-    kontakt: 'z.valerie@seznam.cz\n724 001 636',
-    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
-    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
-  },
-  {
-    koordinator: '', datum: '25. 7. 2026 — sobota', jmeno: 'Galuščiaková',
-    kontakt: 'galusciakova.z@gmail.com\n602 844 570',
-    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
-    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
-  },
-  {
-    koordinator: '', datum: '13. 8. 2026 — čtvrtek', jmeno: 'Kolísková',
-    kontakt: 'koliskova.andrea@gmail.com\n776 768 067',
-    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
-    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
-  },
-  {
-    koordinator: '', datum: '15. 8. 2026 — sobota', jmeno: 'Schoffer',
-    kontakt: 'david.schoffer@cz-bosh.com\n730 846 600',
-    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
-    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
-  },
-  {
-    koordinator: '', datum: '20. 8. 2026 — čtvrtek', jmeno: 'Kremr',
-    kontakt: 'matejkremr@gmail.com\n608 945 536',
-    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
-    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
-  },
-  {
-    koordinator: '', datum: '22. 8. 2026 — sobota', jmeno: 'Alinče',
-    kontakt: 'antoninalince1@gmail.com\n773 213 489',
-    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
-    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
-  },
-  {
-    koordinator: '', datum: '10. 9. 2026 — čtvrtek', jmeno: 'Pomykalová',
-    kontakt: 'kacka.pomykalova@gmail.com\n722 636 351',
-    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
-    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
-  },
-  {
-    koordinator: '', datum: '12. 9. 2026 — sobota', jmeno: 'Valová',
-    kontakt: 'unka.valova@gmail.com\n732 809 840',
-    pocetOsob: null, pocetObsluhy: null, cateringValkovi: '', maringotka: '', kava: '',
-    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null, poznamka: '',
-  },
-];
-
-const CRM_MESICE = ['','Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
-const CRM_DNY = ['Neděle','Pondělí','Úterý','Středa','Čtvrtek','Pátek','Sobota'];
-
-function parseCrmDatum(datum) {
-  const m = (datum || '').match(/(\d+)\.\s*(\d+)\.\s*(\d{4})/);
-  return m ? { month: parseInt(m[2]), year: parseInt(m[3]) } : null;
-}
-
-function formatCrmDatum(iso) {
-  if (!iso) return '';
-  const d = new Date(iso + 'T12:00:00');
-  return `${d.getDate()}. ${d.getMonth()+1}. ${d.getFullYear()} — ${CRM_DNY[d.getDay()]}`;
-}
-
-function crmDatumToIso(czech) {
-  const m = (czech || '').match(/(\d+)\.\s*(\d+)\.\s*(\d{4})/);
-  if (!m) return '';
-  return `${m[3]}-${String(m[2]).padStart(2,'0')}-${String(m[1]).padStart(2,'0')}`;
-}
-
-function clearCrmFilters() {
-  document.getElementById('crm-search').value = '';
-  document.getElementById('crm-search-mesic').value = '';
-  document.getElementById('crm-search-coord').value = '';
-  renderCrm();
-}
-
-const CRM_COORDS = ['', 'Matěj', 'Honza', 'Vojta', 'Grochy'];
-
-function crmBadge(v) {
-  if (v === 'ANO') return `<span class="tag" style="background:var(--green-light);color:var(--green);">ANO</span>`;
-  if (v === 'NE')  return `<span class="tag" style="background:var(--red-light);color:var(--red);">NE</span>`;
-  return `<span style="color:var(--muted)">—</span>`;
-}
-function crmKc(v) {
-  return v != null && v !== '' ? `<strong>${Number(v).toLocaleString('cs-CZ')} Kč</strong>` : `<span style="color:var(--muted)">—</span>`;
-}
-function crmTxt(v) {
-  return v != null && v !== '' ? String(v).replace(/\n/g, '<br>') : `<span style="color:var(--muted)">—</span>`;
-}
-
-let _crmListener = null;
-
-function saveCrmToFirebase() {
-  db.ref('crmEvents').set(crmEvents);
-}
-
-function subscribeCrm() {
-  if (_crmListener) return;
-  _crmListener = db.ref('crmEvents').on('value', snapshot => {
-    const data = snapshot.val();
-    if (Array.isArray(data) && data.length > 0) {
-      crmEvents.splice(0, crmEvents.length, ...data);
-    } else if (data === null) {
-      db.ref('crmEvents').set(crmEvents);
-    }
-    renderCrm();
-  });
-}
-
-function unsubscribeCrm() {
-  if (_crmListener) {
-    db.ref('crmEvents').off('value', _crmListener);
-    _crmListener = null;
-  }
-}
-
-function saveCrmCell(globalIdx, key, value) {
-  const _prev = crmEvents[globalIdx][key];
-  crmEvents[globalIdx][key] = value;
-  saveCrmToFirebase();
-  logAudit('crm_edit', (crmEvents[globalIdx].jmeno || '') + ' / ' + key,
-    `„${_prev == null || _prev === '' ? '—' : _prev}" → „${value === '' ? '—' : value}"`);
-  renderCrm();
-}
-
-function editCrmCell(td, globalIdx, key, type) {
-  if (td.querySelector('input,select,textarea')) return;
-  const current = crmEvents[globalIdx][key];
-  let el;
-
-  if (type === 'bool') {
-    el = document.createElement('select');
-    ['', 'ANO', 'NE'].forEach(o => {
-      const opt = document.createElement('option');
-      opt.value = o; opt.textContent = o || '—';
-      if (current === o) opt.selected = true;
-      el.appendChild(opt);
-    });
-    el.addEventListener('change', () => { saveCrmCell(globalIdx, key, el.value); });
-  } else if (type === 'kc') {
-    el = document.createElement('input');
-    el.type = 'number'; el.value = current ?? '';
-  } else if (key === 'datum') {
-    el = document.createElement('input');
-    el.type = 'date'; el.value = crmDatumToIso(current);
-    el.addEventListener('change', () => { saveCrmCell(globalIdx, key, formatCrmDatum(el.value)); });
-  } else if (key === 'kontakt') {
-    el = document.createElement('textarea');
-    el.value = current ?? ''; el.rows = 3;
-    el.style.resize = 'vertical';
-  } else {
-    el = document.createElement('input');
-    el.type = 'text'; el.value = current ?? '';
-  }
-
-  el.style.cssText = 'width:100%;border:1px solid var(--accent);border-radius:4px;padding:4px 8px;font-size:0.88rem;font-family:inherit;box-sizing:border-box;';
-  td.innerHTML = '';
-  td.appendChild(el);
-  el.focus();
-  if (el.select) el.select();
-
-  const commit = () => {
-    let val = el.value;
-    if (type === 'kc') val = val !== '' ? Number(val) : null;
-    saveCrmCell(globalIdx, key, val);
-  };
-  el.addEventListener('blur', commit);
-  el.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && el.tagName !== 'TEXTAREA') { e.preventDefault(); el.blur(); }
-    if (e.key === 'Escape') renderCrm();
-  });
-}
-
-function renderCrm() {
-  const search      = (document.getElementById('crm-search')?.value       || '').toLowerCase();
-  const searchMesic = (document.getElementById('crm-search-mesic')?.value || '');
-  const searchCoord = (document.getElementById('crm-search-coord')?.value || '').toLowerCase();
-
-  // populate month/year dropdown
-  const mesicSelect = document.getElementById('crm-search-mesic');
-  if (mesicSelect) {
-    const cur = mesicSelect.value;
-    const months = [...new Map(
-      crmEvents.map(e => parseCrmDatum(e.datum)).filter(Boolean)
-        .map(d => [`${d.year}-${String(d.month).padStart(2,'0')}`, d])
-    ).values()].sort((a,b) => a.year - b.year || a.month - b.month);
-    mesicSelect.innerHTML = '<option value="">Všechny měsíce</option>' +
-      months.map(d => {
-        const val = `${d.year}-${String(d.month).padStart(2,'0')}`;
-        return `<option value="${val}" ${cur === val ? 'selected' : ''}>${CRM_MESICE[d.month]} ${d.year}</option>`;
-      }).join('');
-  }
-
-  const coordSelect = document.getElementById('crm-search-coord');
-  if (coordSelect) {
-    const cur = coordSelect.value;
-    const used = [...new Set(crmEvents.map(e => e.koordinator).filter(Boolean))].sort();
-    coordSelect.innerHTML = '<option value="">Všichni koordinátoři</option>' +
-      used.map(c => `<option value="${c.toLowerCase()}" ${cur === c.toLowerCase() ? 'selected' : ''}>${c}</option>`).join('');
-  }
-
-  const filtered = crmEvents
-    .map((e, i) => ({ e, i }))
-    .filter(({ e }) => {
-      if (search && !(e.jmeno || '').toLowerCase().includes(search)) return false;
-      if (searchCoord && !(e.koordinator || '').toLowerCase().includes(searchCoord)) return false;
-      if (searchMesic) {
-        const d = parseCrmDatum(e.datum);
-        if (!d) return false;
-        const val = `${d.year}-${String(d.month).padStart(2,'0')}`;
-        if (val !== searchMesic) return false;
-      }
-      return true;
-    });
-
-  const wrap = document.getElementById('crm-table-wrap');
-  if (!wrap) return;
-
-  if (filtered.length === 0) {
-    wrap.innerHTML = `<div style="text-align:center;padding:48px;color:var(--muted);">
-      <div style="font-size:2rem;margin-bottom:8px;">📋</div>
-      <div style="font-weight:600;">Žádné záznamy</div>
-      <div style="font-size:0.85rem;margin-top:4px;">Žádná akce neodpovídá hledání.</div>
-    </div>`;
-    return;
-  }
-
-  const headCols = filtered.map(({ e, i }) =>
-    `<th style="min-width:190px;text-align:left;background:var(--surface);padding:10px 14px;border-bottom:2px solid var(--border);position:sticky;top:0;z-index:2;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
-        <div>${e.datum}<br><span style="font-weight:500;font-size:0.85rem;color:var(--accent);">${e.jmeno}</span></div>
-        <button onclick="deleteCrmEvent(${i})" title="Smazat svatbu" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:1rem;padding:0;line-height:1;flex-shrink:0;" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--muted)'">🗑</button>
-      </div>
-    </th>`
-  ).join('');
-
-  const rows = CRM_FIELDS.map((f, fi) => {
-    const bg = fi % 2 !== 0 ? 'var(--surface-2)' : 'var(--card)';
-    const labelTd = `<td style="background:${bg};padding:9px 14px;font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;color:var(--muted);white-space:nowrap;border-right:2px solid var(--border);position:sticky;left:0;z-index:1;">${f.label}</td>`;
-
-    const cells = filtered.map(({ e, i }) => {
-      const v = e[f.key];
-
-      if (f.key === 'koordinator') {
-        const opts = CRM_COORDS.map(o =>
-          `<option value="${o}" ${v === o ? 'selected' : ''}>${o || '—'}</option>`
-        ).join('');
-        return `<td style="background:${bg};padding:6px 10px;">
-          <select onchange="saveCrmCell(${i},'koordinator',this.value)"
-            style="border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:0.88rem;background:#fff;cursor:pointer;width:100%;">
-            ${opts}
-          </select>
-        </td>`;
-      }
-
-      let display;
-      if (f.type === 'bool') display = crmBadge(v);
-      else if (f.type === 'kc') display = crmKc(v);
-      else display = crmTxt(v);
-
-      const hint = v == null || v === '' ? ' title="Klikněte pro úpravu"' : '';
-      return `<td style="background:${bg};padding:9px 14px;font-size:0.88rem;cursor:pointer;" ${hint}
-        onclick="editCrmCell(this,${i},'${f.key}','${f.type || 'text'}')">${display}</td>`;
-    }).join('');
-
-    return `<tr>${labelTd}${cells}</tr>`;
-  }).join('');
-
-  wrap.style.cssText = 'overflow:auto;max-height:75vh;';
-  wrap.innerHTML = `<table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
-    <thead><tr>
-      <th style="background:var(--surface);color:var(--muted);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.4px;padding:10px 14px;border-bottom:2px solid var(--border);border-right:2px solid var(--border);white-space:nowrap;position:sticky;top:0;left:0;z-index:3;">Pole</th>
-      ${headCols}
-    </tr></thead>
-    <tbody>${rows}</tbody>
-  </table>`;
-}
-
-function deleteCrmEvent(globalIdx) {
-  const e = crmEvents[globalIdx];
-  if (!e) return;
-  if (!confirm(`Opravdu chcete smazat svatbu "${e.jmeno}" (${e.datum})?`)) return;
-  crmEvents.splice(globalIdx, 1);
-  saveCrmToFirebase();
-  renderCrm();
-}
-
-function openCrmForm() {
-  const overlay = document.getElementById('crm-modal-overlay');
-  overlay.style.display = 'flex';
-  document.getElementById('crm-new-datum').value = '';
-  document.getElementById('crm-new-jmeno').value = '';
-  document.getElementById('crm-new-kontakt').value = '';
-  document.getElementById('crm-new-osoby').value = '';
-  document.getElementById('crm-new-obsluha').value = '';
-  document.getElementById('crm-new-poznamka').value = '';
-  document.getElementById('crm-form-error').style.display = 'none';
-  const koord = document.getElementById('crm-new-koord');
-  koord.innerHTML = CRM_COORDS.map(c => `<option value="${c}">${c || '— nevybráno —'}</option>`).join('');
-  setTimeout(() => document.getElementById('crm-new-datum').focus(), 50);
-}
-
-function closeCrmForm(e) {
-  if (e && e.target !== document.getElementById('crm-modal-overlay')) return;
-  document.getElementById('crm-modal-overlay').style.display = 'none';
-}
-
-function submitCrmForm() {
-  const datumIso = document.getElementById('crm-new-datum').value;
-  const jmeno    = document.getElementById('crm-new-jmeno').value.trim();
-  const errEl    = document.getElementById('crm-form-error');
-
-  if (!datumIso || !jmeno) {
-    errEl.textContent = 'Datum a jméno jsou povinné.';
-    errEl.style.display = 'block';
-    return;
-  }
-  const datum = formatCrmDatum(datumIso);
-
-  const osoby   = document.getElementById('crm-new-osoby').value;
-  const obsluha = document.getElementById('crm-new-obsluha').value;
-
-  crmEvents.push({
-    datum,
-    jmeno,
-    kontakt:      document.getElementById('crm-new-kontakt').value.trim(),
-    koordinator:  document.getElementById('crm-new-koord').value,
-    pocetOsob:    osoby   !== '' ? Number(osoby)   : null,
-    pocetObsluhy: obsluha !== '' ? Number(obsluha) : null,
-    poznamka:     document.getElementById('crm-new-poznamka').value.trim(),
-    cateringValkovi: '', maringotka: '', kava: '',
-    doplatekPronajmu: null, konskBar: '', vyzdoba: '', celkem: null,
-  });
-
-  saveCrmToFirebase();
-  document.getElementById('crm-modal-overlay').style.display = 'none';
-  renderCrm();
-}
 
 // ============================================================
 // TO-DO LOCK
@@ -5754,7 +5251,6 @@ function lockTodo() {
 // ============================================================
 let todos = [];
 
-function saveTodos() { return db.ref('todos').set(keyById(todos)); }
 
 function addTodo() {
   const task = document.getElementById('todo-new-task').value.trim();
@@ -5963,10 +5459,6 @@ function showTab(name) {
   if (name === 'changelog') {
     if (!isAdmin()) { showTab('prehled'); return; }
     openChangelog();
-  }
-  if (name === 'crm') {
-    if (crmUnlocked) renderCrm();
-    else renderCrmLock();
   }
   if (name === 'todo') {
     if (todoUnlocked) renderTodos();
