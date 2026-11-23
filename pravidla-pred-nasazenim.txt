@@ -1,0 +1,23 @@
+{
+  "rules": {
+
+    "auditLog": {
+      ".read": "auth != null && (auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz')",
+      "$zaznam": {
+        ".write": "auth != null && (!data.exists() || auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz')",
+        ".validate": "newData.hasChildren(['ts','email','action'])"
+      }
+    },
+
+    "svatebni_sezona": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+
+    "$ostatni": {
+      ".read": "auth != null && $ostatni !== 'auditLog'",
+      ".write": "auth != null && $ostatni !== 'auditLog'"
+    }
+
+  }
+}

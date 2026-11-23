@@ -1482,6 +1482,8 @@ const AUDIT_ACTIONS = {
   employee_remove:  { label: 'Odebrání zaměstnance', icon: '👥', group: 'Tým' },
   crm_edit:         { label: 'Úprava CRM',           icon: '📇', group: 'CRM' },
   payroll_paid:     { label: 'Zápis výplaty',        icon: '💰', group: 'Výplaty' },
+  doc_open:         { label: 'Otevření dokumentu',   icon: '📄', group: 'Dokumenty' },
+  doc_prevzato:     { label: 'Převzetí ze smlouvy',  icon: '📥', group: 'Dokumenty' },
 };
 function auditMeta(a) { return AUDIT_ACTIONS[a] || { label: a || 'Neznámá akce', icon: '•', group: 'Ostatní' }; }
 
@@ -1685,6 +1687,221 @@ function renderChangelog() {
         ? '<div class="page-sub" style="margin-top:10px;">Zobrazeno prvních ' + MAX + ' z '
           + rows.length + ' záznamů — zužte filtr nebo použijte Export CSV.</div>'
         : '');
+}
+
+// ============================================================
+// DOKUMENTY ZE SDÍLENÉHO DISKU
+// Uzel `weddingDocs` plní Apps Script (mlyn-drive-sync.gs) — projde složky
+// koordinátorů na Disku, přečte smlouvu a zapíše metadata sem.
+//
+// Uzel se ZÁMĚRNĚ nenačítá při startu (není v STATE_KEYS). Dva důvody:
+// pravidla ho pouštějí jen adminovi, takže by loadState() ostatním spadlo
+// na permission_denied, a běžný uživatel ho stejně nepotřebuje.
+// Načítá se líně při otevření detailu svatby, stejně jako fotky.
+//
+// Přístup je zatím jen pro adminy — smlouvy obsahují bydliště a cenu.
+// Až to budou potřebovat koordinátorky, stačí povolit čtení v pravidlech
+// Firebase a upravit JEDINOU funkci níže: muzeVidetDokumenty().
+// ============================================================
+let weddingDocs = {};
+const _docLoads = {};
+
+/** Jediné místo, kde se rozhoduje o přístupu k dokumentům. */
+function muzeVidetDokumenty(date) {
+  return isAdmin();
+}
+
+function loadDocs(date) {
+  if (!muzeVidetDokumenty(date)) return Promise.resolve(null);
+  if (weddingDocs[date] !== undefined) return Promise.resolve(weddingDocs[date]);
+  if (_docLoads[date]) return _docLoads[date];
+
+  _docLoads[date] = db.ref('weddingDocs/' + date).once('value')
+    .then(snap => {
+      if (weddingDocs[date] === undefined) weddingDocs[date] = snap.val() || null;
+      return weddingDocs[date];
+    })
+    .catch(() => { weddingDocs[date] = null; return null; })
+    .finally(() => { delete _docLoads[date]; });
+
+  return _docLoads[date];
+}
+
+const DOC_DRUHY = {
+  smlouva_podepsana: { label: 'Podepsaná smlouva', icon: '✍️', poradi: 1 },
+  smlouva_pracovni:  { label: 'Smlouva (dokument)', icon: '📝', poradi: 2 },
+  faktura:           { label: 'Faktura',            icon: '🧾', poradi: 3 },
+  pdf_ostatni:       { label: 'PDF',                icon: '📄', poradi: 4 },
+  ostatni:           { label: 'Soubor',             icon: '📎', poradi: 5 }
+};
+function docDruh(d) { return DOC_DRUHY[d] || DOC_DRUHY.ostatni; }
+
+function fmtVelikost(b) {
+  if (!b && b !== 0) return '';
+  if (b < 1024) return b + ' B';
+  if (b < 1048576) return Math.round(b / 1024) + ' kB';
+  return (b / 1048576).toFixed(1).replace('.', ',') + ' MB';
+}
+
+/** Otevře dokument a zaznamená to — jde o smlouvy s osobními údaji. */
+function otevritDokument(date, id) {
+  const z = weddingDocs[date];
+  const f = z && z.soubory ? z.soubory[id] : null;
+  if (!f) return;
+  logAudit('doc_open', fmtDate(date), f.nazev);
+  window.open(f.url, '_blank', 'noopener');
+}
+
+/**
+ * Co ze smlouvy jde převzít do polí aplikace.
+ * Záměrně se nic nepřepisuje samo — smlouva nemusí být aktuální a ruční
+ * oprava má přednost. Uživatel vidí rozdíl a převezme ho kliknutím.
+ */
+function navrhyZeSmlouvy(date) {
+  const z = weddingDocs[date];
+  const sml = z && z.smlouva;
+  if (!sml) return [];
+  const n0 = (sml.najemci || [])[0] || {};
+  const n1 = (sml.najemci || [])[1] || {};
+  const jmena = [n0.jmeno, n1.jmeno].filter(Boolean).join(' & ');
+  const navrhy = [
+    { klic: 'contact', popis: 'Jméno',   ze: jmena,        v: weddingContact[date] || '' },
+    { klic: 'phone',   popis: 'Telefon', ze: n0.telefon || '', v: weddingPhone[date] || '' },
+    { klic: 'email',   popis: 'E-mail',  ze: n0.email || '',   v: weddingEmail[date] || '' },
+    { klic: 'deposit', popis: 'Záloha',  ze: sml.zaloha,   v: weddingRentDeposit[date] },
+    { klic: 'balance', popis: 'Doplatek', ze: sml.doplatek, v: weddingRentBalance[date] }
+  ];
+  return navrhy.filter(x => x.ze !== null && x.ze !== undefined && x.ze !== ''
+    && String(x.ze) !== String(x.v == null ? '' : x.v));
+}
+
+function prevzitZeSmlouvy(date, klic) {
+  const n = navrhyZeSmlouvy(date).find(x => x.klic === klic);
+  if (!n) return;
+  if (klic === 'contact') updateContact(date, n.ze);
+  if (klic === 'phone')   updatePhone(date, n.ze);
+  if (klic === 'email')   updateEmail(date, n.ze);
+  if (klic === 'deposit') updateRentDeposit(date, n.ze);
+  if (klic === 'balance') updateRentBalance(date, n.ze);
+  logAudit('doc_prevzato', fmtDate(date), n.popis + ': „' + (n.v || '—') + '" → „' + n.ze + '"');
+  openWeddingModal(date);   // překreslí modal i vstupy
+  markModalSaved(n.popis + ' převzat ze smlouvy');
+}
+
+function prevzitVseZeSmlouvy(date) {
+  const navrhy = navrhyZeSmlouvy(date);
+  if (!navrhy.length) return;
+  confirmAction('Převzít ze smlouvy ' + navrhy.length + ' údajů? Přepíší se současné hodnoty.', () => {
+    navrhy.forEach(n => {
+      if (n.klic === 'contact') updateContact(date, n.ze);
+      if (n.klic === 'phone')   updatePhone(date, n.ze);
+      if (n.klic === 'email')   updateEmail(date, n.ze);
+      if (n.klic === 'deposit') updateRentDeposit(date, n.ze);
+      if (n.klic === 'balance') updateRentBalance(date, n.ze);
+    });
+    logAudit('doc_prevzato', fmtDate(date), 'hromadně: ' + navrhy.map(n => n.popis).join(', '));
+    openWeddingModal(date);
+    markModalSaved('Údaje převzaty ze smlouvy');
+  });
+}
+
+function docsHtml(date) {
+  const z = weddingDocs[date];
+  if (z === undefined) return '<div style="font-size:0.82rem;color:var(--muted);">Načítám dokumenty…</div>';
+  if (!z) {
+    return '<div style="font-size:0.82rem;color:var(--muted);">'
+      + 'Pro tento termín nejsou na Disku žádné dokumenty.<br>'
+      + '<span style="font-size:0.76rem;">Synchronizaci zajišťuje Apps Script; pokud složka existuje, zkuste ji spustit.</span></div>';
+  }
+
+  const soubory = Object.keys(z.soubory || {})
+    .map(id => Object.assign({ id: id }, z.soubory[id]))
+    .sort((a, b) => docDruh(a.druh).poradi - docDruh(b.druh).poradi);
+
+  let html = '';
+
+  if (z.upozorneni && z.upozorneni.length) {
+    html += '<div class="alert alert-warning" style="margin-bottom:10px;font-size:0.8rem;">'
+      + z.upozorneni.map(u => escAttr(u)).join('<br>') + '</div>';
+  }
+
+  html += '<div style="display:flex;flex-direction:column;gap:5px;">'
+    + soubory.map(f => {
+        const d = docDruh(f.druh);
+        return '<button onclick="otevritDokument(\'' + date + '\',\'' + escAttr(f.id) + '\')"'
+          + ' style="display:flex;align-items:center;gap:9px;text-align:left;width:100%;padding:8px 10px;'
+          + 'border:1px solid var(--border);border-radius:8px;background:var(--surface-2);cursor:pointer;font-size:0.84rem;">'
+          + '<span style="flex:none;">' + d.icon + '</span>'
+          + '<span style="flex:1;min-width:0;">'
+          + '<span style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escAttr(f.nazev) + '</span>'
+          + '<span style="display:block;font-size:0.72rem;color:var(--muted);">' + escAttr(d.label)
+          + (f.velikost ? ' · ' + fmtVelikost(f.velikost) : '') + '</span>'
+          + '</span><span style="flex:none;color:var(--muted);">↗</span></button>';
+      }).join('')
+    + '</div>';
+
+  const sml = z.smlouva;
+  if (sml) {
+    const radky = [
+      ['Nájemné', sml.najemne != null ? fmtKc(sml.najemne) : null],
+      ['Záloha', sml.zaloha != null ? fmtKc(sml.zaloha) : null],
+      ['Doplatek', sml.doplatek != null ? fmtKc(sml.doplatek) : null],
+      ['Jistota', sml.jistota != null ? fmtKc(sml.jistota) : null],
+      ['Účet', sml.ucet],
+      ['Nájem', sml.najemOd ? fmtDate(sml.najemOd) + ' ' + (sml.najemOdCas || '')
+        + ' → ' + fmtDate(sml.najemDo) + ' ' + (sml.najemDoCas || '') : null]
+    ].filter(r => r[1]);
+
+    html += '<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);">'
+      + '<div style="font-size:0.76rem;font-weight:700;color:var(--muted);text-transform:uppercase;'
+      + 'letter-spacing:0.4px;margin-bottom:7px;">Ze smlouvy</div>'
+      + '<div style="display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:0.82rem;">'
+      + radky.map(r => '<span style="color:var(--muted);">' + escAttr(r[0]) + '</span><span>'
+          + escAttr(r[1]) + '</span>').join('')
+      + '</div>';
+
+    const navrhy = navrhyZeSmlouvy(date);
+    if (navrhy.length) {
+      html += '<div style="margin-top:10px;">'
+        + '<div style="font-size:0.78rem;color:var(--clay);margin-bottom:6px;">'
+        + 'Liší se od údajů v aplikaci (' + navrhy.length + '):</div>'
+        + navrhy.map(n =>
+            '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;font-size:0.8rem;">'
+            + '<span style="color:var(--muted);min-width:62px;">' + escAttr(n.popis) + '</span>'
+            + '<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;">'
+            + '<s style="color:var(--muted);">' + escAttr(n.v || '—') + '</s> → <strong>'
+            + escAttr(n.ze) + '</strong></span>'
+            + '<button class="btn btn-outline btn-sm" style="flex:none;padding:3px 9px;font-size:0.74rem;"'
+            + ' onclick="prevzitZeSmlouvy(\'' + date + '\',\'' + n.klic + '\')">Převzít</button></div>').join('')
+        + '<button class="btn btn-outline btn-sm" style="margin-top:4px;font-size:0.76rem;"'
+        + ' onclick="prevzitVseZeSmlouvy(\'' + date + '\')">Převzít vše (' + navrhy.length + ')</button>'
+        + '</div>';
+    } else {
+      html += '<div style="margin-top:8px;font-size:0.78rem;color:var(--green);">'
+        + '✓ Údaje v aplikaci se smlouvou souhlasí</div>';
+    }
+    html += '</div>';
+  }
+
+  if (z.slozkaUrl) {
+    html += '<div style="margin-top:10px;">'
+      + '<a href="' + escAttr(z.slozkaUrl) + '" target="_blank" rel="noopener"'
+      + ' style="font-size:0.78rem;color:var(--accent);">📁 Otevřít složku na Disku ↗</a>'
+      + (z.aktualizovano ? '<span style="font-size:0.72rem;color:var(--muted);margin-left:8px;">'
+          + 'aktualizováno ' + escAttr(auditFmtRel(Date.parse(z.aktualizovano))) + '</span>' : '')
+      + '</div>';
+  }
+
+  return html;
+}
+
+function initDocsSection(date) {
+  const box = document.getElementById('docs-' + date);
+  if (!box) return;
+  loadDocs(date).then(() => {
+    const b = document.getElementById('docs-' + date);
+    if (b && _modalDate === date) b.innerHTML = docsHtml(date);
+  });
 }
 
 function exportChangelogCsv() {
@@ -4215,12 +4432,20 @@ function openWeddingModal(date) {
           style="display:none;" onchange="uploadWeddingPhotos('${date}', this)">
       </div>
     </div>
+    ${muzeVidetDokumenty(date) ? `
+      <div style="margin-top:22px;padding-top:14px;border-top:1px solid var(--border);">
+        <div style="font-size:0.8rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:9px;">
+          Dokumenty <span style="font-weight:400;text-transform:none;letter-spacing:0;">— ze sdíleného Disku</span>
+        </div>
+        <div id="docs-${date}"></div>
+      </div>` : ''}
     ${isAdmin() ? `
       <div style="margin-top:22px;padding-top:14px;border-top:1px solid var(--border);text-align:right;">
         <button class="btn btn-ghost-danger btn-sm" onclick="removeWedding('${date}')">Smazat termín</button>
       </div>` : ''}
   `;
   initPhotoSection(date);
+  initDocsSection(date);
   document.getElementById('modal-overlay').classList.add('open');
 }
 

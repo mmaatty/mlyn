@@ -1,9 +1,17 @@
 {
+  // Dohnaluv Mlyn - pravidla Realtime Database.
+  // Vlozit ve Firebase konzoli: Realtime Database -> Rules -> Publish.
+  //
+  // POZOR: komentare se pisou jen takto, dvema lomitky.
+  // Klic s textovou hodnotou je pro Firebase definice uzlu a musi byt {},
+  // takze konzole takovy radek odmitne hlaskou Expected brace.
+  //
+  // ADMIN = e-mail z ADMIN_EMAILS v dohnaluv-mlyn.html.
+  // Pri zmene admina upravit OBOJI - tady i v kodu.
   "rules": {
-    "//": "Dohnaluv Mlyn - pravidla Realtime Database. Vlozit ve Firebase konzoli: Realtime Database -> Rules -> Publish.",
-    "//1": "ADMIN = e-mail z ADMIN_EMAILS v dohnaluv-mlyn.html. Pri zmene admina upravit OBOJI - tady i v kodu.",
-    "//2": "Korenove .read/.write false znamena, ze novy uzel neni verejny, dokud mu sem nekdo pravidlo nenapise.",
 
+    // Korenove .read/.write false znamena, ze novy uzel neni verejny,
+    // dokud mu sem nekdo pravidlo nenapise.
     ".read": false,
     ".write": false,
 
@@ -16,11 +24,13 @@
     "todos":         { ".read": "auth != null", "$id": { ".write": "auth != null" } },
     "paymentPaid":   { ".read": "auth != null", ".write": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'" },
 
-    "//3": "Platebni udaje - jen admin. Cte je modal 'Vyplatit' v sekci Vyplaty, ktera je stejne jen pro adminy.",
+    // Platebni udaje - jen admin. Cte je modal 'Vyplatit' v sekci Vyplaty,
+    // ktera je stejne jen pro adminy.
     "bankAccounts":  { ".read": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'", ".write": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'" },
     "personQR":      { ".read": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'", ".write": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'" },
 
-    "//4": "Auditni stopa: zapsat novy zaznam smi kdokoli prihlaseny, ale prepsat/smazat uz jen admin (jinak si kazdy zahladi stopu). Cist smi jen admin.",
+    // Auditni stopa: zapsat novy zaznam smi kdokoli prihlaseny, ale prepsat
+    // nebo smazat uz jen admin (jinak si kazdy zahladi stopu). Cist smi jen admin.
     "auditLog": {
       ".read": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'",
       "$id": {
@@ -29,7 +39,7 @@
       }
     },
 
-    "//5": "Terminy a jejich detaily - cte i zapisuje kdokoli z tymu.",
+    // Terminy a jejich detaily - cte i zapisuje kdokoli z tymu.
     "weddingAssignments":   { ".read": "auth != null", ".write": "auth != null" },
     "weddingContact":       { ".read": "auth != null", ".write": "auth != null" },
     "weddingPhone":         { ".read": "auth != null", ".write": "auth != null" },
@@ -47,17 +57,30 @@
     "weddingChecklist":     { ".read": "auth != null", ".write": "auth != null" },
     "weddingPhotos":        { ".read": "auth != null", ".write": "auth != null" },
 
-    "//6": "Zakladani a mazani terminu je spravcovska akce (v kodu uz ji hlida isAdmin).",
+    // Zakladani a mazani terminu je spravcovska akce (v kodu uz ji hlida isAdmin).
     "customWeddings":  { ".read": "auth != null", ".write": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'" },
     "deletedWeddings": { ".read": "auth != null", ".write": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'" },
 
-    "//7": "Migrace uz vsechny probehly - priznaky i zalohy jsou jen pro cteni, aby je nikdo omylem nepretocil a migrace nebehla znovu.",
+    // Migrace uz vsechny probehly - priznaky i zalohy jsou jen pro cteni,
+    // aby je nikdo omylem nepretocil a migrace nebehla znovu.
     "migrations": { ".read": "auth != null", ".write": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'" },
 
-    "//8": "CRM zalozka je v aplikaci skryta (display:none). Data se zamykaji, nez padne rozhodnuti vratit nebo smazat.",
+    // CRM zalozka uz v aplikaci neni (commit 74dd643). Data se zamykaji,
+    // nez padne rozhodnuti je vratit nebo smazat.
     "crmEvents": { ".read": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'", ".write": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'" },
 
-    "//9": "Stary uzel z prvni verze - nikde se nepouziva.",
+    // Dokumenty ze sdileneho Disku (zrcadli je Apps Script mlyn-drive-sync.gs).
+    // Obsahuji smlouvy s bydlistem a cenou, proto jen admin - stejne jako bankAccounts.
+    // Zapisuje servisni ucet, ktery pravidla obchazi.
+    // Az to budou potrebovat koordinatorky, zmenit .read na "auth != null"
+    // a upravit funkci muzeVidetDokumenty() v dohnaluv-mlyn.html.
+    "weddingDocs": {
+      ".read": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'",
+      ".write": "auth.token.email === 'dohnalmat@gmail.com' || auth.token.email === 'jan.dohnal@jdak.cz'"
+    },
+
+    // Zbytek po starem importu. Necte to ani aplikace, ani stranka
+    // "Svatebni sezona" - ta jede na jine databazi (mlynbeforeafter).
     "svatebni_sezona": { ".read": false, ".write": false }
   }
 }
